@@ -1,0 +1,593 @@
+/*! ------------------------------------------------
+ * Project Name: Beldon - Coming Soon and Landing Page Template
+ * Project Description: Beldon - awesome coming soon template to kick-start your project
+ * Tags: mix_design, coming soon, under construction, template, landing page, portfolio, one page, responsive, html5, css3, creative, clean, agency, personal page
+ * Version: 1.0.2
+ * Build Date: November 2021
+ * Last Update: December 2022
+ * This product is available exclusively on Themeforest
+ * Author: mix_design
+ * Author URI: https://themeforest.net/user/mix_design
+ * File name: color-dark.css
+ * ------------------------------------------------
+ *
+ * ------------------------------------------------
+ * Table of Contents
+ * ------------------------------------------------
+ *  1. Template Backgrounds
+ *  2. Base
+ *  3. Cursor
+ *  4. Typography
+ *  5. Buttons & Triggers
+ *  6. Forms and Forms Reply Groups
+ *  7. Header
+ *  8. Main Section
+ *  9. Countdown
+ *  10. Menu
+ *  11. Notify
+ *  12. Content Sections
+ *  13. Video Block
+ *  14. Skillbars
+ *  15. Google Map
+ *  16. Gallery Custom Styles
+ * ------------------------------------------------
+ * Table of Contents End
+ * ------------------------------------------------ */
+/* ------------------------------------------------*/
+/* Template Backgrounds Colors Start */
+/* ------------------------------------------------*/
+.svg-background-1,
+.svg-background-2,
+.svg-background-3 {
+  background-color: #0f101b;
+}
+
+/* ------------------------------------------------*/
+/* Template Backgrounds Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Base Colors Start */
+/* ------------------------------------------------*/
+::-moz-selection {
+  background-color: rgba(123, 72, 183, 0.7);
+  color: #ffffff;
+}
+::selection {
+  background-color: rgba(123, 72, 183, 0.7);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  background: #311d49;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #311d49;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #7b48b7;
+}
+
+.color-layer-black {
+  background-color: rgba(12, 12, 40, 0.4);
+}
+
+.color-layer-gradient-bottom {
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(123, 72, 183, 0.1)), to(rgba(123, 72, 183, 0.5)));
+  background: -moz-linear-gradient(top, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  background: -o-linear-gradient(top, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  mix-blend-mode: multiply;
+}
+
+.color-layer-gradient {
+  background: -moz-linear-gradient(315deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  background: -o-linear-gradient(315deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------*/
+/* Base Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Cursor Colors Start */
+/* ------------------------------------------------*/
+.cursor {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Cursor Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Typography Colors Start */
+/* ------------------------------------------------*/
+p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+h1 {
+  color: #ffffff;
+}
+
+.headline__subtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.headline__descr {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+h2 {
+  color: #ffffff;
+}
+
+.block__subtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.block__text {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.section-slogan {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+h3 {
+  color: #ffffff;
+}
+h3 small {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+h4 {
+  color: #ffffff;
+}
+h4 small {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.team__descr {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+h5 {
+  color: #ffffff;
+}
+
+.contact-data__item p {
+  color: rgba(255, 255, 255, 0.5);
+}
+.contact-data__item a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.no-touch .contact-data__item a:hover {
+  color: #ffffff;
+}
+.contact-data__item ul li {
+  color: rgba(255, 255, 255, 0.5);
+}
+.contact-data__item ul li a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.no-touch .contact-data__item ul li a:hover {
+  color: #ffffff;
+}
+
+.socials-text {
+  color: rgba(255, 255, 255, 0.5);
+}
+.socials-text li::after {
+  color: rgba(255, 255, 255, 0.5);
+}
+.socials-text li a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.no-touch .socials-text li a:hover {
+  color: #ffffff;
+}
+
+.socials-icons {
+  color: rgba(255, 255, 255, 0.5);
+}
+.socials-icons li a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.no-touch .socials-icons li:hover a {
+  color: #ffffff;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.5);
+}
+.copyright a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.no-touch .copyright a:hover {
+  color: #ffffff;
+}
+
+blockquote p {
+  color: #fff;
+}
+blockquote p span {
+  color: #7c61af;
+}
+blockquote cite {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ------------------------------------------------*/
+/* Typography Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Buttons & Triggers Colors Start */
+/* ------------------------------------------------*/
+.menu-trigger {
+  color: #ffffff;
+}
+.menu-trigger svg {
+  fill: #ffffff;
+}
+.menu-trigger.light-desktop {
+  color: #262626;
+}
+.menu-trigger.light-desktop svg {
+  fill: #000000;
+}
+.menu-trigger.dark-desktop {
+  color: #262626;
+}
+.menu-trigger.dark-desktop svg {
+  fill: #000000;
+}
+@media only screen and (min-width: 1200px) {
+  .menu-trigger.light-desktop {
+    color: #ffffff;
+  }
+  .menu-trigger.light-desktop svg {
+    fill: #ffffff;
+  }
+  .menu-trigger.dark-desktop {
+    color: #262626;
+  }
+  .menu-trigger.dark-desktop svg {
+    fill: #000000;
+  }
+}
+
+.no-touch .round-button:hover .button__icon {
+  color: #fff;
+}
+.no-touch .round-button:hover .button__caption {
+  color: #ffffff;
+}
+
+.button__caption {
+  color: #ffffff;
+}
+
+.button__icon {
+  border: 1px solid #7c61af;
+  color: #7c61af;
+}
+.button__icon::after {
+  background-color: #7b48b7;
+}
+
+.intro__scroll::after {
+  background-color: #ffffff;
+}
+
+.inner-video-trigger {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+.inner-video-trigger::after {
+  background-color: #ffffff;
+}
+.no-touch .inner-video-trigger:hover {
+  color: #000000;
+}
+
+.btn {
+  color: #fff;
+}
+
+.btn-solid {
+  background-color: #7b48b7;
+  color: #ffffff;
+  border: 1px solid #7b48b7;
+}
+.btn-solid::after {
+  background-color: #0f101b;
+}
+.no-touch .btn-solid:hover {
+  color: #ffffff;
+}
+
+/* ------------------------------------------------*/
+/* Buttons & Triggers Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Forms and Forms Reply Colors Start */
+/* ------------------------------------------------*/
+form input, form textarea {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+form input:focus, form textarea:focus {
+  border-bottom: 1px solid #7b48b7;
+}
+form .inputs-description {
+  color: rgba(255, 255, 255, 0.5);
+}
+form ::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+form :-moz-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+form ::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+form :-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+form input:focus:required:invalid,
+form textarea:focus:required:invalid {
+  color: #fff;
+}
+form input:required:valid,
+form textarea:required:valid {
+  color: #fff;
+}
+
+.reply-group__icon {
+  color: #7b48b7;
+}
+
+.reply-group__title {
+  color: #ffffff;
+}
+
+p.reply-group__title {
+  color: #ffffff;
+}
+
+.reply-group__text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ------------------------------------------------*/
+/* Forms and Forms Reply Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Header Colors Start */
+/* ------------------------------------------------*/
+.header {
+  background-color: transparent;
+}
+
+.header__logo.replace-to-light::after {
+  background-image: url("../../img/logo-light.svg");
+}
+
+.header__underline {
+  background-color: #7f8678;
+}
+.header__underline.light-desktop {
+  background-color: #7f8678;
+}
+.header__underline.dark-desktop {
+  background-color: #7f8678;
+}
+@media only screen and (min-width: 1200px) {
+  .header__underline.light-desktop {
+    background-color: #ffffff;
+  }
+  .header__underline.dark-desktop {
+    background-color: #7f8678;
+  }
+}
+
+/* ------------------------------------------------*/
+/* Header Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Main Section Colors Start */
+/* ------------------------------------------------*/
+.main {
+  background-color: #0f101b;
+}
+
+.main__intro {
+  background-color: #0f101b;
+}
+
+.media__content {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Main Section Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Countdown Colors Start */
+/* ------------------------------------------------*/
+.media__countdown #countdown {
+  color: #ffffff;
+}
+.media__countdown .help-text {
+  color: #ffffff;
+}
+.media__countdown .countdown-period {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ------------------------------------------------*/
+/* Countdown Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Menu Colors Start */
+/* ------------------------------------------------*/
+.nav {
+  background-color: #0f101b;
+}
+
+.nav__media {
+  background-color: #ffffff;
+}
+
+.media__container {
+  background-color: #ffffff;
+}
+
+.menu__link {
+  color: #ffffff;
+}
+.no-touch .menu__link:hover {
+  color: #7c61af;
+}
+.menu__link.active-trigger {
+  color: #7c61af;
+}
+.no-touch .menu__link.active-trigger:hover {
+  color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Menu Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Notify Colors Start */
+/* ------------------------------------------------*/
+.notify {
+  background-color: #0f101b;
+}
+@media only screen and (min-width: 1200px) {
+  .notify {
+    background-color: rgba(15, 16, 27, 0.5);
+  }
+}
+
+.popup-title__subtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.popup-title__title {
+  color: #ffffff;
+}
+
+.popup-title__text {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.notify-close::before, .notify-close::after {
+  background-color: gray;
+}
+.no-touch .notify-close:hover::before, .no-touch .notify-close:hover::after {
+  background-color: #ffffff;
+}
+
+/* ------------------------------------------------*/
+/* Notify Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Content Sections Colors Start */
+/* ------------------------------------------------*/
+.inner {
+  background-color: #0f101b;
+}
+
+.inner__intro {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Content Sections Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Video Block Colors Start */
+/* ------------------------------------------------*/
+.inner-video {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Video Block Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Skillbars Colors Start */
+/* ------------------------------------------------*/
+.skillbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.skillbar-title {
+  color: #ffffff;
+}
+
+.skillbar-bar {
+  background-color: #7b48b7;
+}
+
+.skill-bar-percent {
+  color: #ffffff;
+}
+
+/* ------------------------------------------------*/
+/* Skillbars Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Google Map Colors Start */
+/* ------------------------------------------------*/
+.google-map {
+  background-color: #7b48b7;
+}
+
+#zoom-in, #zoom-out {
+  border: 1px solid #ffffff;
+  background-color: rgba(123, 72, 183, 0.1);
+  color: #ffffff;
+}
+#zoom-in::after, #zoom-out::after {
+  background-color: #7b48b7;
+}
+.no-touch #zoom-in:hover, .no-touch #zoom-out:hover {
+  color: #fff;
+}
+
+/* ------------------------------------------------*/
+/* Google Map Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Gallery Custom Colors Start */
+/* ------------------------------------------------*/
+.pswp__caption__center h3 {
+  color: #fff;
+}
+.pswp__caption__center h3 small {
+  color: rgba(255, 255, 255, 0.5);
+}
+.pswp__caption__center p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pswp__bg {
+  background-color: #251637;
+}
+.pswp__bg::after {
+  background-color: #251637;
+}
+
+.pswp__button--close {
+  background-color: #f18af9;
+}
+
+/* ------------------------------------------------*/
+/* Gallery Custom Colors Start */
+/* ------------------------------------------------*/

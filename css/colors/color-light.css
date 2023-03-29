@@ -1,0 +1,593 @@
+/*! ------------------------------------------------
+ * Project Name: Beldon - Coming Soon and Landing Page Template
+ * Project Description: Beldon - awesome coming soon template to kick-start your project
+ * Tags: mix_design, coming soon, under construction, template, landing page, portfolio, one page, responsive, html5, css3, creative, clean, agency, personal page
+ * Version: 1.0.2
+ * Build Date: November 2021
+ * Last Update: December 2022
+ * This product is available exclusively on Themeforest
+ * Author: mix_design
+ * Author URI: https://themeforest.net/user/mix_design
+ * File name: color-light.css
+ * ------------------------------------------------
+ *
+ * ------------------------------------------------
+ * Table of Contents
+ * ------------------------------------------------
+ *  1. Template Backgrounds
+ *  2. Base
+ *  3. Cursor
+ *  4. Typography
+ *  5. Buttons & Triggers
+ *  6. Forms and Forms Reply Groups
+ *  7. Header
+ *  8. Main Section
+ *  9. Countdown
+ *  10. Menu
+ *  11. Notify
+ *  12. Content Sections
+ *  13. Video Block
+ *  14. Skillbars
+ *  15. Google Map
+ *  16. Gallery Custom Styles
+ * ------------------------------------------------
+ * Table of Contents End
+ * ------------------------------------------------ */
+/* ------------------------------------------------*/
+/* Template Backgrounds Colors Start */
+/* ------------------------------------------------*/
+.svg-background-1,
+.svg-background-2,
+.svg-background-3 {
+  background-color: #f7f7f7;
+}
+
+/* ------------------------------------------------*/
+/* Template Backgrounds Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Base Colors Start */
+/* ------------------------------------------------*/
+::-moz-selection {
+  background-color: rgba(123, 72, 183, 0.7);
+  color: #ffffff;
+}
+::selection {
+  background-color: rgba(123, 72, 183, 0.7);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  background: #cab6e2;
+}
+
+::-webkit-scrollbar-track {
+  background: #cab6e2;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #7b48b7;
+}
+
+.color-layer-black {
+  background-color: rgba(12, 12, 40, 0.4);
+}
+
+.color-layer-gradient-bottom {
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(123, 72, 183, 0.1)), to(rgba(123, 72, 183, 0.5)));
+  background: -moz-linear-gradient(top, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  background: -o-linear-gradient(top, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(123, 72, 183, 0.1) 0%, rgba(123, 72, 183, 0.5) 100%);
+  mix-blend-mode: multiply;
+}
+
+.color-layer-gradient {
+  background: -moz-linear-gradient(315deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  background: -o-linear-gradient(315deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(86, 55, 137, 0.6) 0%, rgba(152, 25, 154, 0.6) 35%, rgba(15, 15, 84, 0.6) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------*/
+/* Base Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Cursor Colors Start */
+/* ------------------------------------------------*/
+.cursor {
+  background-color: #ad85f9;
+}
+
+/* ------------------------------------------------*/
+/* Cursor Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Typography Colors Start */
+/* ------------------------------------------------*/
+p {
+  color: #3d3d3d;
+}
+
+h1 {
+  color: #000000;
+}
+
+.headline__subtitle {
+  color: #636363;
+}
+
+.headline__descr {
+  color: #3d3d3d;
+}
+
+h2 {
+  color: #000000;
+}
+
+.block__subtitle {
+  color: #636363;
+}
+
+.block__text {
+  color: #3d3d3d;
+}
+
+.section-slogan {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+h3 {
+  color: #000;
+}
+h3 small {
+  color: #636363;
+}
+
+h4 {
+  color: #000000;
+}
+h4 small {
+  color: #636363;
+}
+
+.team__descr {
+  color: #3d3d3d;
+}
+
+h5 {
+  color: #000000;
+}
+
+.contact-data__item p {
+  color: #3d3d3d;
+}
+.contact-data__item a {
+  color: #3d3d3d;
+}
+.no-touch .contact-data__item a:hover {
+  color: #000000;
+}
+.contact-data__item ul li {
+  color: #3d3d3d;
+}
+.contact-data__item ul li a {
+  color: #3d3d3d;
+}
+.no-touch .contact-data__item ul li a:hover {
+  color: #000000;
+}
+
+.socials-text {
+  color: #636363;
+}
+.socials-text li::after {
+  color: #636363;
+}
+.socials-text li a {
+  color: #636363;
+}
+.no-touch .socials-text li a:hover {
+  color: #000000;
+}
+
+.socials-icons {
+  color: #636363;
+}
+.socials-icons li a {
+  color: #636363;
+}
+.no-touch .socials-icons li:hover a {
+  color: #000000;
+}
+
+.copyright {
+  color: #636363;
+}
+.copyright a {
+  color: #636363;
+}
+.no-touch .copyright a:hover {
+  color: #000000;
+}
+
+blockquote p {
+  color: #1a1a1a;
+}
+blockquote p span {
+  color: #7c61af;
+}
+blockquote cite {
+  color: #636363;
+}
+
+/* ------------------------------------------------*/
+/* Typography Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Buttons & Triggers Colors Start */
+/* ------------------------------------------------*/
+.menu-trigger {
+  color: #262626;
+}
+.menu-trigger svg {
+  fill: #000000;
+}
+.menu-trigger.light-desktop {
+  color: #262626;
+}
+.menu-trigger.light-desktop svg {
+  fill: #000000;
+}
+.menu-trigger.dark-desktop {
+  color: #262626;
+}
+.menu-trigger.dark-desktop svg {
+  fill: #000000;
+}
+@media only screen and (min-width: 1200px) {
+  .menu-trigger.light-desktop {
+    color: #ffffff;
+  }
+  .menu-trigger.light-desktop svg {
+    fill: #ffffff;
+  }
+  .menu-trigger.dark-desktop {
+    color: #262626;
+  }
+  .menu-trigger.dark-desktop svg {
+    fill: #000000;
+  }
+}
+
+.no-touch .round-button:hover .button__icon {
+  color: #fff;
+}
+.no-touch .round-button:hover .button__caption {
+  color: #000000;
+}
+
+.button__caption {
+  color: #000000;
+}
+
+.button__icon {
+  border: 1px solid #7c61af;
+  color: #7c61af;
+}
+.button__icon::after {
+  background-color: #7b48b7;
+}
+
+.intro__scroll::after {
+  background-color: #ffffff;
+}
+
+.inner-video-trigger {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+.inner-video-trigger::after {
+  background-color: #ffffff;
+}
+.no-touch .inner-video-trigger:hover {
+  color: #000000;
+}
+
+.btn {
+  color: #000;
+}
+
+.btn-solid {
+  background-color: #7b48b7;
+  color: #ffffff;
+  border: 1px solid #7b48b7;
+}
+.btn-solid::after {
+  background-color: #ffffff;
+}
+.no-touch .btn-solid:hover {
+  color: #000;
+}
+
+/* ------------------------------------------------*/
+/* Buttons & Triggers Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Forms and Forms Reply Colors Start */
+/* ------------------------------------------------*/
+form input, form textarea {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  color: #000;
+}
+form input:focus, form textarea:focus {
+  border-bottom: 1px solid #7b48b7;
+}
+form .inputs-description {
+  color: #636363;
+}
+form ::-webkit-input-placeholder {
+  color: #929292;
+}
+form :-moz-placeholder {
+  color: #929292;
+}
+form ::-moz-placeholder {
+  color: #929292;
+}
+form :-ms-input-placeholder {
+  color: #929292;
+}
+form input:focus:required:invalid,
+form textarea:focus:required:invalid {
+  color: #000;
+}
+form input:required:valid,
+form textarea:required:valid {
+  color: #000;
+}
+
+.reply-group__icon {
+  color: #7b48b7;
+}
+
+.reply-group__title {
+  color: #000000;
+}
+
+p.reply-group__title {
+  color: #000000;
+}
+
+.reply-group__text {
+  color: #3d3d3d;
+}
+
+/* ------------------------------------------------*/
+/* Forms and Forms Reply Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Header Colors Start */
+/* ------------------------------------------------*/
+.header {
+  background-color: transparent;
+}
+
+.header__logo.replace-to-light::after {
+  background-image: url("../../img/logo-light.svg");
+}
+
+.header__underline {
+  background-color: #7f8678;
+}
+.header__underline.light-desktop {
+  background-color: #7f8678;
+}
+.header__underline.dark-desktop {
+  background-color: #7f8678;
+}
+@media only screen and (min-width: 1200px) {
+  .header__underline.light-desktop {
+    background-color: #ffffff;
+  }
+  .header__underline.dark-desktop {
+    background-color: #7f8678;
+  }
+}
+
+/* ------------------------------------------------*/
+/* Header Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Main Section Colors Start */
+/* ------------------------------------------------*/
+.main {
+  background-color: #fcfcfc;
+}
+
+.main__intro {
+  background-color: #fcfcfc;
+}
+
+.media__content {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Main Section Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Countdown Colors Start */
+/* ------------------------------------------------*/
+.media__countdown #countdown {
+  color: #ffffff;
+}
+.media__countdown .help-text {
+  color: #ffffff;
+}
+.media__countdown .countdown-period {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ------------------------------------------------*/
+/* Countdown Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Menu Colors Start */
+/* ------------------------------------------------*/
+.nav {
+  background-color: #f7f7f7;
+}
+
+.nav__media {
+  background-color: #ffffff;
+}
+
+.media__container {
+  background-color: #ffffff;
+}
+
+.menu__link {
+  color: #000000;
+}
+.no-touch .menu__link:hover {
+  color: #7b48b7;
+}
+.menu__link.active-trigger {
+  color: #7b48b7;
+}
+.no-touch .menu__link.active-trigger:hover {
+  color: #623a92;
+}
+
+/* ------------------------------------------------*/
+/* Menu Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Notify Colors Start */
+/* ------------------------------------------------*/
+.notify {
+  background-color: #f7f7f7;
+}
+@media only screen and (min-width: 1200px) {
+  .notify {
+    background-color: rgba(247, 247, 247, 0.5);
+  }
+}
+
+.popup-title__subtitle {
+  color: #636363;
+}
+
+.popup-title__title {
+  color: #000000;
+}
+
+.popup-title__text {
+  color: #3d3d3d;
+}
+
+.notify-close::before, .notify-close::after {
+  background-color: #000000;
+}
+.no-touch .notify-close:hover::before, .no-touch .notify-close:hover::after {
+  background-color: #636363;
+}
+
+/* ------------------------------------------------*/
+/* Notify Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Content Sections Colors Start */
+/* ------------------------------------------------*/
+.inner {
+  background-color: #f7f7f7;
+}
+
+.inner__intro {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Content Sections Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Video Block Colors Start */
+/* ------------------------------------------------*/
+.inner-video {
+  background-color: #7b48b7;
+}
+
+/* ------------------------------------------------*/
+/* Video Block Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Skillbars Colors Start */
+/* ------------------------------------------------*/
+.skillbar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.skillbar-title {
+  color: #000000;
+}
+
+.skillbar-bar {
+  background-color: #7b48b7;
+}
+
+.skill-bar-percent {
+  color: #000000;
+}
+
+/* ------------------------------------------------*/
+/* Skillbars Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Google Map Colors Start */
+/* ------------------------------------------------*/
+.google-map {
+  background-color: #7b48b7;
+}
+
+#zoom-in, #zoom-out {
+  border: 1px solid #7b48b7;
+  background-color: #ffffff;
+  color: #623a92;
+}
+#zoom-in::after, #zoom-out::after {
+  background-color: #7b48b7;
+}
+.no-touch #zoom-in:hover, .no-touch #zoom-out:hover {
+  color: #fff;
+}
+
+/* ------------------------------------------------*/
+/* Google Map Colors End */
+/* ------------------------------------------------*/
+/* ------------------------------------------------*/
+/* Gallery Custom Colors Start */
+/* ------------------------------------------------*/
+.pswp__caption__center h3 {
+  color: #fff;
+}
+.pswp__caption__center h3 small {
+  color: rgba(255, 255, 255, 0.5);
+}
+.pswp__caption__center p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pswp__bg {
+  background-color: #251637;
+}
+.pswp__bg::after {
+  background-color: #251637;
+}
+
+.pswp__button--close {
+  background-color: #f18af9;
+}
+
+/* ------------------------------------------------*/
+/* Gallery Custom Colors Start */
+/* ------------------------------------------------*/
