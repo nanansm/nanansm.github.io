@@ -19,73 +19,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN for rapid development -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#0a0a0a',
-                        secondary: '#6b6b6b',
-                        background: '#fafafa',
-                    },
-                    spacing: {
-                        '128': '32rem',
-                    }
-                }
-            }
-        }
-    </script>
-    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-background text-primary font-sans antialiased">
+<body>
     
     <!-- Navbar (Fixed) -->
-    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="logo text-xl font-semibold tracking-tighter hover:opacity-60 transition-opacity">NANAN.</a>
+    <nav id="navbar" class="navbar">
+        <div class="container navbar-container">
+            <a href="#" class="logo">NANAN.</a>
             
             <!-- Desktop Menu -->
-            <ul class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-wider">
-                <li><a href="#work" class="hover:opacity-60 transition-opacity">Work</a></li>
-                <li><a href="#about" class="hover:opacity-60 transition-opacity">About</a></li>
-                <li><a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a></li>
+            <ul class="nav-menu desktop-menu">
+                <li><a href="#work" class="nav-link">Work</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             
             <!-- Mobile Toggle -->
-            <button id="mobile-menu-toggle" class="md:hidden p-2" aria-label="Toggle menu">
-                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
-                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
-                <span class="block w-6 h-0.5 bg-primary transition-all"></span>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </button>
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100">
-            <ul class="flex flex-col py-4">
-                <li><a href="#work" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Work</a></li>
-                <li><a href="#about" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">About</a></li>
-                <li><a href="#contact" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Contact</a></li>
+        <div id="mobile-menu" class="mobile-menu hidden">
+            <ul class="mobile-menu-list">
+                <li><a href="#work" class="mobile-link">Work</a></li>
+                <li><a href="#about" class="mobile-link">About</a></li>
+                <li><a href="#contact" class="mobile-link">Contact</a></li>
             </ul>
         </div>
     </nav>
     
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-20">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl">
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-6 opacity-0 translate-y-4" data-aos="fade-up">
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title fade-in">
                     Strategic<br>
                     <span class="text-secondary">Marketing</span><br>
                     Analyst
                 </h1>
-                <p class="text-lg md:text-xl text-secondary font-light max-w-2xl mt-8 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
+                <p class="hero-subtitle fade-in" data-aos-delay="200">
                     Crafting data-driven marketing strategies that elevate brands and drive meaningful engagement across digital platforms.
                 </p>
             </div>
@@ -93,125 +71,137 @@
     </section>
     
     <!-- Work Section -->
-    <section id="work" class="py-24 md:py-32">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-light mb-16 opacity-0 translate-y-4" data-aos="fade-up">Selected Work</h2>
+    <section id="work" class="section work-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Selected Work</h2>
             
             <!-- Project Grid (2 columns on desktop) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+            <div class="project-grid">
                 
                 <!-- Project Card 1: Juragan Laptop -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_1.jpg" 
+                            src="./img/portfolio-2column/img_1.jpg" 
                             alt="Juragan Laptop Digital Campaign"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Juragan Laptop</h3>
-                        <span class="text-sm text-secondary">Digital Campaign</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Juragan Laptop</h3>
+                            <span class="project-category">Digital Campaign</span>
+                        </div>
+                        <p class="project-meta">Strategic Marketing • 2017-2019</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Strategic Marketing • 2017-2019</p>
                 </article>
                 
                 <!-- Project Card 2: BTH -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_2.jpg" 
+                            src="./img/portfolio-2column/img_2.jpg" 
                             alt="BTH Brand Strategy"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">BTH</h3>
-                        <span class="text-sm text-secondary">Brand Strategy</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">BTH</h3>
+                            <span class="project-category">Brand Strategy</span>
+                        </div>
+                        <p class="project-meta">Brand Consultant • 2018-2020</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Brand Consultant • 2018-2020</p>
                 </article>
                 
                 <!-- Project Card 3 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_3.jpg" 
+                            src="./img/portfolio-2column/img_3.jpg" 
                             alt="Marketing Analytics Dashboard"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Analytics Dashboard</h3>
-                        <span class="text-sm text-secondary">Data Visualization</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Analytics Dashboard</h3>
+                            <span class="project-category">Data Visualization</span>
+                        </div>
+                        <p class="project-meta">Data Analyst • 2019-2021</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Data Analyst • 2019-2021</p>
                 </article>
                 
                 <!-- Project Card 4 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_4.jpg" 
+                            src="./img/portfolio-2column/img_4.jpg" 
                             alt="Social Media Campaign"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Social Campaign</h3>
-                        <span class="text-sm text-secondary">Social Media</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Social Campaign</h3>
+                            <span class="project-category">Social Media</span>
+                        </div>
+                        <p class="project-meta">Content Strategy • 2020-2022</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Content Strategy • 2020-2022</p>
                 </article>
                 
                 <!-- Project Card 5 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_5.jpg" 
+                            src="./img/portfolio-2column/img_5.jpg" 
                             alt="E-commerce Growth Strategy"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">E-commerce Growth</h3>
-                        <span class="text-sm text-secondary">Growth Marketing</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">E-commerce Growth</h3>
+                            <span class="project-category">Growth Marketing</span>
+                        </div>
+                        <p class="project-meta">Growth Lead • 2021-2023</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Growth Lead • 2021-2023</p>
                 </article>
                 
                 <!-- Project Card 6 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                <article class="project-card fade-in">
+                    <div class="project-image-wrapper">
                         <img 
-                            src="img/portfolio-2column/img_6.jpg" 
+                            src="./img/portfolio-2column/img_6.jpg" 
                             alt="Market Research Analysis"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            class="project-image"
                             loading="lazy"
                             width="800" 
                             height="600"
                         >
                     </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Market Research</h3>
-                        <span class="text-sm text-secondary">Research</span>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Market Research</h3>
+                            <span class="project-category">Research</span>
+                        </div>
+                        <p class="project-meta">Market Analyst • 2022-Present</p>
                     </div>
-                    <p class="text-secondary text-sm mt-1">Market Analyst • 2022-Present</p>
                 </article>
                 
             </div>
@@ -219,40 +209,40 @@
     </section>
     
     <!-- About Section -->
-    <section id="about" class="py-24 md:py-32 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-light opacity-0 translate-y-4" data-aos="fade-up">About Me</h2>
+    <section id="about" class="section about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-label">
+                    <h2 class="section-title fade-in">About Me</h2>
                 </div>
-                <div class="opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
-                    <p class="text-secondary font-light leading-relaxed mb-6">
+                <div class="about-content fade-in" data-aos-delay="200">
+                    <p class="about-text">
                         With over 5 years of experience in strategic marketing and data analysis, I help brands navigate the complex digital landscape. My approach combines analytical rigor with creative thinking to deliver measurable results.
                     </p>
-                    <p class="text-secondary font-light leading-relaxed mb-8">
+                    <p class="about-text">
                         I specialize in developing comprehensive marketing strategies that align business objectives with customer insights, ensuring every campaign drives meaningful engagement and ROI.
                     </p>
                     
-                    <h3 class="text-lg font-semibold mb-4">Core Skills</h3>
-                    <ul class="space-y-2 text-secondary font-light">
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                    <h3 class="skills-title">Core Skills</h3>
+                    <ul class="skills-list">
+                        <li class="skill-item">
+                            <span class="skill-bullet"></span>
                             Strategic Planning & Market Analysis
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                        <li class="skill-item">
+                            <span class="skill-bullet"></span>
                             Digital Campaign Management
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                        <li class="skill-item">
+                            <span class="skill-bullet"></span>
                             Data Visualization & Reporting
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                        <li class="skill-item">
+                            <span class="skill-bullet"></span>
                             Brand Strategy & Positioning
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                        <li class="skill-item">
+                            <span class="skill-bullet"></span>
                             Social Media & Content Strategy
                         </li>
                     </ul>
@@ -262,25 +252,25 @@
     </section>
     
     <!-- Contact / Footer Section -->
-    <section id="contact" class="py-24 md:py-32">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl">
-                <h2 class="text-3xl md:text-4xl font-light mb-12 opacity-0 translate-y-4" data-aos="fade-up">Get In Touch</h2>
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title fade-in">Get In Touch</h2>
                 
-                <a href="mailto:hello@nanansm.com" class="block text-4xl md:text-5xl lg:text-6xl font-light hover:opacity-60 transition-opacity mb-16 opacity-0 translate-y-4" data-aos="fade-up">
+                <a href="mailto:hello@nanansm.com" class="email-link fade-in">
                     hello@nanansm.com
                 </a>
                 
                 <!-- Social Links -->
-                <div class="flex space-x-6 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
-                    <a href="https://www.linkedin.com/in/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">LinkedIn</a>
-                    <a href="https://www.instagram.com/nanan.sm/" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">Instagram</a>
-                    <a href="https://github.com/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">GitHub</a>
+                <div class="social-links fade-in" data-aos-delay="200">
+                    <a href="https://www.linkedin.com/in/nanansm" target="_blank" rel="noopener noreferrer" class="social-link">LinkedIn</a>
+                    <a href="https://www.instagram.com/nanan.sm/" target="_blank" rel="noopener noreferrer" class="social-link">Instagram</a>
+                    <a href="https://github.com/nanansm" target="_blank" rel="noopener noreferrer" class="social-link">GitHub</a>
                 </div>
                 
                 <!-- Copyright -->
-                <div class="mt-24 pt-8 border-t border-gray-100">
-                    <p class="text-sm text-secondary">&copy; <span id="current-year">2024</span> Nanan SM. All rights reserved.</p>
+                <div class="copyright">
+                    <p class="copyright-text">&copy; <span id="current-year">2024</span> Nanan SM. All rights reserved.</p>
                 </div>
             </div>
         </div>

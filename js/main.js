@@ -1,6 +1,7 @@
 /**
  * Main JavaScript for Portfolio
  * Handles: Smooth scroll, fade-in animations, mobile menu, navbar scroll state
+ * Vanilla JS - No frameworks
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -87,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
     
-    // Observe all elements with data-aos="fade-up"
-    document.querySelectorAll('[data-aos="fade-up"]').forEach(el => {
+    // Observe all elements with fade-in class
+    document.querySelectorAll('.fade-in').forEach(el => {
         observer.observe(el);
     });
     
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
-    // Example: Handle resize events efficiently
+    // Handle resize events efficiently
     const handleResize = debounce(() => {
         // Add any resize-specific logic here if needed
     }, 250);
