@@ -1,829 +1,292 @@
-
-<!doctype html>
-<html class="no-js" lang="">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>NananSm - Strategyc Marketing Analyst</title>
-    <meta name="description" content="">
-    <meta name="msapplication-tap-highlight" content="yes" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0" />
-
-    <!-- Google Web Font -->
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lekton:400,700,400italic' rel='stylesheet' type='text/css'>
-
-    <!--  Bootstrap 3-->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-
-    <!-- OWL Carousel -->
-    <link rel="stylesheet" href="css/owl.carousel.css">
-    <link rel="stylesheet" href="css/owl.theme.css">
-
-    <!--  Slider -->
-    <link rel="stylesheet" href="css/jquery.kenburnsy.css">
-
-    <!-- Animate -->
-    <link rel="stylesheet" href="css/animate.css">
-
-    <!-- Web Icons Font -->
-    <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
-    <link rel="stylesheet" href="css/iconmoon.css">
-    <link rel="stylesheet" href="css/et-line.css">
-    <link rel="stylesheet" href="css/ionicons.css">
-
-    <!-- Magnific PopUp -->
-    <link rel="stylesheet" href="css/magnific-popup.css">
-
-    <!-- Tabs -->
-    <link rel="stylesheet" type="text/css" href="css/tabs.css" />
-    <link rel="stylesheet" type="text/css" href="css/tabstyles.css" />
-
-    <!-- Loader Style -->
-    <link rel="stylesheet" href="css/loader-1.css">
-
-    <!-- Costum Styles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nanan SM - Strategic Marketing Analyst Portfolio">
+    <meta name="author" content="Nanan SM">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Nanan SM - Strategic Marketing Analyst">
+    <meta property="og:description" content="Portfolio of Nanan SM, a strategic marketing analyst specializing in digital campaigns and brand strategy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nanansm.github.io">
+    
+    <title>Nanan SM — Strategic Marketing Analyst</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN for rapid development -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0a0a0a',
+                        secondary: '#6b6b6b',
+                        background: '#fafafa',
+                    },
+                    spacing: {
+                        '128': '32rem',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/responsive.css">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/ico" href="favicon.ico">
-
-    <!-- Modernizer & Respond js -->
-    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
-
-<body>
-
-    <!-- Preloader -->
-    <div class="cover"></div>
-
-    <div class="header">
-        <div class="container">
-            <div class="logo">
-                <!--<a href="index.html">
-                    <img src="img/logo.png" alt="Logo">
-                </a>!-->
-                <h1>
-                HELLO THERE !!!
-                </h1>
-
-            </div>
-
-            <!-- Menu Hamburger (Default) -->
-            <button class="main-menu-indicator" id="open-button">
-                <span class="line"></span>
+<body class="bg-background text-primary font-sans antialiased">
+    
+    <!-- Navbar (Fixed) -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="logo text-xl font-semibold tracking-tighter hover:opacity-60 transition-opacity">NANAN.</a>
+            
+            <!-- Desktop Menu -->
+            <ul class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-wider">
+                <li><a href="#work" class="hover:opacity-60 transition-opacity">Work</a></li>
+                <li><a href="#about" class="hover:opacity-60 transition-opacity">About</a></li>
+                <li><a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a></li>
+            </ul>
+            
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-toggle" class="md:hidden p-2" aria-label="Toggle menu">
+                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
+                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
+                <span class="block w-6 h-0.5 bg-primary transition-all"></span>
             </button>
-
-            <div class="menu-wrap" style="background-image: url(img/nav_bg.jpg)">
-                <div class="menu-content">
-                    <div class="navigation">
-                        <span class="pe-7s-close close-menu" id="close-button"></span>
-                        <div class="search-wrap js-ui-search">
-                            <input class="js-ui-text" type="text" placeholder="Search Here...">
-                            <span class="eks js-ui-close"></span>
-                        </div>
-                    </div>
-                    <nav class="menu">
-                        <div class="menu-list">
-                            <ul>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-
-                    <div class="hidden-xs">
-                        <div class="menu-social-media">
-                            <ul>
-                              <li><a href="https://www.facebook.com/nanansoe/"><i class="iconmoon-facebook"></i></a></li>
-                              <li><a href="https://id.pinterest.com/nanansm/"><i class="iconmoon-pinterest"></i></a></li>
-                              <li><a href="https://www.instagram.com/nanan.sm/"><i class="ion-social-instagram"></i></a></li>
-                              <li><a href="https://www.linkedin.com/in/nanansm/"><i class="iconmoon-linkedin2"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="menu-information">
-                            <ul>
-                                <li><span>T:</span> 003 124 115</li>
-                                <li><span>E:</span> info@mail.com</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Menu Hamburger (Default) -->
-
         </div>
-    </div>
-
-
-
-
-<div class="container">
-    <div class="slider-wrapper">
-            <div class="arch-slider-content">
-                <p>
-                    Welcome<br>
-                    to my <b>Simple</b> Portfolio
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100">
+            <ul class="flex flex-col py-4">
+                <li><a href="#work" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Work</a></li>
+                <li><a href="#about" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">About</a></li>
+                <li><a href="#contact" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-6 opacity-0 translate-y-4" data-aos="fade-up">
+                    Strategic<br>
+                    <span class="text-secondary">Marketing</span><br>
+                    Analyst
+                </h1>
+                <p class="text-lg md:text-xl text-secondary font-light max-w-2xl mt-8 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
+                    Crafting data-driven marketing strategies that elevate brands and drive meaningful engagement across digital platforms.
                 </p>
             </div>
-        <div id="slider-ef" class="slider-images-wrapper">
-            <img class="img-responsive" src="img/slider/Portfolio9.jpg" alt="beutik company">
-            <img class="img-responsive" src="img/slider/Portfolio10.jpg" alt="150 coffee gardeb">
-            <img class="img-responsive" src="img/slider/Portfolio8.jpg" alt="kopi anjis">
         </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-      <div class="col-md-12">
-          <div class="tabs-wrapper">
-              <h1>What I Do</h1>
-              <div class="tabs ef-tabs tabs-style-flip">
-                  <nav>
-                      <ul>
-                          <li class="tab-current">
-                              <a href="#section-flip-1">
-                                  <span class="tabs-icon icon-tools"></span>
-                                  <span class="tabs-title">Front End</span>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#section-flip-2">
-                                  <span class="tabs-icon icon-lightbulb"></span>
-                                  <span class="tabs-title">Back End</span>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#section-flip-3">
-                                  <span class="tabs-icon icon-paintbrush"></span>
-                                  <span class="tabs-title">Consultancy</span>
-                              </a>
-                          </li>
-                      </ul>
-                  </nav>
-                  <div class="content-wrap">
-                      <section id="section-flip-1" class="content-current">
-                          <div class="col-md-12">
-                              <div class="row">
-                                  <p>
-                                      Provide a value for how well the content is created to be distributed to the right audience, in the selected placements, and takes into account the data obtained that can be converted to sales.
-                                  </p>
-                              </div>
-                          </div>
-                      </section>
-                      <section id="section-flip-2">
-                          <div class="col-md-12">
-                              <div class="row">
-                                  <p>Make the right marketing strategy, taking into account how good decisions must be taken. With appropriate financial planning, and the right placement.</p>
-                              </div>
-                          </div>
-                      </section>
-                      <section id="section-flip-3">
-                          <div class="col-md-12">
-                              <div class="row">
-                                  <p>
-                                      As well as providing development services, I can also help you decide strategic roadmaps via consultancy services.
-                                  </p>
-                              </div>
-                          </div>
-                      </section>
-                      </div><!-- /content-wrap -->
-                      </div><!-- /tabs -->
-                  </div>
-              </div>
+    </section>
+    
+    <!-- Work Section -->
+    <section id="work" class="py-24 md:py-32">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-light mb-16 opacity-0 translate-y-4" data-aos="fade-up">Selected Work</h2>
+            
+            <!-- Project Grid (2 columns on desktop) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+                
+                <!-- Project Card 1: Juragan Laptop -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_1.jpg" 
+                            alt="Juragan Laptop Digital Campaign"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">Juragan Laptop</h3>
+                        <span class="text-sm text-secondary">Digital Campaign</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Strategic Marketing • 2017-2019</p>
+                </article>
+                
+                <!-- Project Card 2: BTH -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_2.jpg" 
+                            alt="BTH Brand Strategy"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">BTH</h3>
+                        <span class="text-sm text-secondary">Brand Strategy</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Brand Consultant • 2018-2020</p>
+                </article>
+                
+                <!-- Project Card 3 -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_3.jpg" 
+                            alt="Marketing Analytics Dashboard"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">Analytics Dashboard</h3>
+                        <span class="text-sm text-secondary">Data Visualization</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Data Analyst • 2019-2021</p>
+                </article>
+                
+                <!-- Project Card 4 -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_4.jpg" 
+                            alt="Social Media Campaign"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">Social Campaign</h3>
+                        <span class="text-sm text-secondary">Social Media</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Content Strategy • 2020-2022</p>
+                </article>
+                
+                <!-- Project Card 5 -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_5.jpg" 
+                            alt="E-commerce Growth Strategy"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">E-commerce Growth</h3>
+                        <span class="text-sm text-secondary">Growth Marketing</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Growth Lead • 2021-2023</p>
+                </article>
+                
+                <!-- Project Card 6 -->
+                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
+                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
+                        <img 
+                            src="img/portfolio-2column/img_6.jpg" 
+                            alt="Market Research Analysis"
+                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            width="800" 
+                            height="600"
+                        >
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-lg font-semibold">Market Research</h3>
+                        <span class="text-sm text-secondary">Research</span>
+                    </div>
+                    <p class="text-secondary text-sm mt-1">Market Analyst • 2022-Present</p>
+                </article>
+                
             </div>
-          </div>
-
-          <div class="container margin-top">
-              <div class="about-studio image-cover" style="background-image: url(img/about-studio.jpg)">
-                  <div class="col-md-6 col-md-offset-6">
-                      <div class="our-studio-content">
-                          <h1>About Me</h1>
-                          <hr>
-                          <p>The habits of all people in this digital age, requires businesses to change the way marketing and advertising, with targeted Digital Marketing, companies can increase traffic and brand awareness of targeted prospective customers.<br><br>
-                      I am very happy to be able to help several companies to increase sales by using appropriate digital marketing, and I hope you make me a partner in your company.
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="py-24 md:py-32 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-light opacity-0 translate-y-4" data-aos="fade-up">About Me</h2>
+                </div>
+                <div class="opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-secondary font-light leading-relaxed mb-6">
+                        With over 5 years of experience in strategic marketing and data analysis, I help brands navigate the complex digital landscape. My approach combines analytical rigor with creative thinking to deliver measurable results.
                     </p>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="container margin-top">
-            <div class="main-title">
-                <h1>MY RECENT WORK</h1>
-                <hr>
-
-            </div>
-              <div class="row">
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>Juragan Laptop</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Advertiser<br>Jan 2017 – Feb 2019</h5></button>
-                                      <div class="panel">
-                                        <p>
-                                        Membuat campaign untuk meningkatkan Brand Awareness dan merubahnya menjadi Penjualan.
-                                        Juragan laptop sendiri merupakan salah satu perusahaan penjualan laptop second di Kota Bandung, dengan target pasar anak muda atau mahasiswa yang membutuhkan laptop dengan spesifikasi dan budget yang sesuai.
-                                        <br><br>Detail Pekerjaan:<br>
-                                        <li>Merencanakan periklanan yang sesuai dengan target market - Membuat Budgeting periklanan</li>
-                                        <li>Memilih media Channel untuk periklanan</li>
-                                        <li>Membuat content ads.</li>
-                                        <li>Membuat Copywriting di iklan</li>
-                                        <li>Mengukur kinerja iklan.</li>
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>Bakso Aci Masjay</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Advertisement Specialist<br>Mar 2020 – Jun 2020</h5></button>
-                                      <div class="panel">
-                                      <p>Bakso Aci Masjay, Pioneer Bakso Aci di Kota Bandung.
-                                        <br><br>Detail Pekerjaan:<br>
-                                        <li>Ads Planing</li>
-                                        <li>Ads Calculation</li>
-                                        <li>Audience Targeting</li>
-                                        <li>Reach People Targeting</li>
-                                          <li>Contenct Ad Selection</li>
-                                          <li>Ads Manager</li>
-                                        <li>Ads Reporting</li>
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>The White Clover</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Digital Marketing Specialist<br>Apr 2021 – Jun 2021</h5></button>
-                                      <div class="panel">
-                                        <p>
-                                        The White Clover, yang berada di Jl. Dr. Cipto No.24, Pasir Kaliki, Kota Bandung. merupakan Fine and Dining Resto, Mice, dan intimate Wedding.
-                                        “Victorious with Love, Prosperous in Luck”
-                                        <br><br>Detail Pekerjaan:<br>
-
-                                        <li>Pemilihan Chanel untuk paid Promotion</li>
-                                          <li>Ads Calculation</li>
-                                          <li>Content Direction</li>
-                                          <li>Media Cultivation</li>
-                                          <li>Audience Journey Maps</li>
-                                          <li>Campaign Optimizer</li>
-                                          <li>Audience Targeting</li>
-                                          <li>Ads Manager</li>
-                                          <li>Ads Reporting</li>
-
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-
-              </div>
-
-              <div class="row">
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>150 Coffee & Garden</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Digital Marketing Manager<br>Feb 2019 – Sep 2021</h5></button>
-                                      <div class="panel">
-                                      <p>
-                                        Dunia Coffee Shop di Kota Bandung yang sudah bisa terbilang banyak, menjadikan pekerjaan ini salah satu tantangan baru untuk dapat meningkatkan interaksi di Social Media dengan Calon Customer, dengan tujuan untuk menjadi salah satu tempat Favorit kaula muda di Kota Bandung.
-
-                                        <br><br>Detail Pekerjaan:<br>
-                                        <li>Membuat tujuan dari pemasaran yang akan dilakukan</li>
-                                          <li>Menentukan Uniqe Point Selling</li>
-                                          <li>Menentukan Media Channel untuk pemasaran</li>
-                                          <li>Membuat skema content Marketing</li>
-                                          <li>Membuat dan menganalisis Content Marketing</li>
-                                          <li>Membuat Copywriting</li>
-                                          <li>Delivery Content Marketing di Channel yang sudah di pilih</li>
-                                          <li>Pengukuran dan pemeliharaan content marketing yang sudah publish.</li>
-                                          <li>Membuat Laporan Pemasaran.</li>
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>Athenary Coffee</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Business Development Manager<br>Sep 2020 – Okt 2021</h5></button>
-                                      <div class="panel">
-
-                                      <p>Mengembangkan bisnis di Kota Sumedang merupakan Chalange baru. Market yang baru dan semu menjadikan rintangan akan target market dan cara publikasi yang berbeda. Konvensional marketing merupakan faktor penting untuk meningkatkan penjualan produk dari bisnis ini.
-                                        <br><br>Detail Pekerjaan:<br>
-                                        <li>Membuat perencanaan Bisnis</li>
-                                          <li>Membuat Standar Operational yang Efektif dan Efisien</li>
-                                            <li>Brand Identity</li>
-                                              <li>Media Cultivation</li>
-                                                <li>Forecasting Financial</li>
-                                                  <li>Perencanaan Marketing dan Kalkulasi Costing</li>
-                                                    <li>Financial Auditor</li>
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>BTH. Society & Coffee</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Founder <br>Sep 2021 – ~</h5></button>
-                                      <div class="panel">
-                                        <p>Memulai bisnis Coffee Shop di Kota yang belum terjamah oleh dunia kopi adalah suatu tantangan baru untuk memberikan Edukasi terkait Kopi kepada Masyarakat, harga Jual, menjadi penentu faktor diterimanya kebiasaan baru ini.
-
-                                          <br><br>Detail Pekerjaan:<br>
-
-                                          <li>Brand Conceptual
-                                            <li>Forecasting Financial</li>
-                                            <li>Placement Design</li>
-                                            <li>Pricing Calculation</li>
-                                            <li>Business Development</li>
-                                            <li>Product Experience</li>
-                                            <li>Marketing Education</li>
-                                            <li>Setup Business Profitable</li>
-
-                                        </p>
-                                      </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-              </div>
-
-
-              <div class="row">
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                    <h1>Beutik Company</h1>
-                                    <hr>
-                                    <button class="accordion"><h5>Marketing Executive <br>Mei 2021 – Des 2021</h5></button>
-                                    <div class="panel">
-                                      <p>Supporter Clothing Line Company, awal mula konsep dari Beutik Company, yang menjual berbagai merchandise produk supporter Persib Bandung. Konsep tersebut akhirnya dirubah menjadi Sport Life Clothing yang mengusung konsep Clothing General namun tetap mempertahankan Feel Supporter.
-                                      <br><br>Detail Pekerjaan:<br>
-
-                                      <li>Brand Planing
-                                        <li>Campaign Optimizer</li>
-                                        <li>Marketing Chanel Selection</li>
-                                        <li>Public Relation</li>
-                                        <li>Ads Calculation</li>
-                                        <li>Media Cultivation</li>
-                                        <li>Marketing Development</li>
-                                        <li>Website Designer</li>
-
-                                    </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                    <h1>Kopi Anjis</h1>
-                                    <hr>
-                                    <button class="accordion"><h5>Digital Marketing Executive <br>Sep 2021 – Des 2021</h5></button>
-                                    <div class="panel">
-                                    <p>Brand yang sudah lama merubah kosep Marketing menjadi lebih muda. Mulai dari arahan konten sampai ke publishing digital yang harus dibenahi.
-                                      <br><br>Detail Pekerjaan:<br>
-
-                                      <li>Campaign Optimizer</li>
-                                      <li>Contect Direction</li>
-                                        <li>Audience Targeting</li>
-                                          <li>IT Support</li>
-                                            <li>Sales System</li>
-                                              <li>Ads Calculation</li>
-                                                <li>Ads Manager</li>
-                                                  <li>Website Optimizer</li>
-
-                                    </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div>
-                              <div class="wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.5s" style="visibility: visible; animation-duration: 0.5s; animation-delay: 0.5s; animation-name: fadeInUp;">
-                                  <div class="our-story-content-inner">
-                                      <h1>Eighteen Coffee</h1>
-                                      <hr>
-                                      <button class="accordion"><h5>Strategic Marketing S.<br>Okt 2021 – Des 2021</h5></button>
-                                      <div class="panel">
-                                        <p>Eighteen Coffee Hadir dengan menyampaikan ragam produk berkualitas yang mudah dijangkau. Menjadi ruang interaksi yang nyaman melalui rag- am produk yang eksklusif namun sesuai dengan selera customer.
-                                        <br><br>Detail Pekerjaan:<br>
-                                          <li>Hosting Public Relation</li>
-                                            <li>Marketing Writer</li>
-                                              <li>Art Direction</li>
-                                                <li>Ads Manager</li>
-                                                  <li>IT Support</li>
-                                                    <li>Free Website Development</li>
-                                                      <li>Delivery Order Optimizer</li>
-                                      </p>
-                                  </div>
-                                  </div>
-                              </div>
-                         </div>
-                  </div>
-              </div>
-          </div>
-
-
-
-
-
-
-        <div class="container margin-top">
-            <div class="main-title">
-                <h1>MEET MY RECENT WORK</h1>
-                <hr>
-
-            </div>
-            <div class="portfolio-wrapper">
-                <div class="js-masonry">
-                    <div class="row" id="work-grid">
-                        <!-- Begin of Thumbs Portfolio -->
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img6.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Beutik Company</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img4.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Eighteen Coffee</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img8.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Juragan Laptop</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img1.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Athenary Coffee</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img2.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Bakso Aci Masjay</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img3.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">BTH. Society & Coffee</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img9.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">The White Clover</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img7.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">150 Coffee & Garden</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 mix branding">
-                            <div class="img home-portfolio-image">
-                                <img src="img/home-portfolio/img5.jpg" alt="Portfolio Item">
-                                <div class="overlay-thumb">
-                                    <div class="details">
-                                        <span class="title">Kopi Anjis</span>
-                                    </div>
-                                    <span class="btnBefore"></span>
-                                    <span class="btnAfter"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                            </div>
-                        </div>
-                    </div>
+                    <p class="text-secondary font-light leading-relaxed mb-8">
+                        I specialize in developing comprehensive marketing strategies that align business objectives with customer insights, ensuring every campaign drives meaningful engagement and ROI.
+                    </p>
+                    
+                    <h3 class="text-lg font-semibold mb-4">Core Skills</h3>
+                    <ul class="space-y-2 text-secondary font-light">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                            Strategic Planning & Market Analysis
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                            Digital Campaign Management
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                            Data Visualization & Reporting
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                            Brand Strategy & Positioning
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-primary mr-3"></span>
+                            Social Media & Content Strategy
+                        </li>
+                    </ul>
                 </div>
-                <!--<div class="load-more">
-                    <a href="javascript:void(0)" id="load-more"><i class="icon-refresh"></i></a>
-                </div>-->
             </div>
         </div>
-
-        <div class="container margin-top">
-          <div class="main-title">
-              <h1>MY SKILLS</h1>
-              <hr>
-          </div>
-          <div class="row">
-                      <div class="col-md-4">
-                        <div class="skill">
-                            <h4>Social Media Marketing</h4>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" data-transitiongoal="80"></div><!-- /.progress-bar -->
-                            </div><!-- /.progress -->
-                        </div><!-- /.skill -->
-                      </div>
-                      <div class="col-md-4">
-                        <div class="skill">
-                            <h4>SEO + SEM</h4>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" data-transitiongoal="60"></div><!-- /.progress-bar -->
-                            </div><!-- /.progress -->
-                        </div><!-- /.skill -->
-                      </div>
-                      <div class="col-md-4">
-                        <div class="skill">
-                            <h4>Website (HTML+CSS)</h4>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" data-transitiongoal="60"></div><!-- /.progress-bar -->
-                            </div><!-- /.progress -->
-                        </div><!-- /.skill -->
-                      </div>
-              </div>
-              <div class="row">
-                          <div class="col-md-4">
-                            <div class="skill">
-                                <h4>Content Marketing</h4>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" data-transitiongoal="70"></div><!-- /.progress-bar -->
-                                </div><!-- /.progress -->
-                            </div><!-- /.skill -->
-                          </div>
-                          <div class="col-md-4">
-                            <div class="skill">
-                                <h4>Marketplace Optimizer</h4>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" data-transitiongoal="60"></div><!-- /.progress-bar -->
-                                </div><!-- /.progress -->
-                            </div><!-- /.skill -->
-                          </div>
-                          <div class="col-md-4">
-                            <div class="skill">
-                                <h4>Creative Script Writer</h4>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" data-transitiongoal="65"></div><!-- /.progress-bar -->
-                                </div><!-- /.progress -->
-                            </div><!-- /.skill -->
-                          </div>
-                  </div>
-                  </div>
-
-                  <div class="container margin-top">
-                    <div class="main-title">
-                        <h1>CERTIFICATION</h1>
-                        <hr>
-                    </div>
-                      <div>
-                          <div>
-                              <div class="row" id="work-grid">
-                                  <!-- Begin of Thumbs Portfolio -->
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix branding">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_1.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix web">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_2.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix branding">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_5.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix web">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_3.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix branding">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_4.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6 col-sm-6 col-xs-12 mix web">
-                                      <div class="img home-portfolio-image">
-                                          <img src="img/portfolio-2column/img_6.jpg" alt="Portfolio Item">
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-
-                      </div>
-                  </div>
-
-
-        <div class="container margin-top">
-            <div class="row">
-                <div class="architecture-content">
-                    <div class="col-md-6">
-
-                      <div>
-                        <img src="img/nn.png" alt="Nanan Somananan" style="width:100%">
-                        </div>
-
-
-
-                        <!--<div class="box-over-image" style="background-image: url(img/architecure-image.jpg)">
-                            <div class="box-over-image-inner">
-                                <h1>MARKETING/SALE?</h1>
-                                <hr>
-                                <p>Whats is Different about Marketing and Sale?<br>Some People have different opinion about marketing and sales, Marketing give some demand for your brand, and Sales is convertion from demand.</p>
-                            </div>
-                        </div>-->
-
-
-                    </div>
-                    <div class="col-md-6">
-                        <div class="tabs-wrapper">
-                          <div class="main-title">
-                              <h1>Personal Information</h1>
-                          </div>
-                          <h1>Nanan Somanan</h1>
-                          <h5 style="text-align:center;">Strategic Marketing Analyst</h5>
-                          <div style="overflow-x:auto;">
-                            <table>
-                              <tr>
-                                <td>Date of Birth</td>
-                                <td>: 24 March 1996</td>
-                              </tr>
-                              <tr>
-                                <td>Gender</td>
-                                <td>: Male</td>
-                              </tr>
-                              <tr>
-                                <td>Marital Status</td>
-                                <td>: Single</td>
-                              </tr>
-                              <tr>
-                                <td>Phone</td>
-                                <td>: +62 811-2131-496</td>
-                              </tr>
-                            </table>
-                          </div>
-                          <br><br><br>
-
-                          <ul class="social-media">
-                              <li><a href="https://www.facebook.com/nanansoe/"><i class="iconmoon-facebook"></i></a></li>
-                              <li><a href="https://id.pinterest.com/nanansm/"><i class="iconmoon-pinterest"></i></a></li>
-                              <li><a href="https://www.instagram.com/nanan.sm/"><i class="ion-social-instagram"></i></a></li>
-                              <li><a href="https://www.linkedin.com/in/nanansm/"><i class="iconmoon-linkedin2"></i></a></li>
-                          </ul>
-                          <br>
-                          <p><button>Contact</button></p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    </section>
+    
+    <!-- Contact / Footer Section -->
+    <section id="contact" class="py-24 md:py-32">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl md:text-4xl font-light mb-12 opacity-0 translate-y-4" data-aos="fade-up">Get In Touch</h2>
+                
+                <a href="mailto:hello@nanansm.com" class="block text-4xl md:text-5xl lg:text-6xl font-light hover:opacity-60 transition-opacity mb-16 opacity-0 translate-y-4" data-aos="fade-up">
+                    hello@nanansm.com
+                </a>
+                
+                <!-- Social Links -->
+                <div class="flex space-x-6 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
+                    <a href="https://www.linkedin.com/in/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">LinkedIn</a>
+                    <a href="https://www.instagram.com/nanan.sm/" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">Instagram</a>
+                    <a href="https://github.com/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">GitHub</a>
                 </div>
-
-
-            <div class="footer margin-top">
-                <div class="container">
-                    <div class="row">
-                            <div class="col-md-2 col-sm-4 col-xs-12">
-                                <div class="footer-inner">
-                                    <div class="footer-content">
-                                        <h4>Nanan Somanan</h4>
-                                            <address>
-                                                Kota Bandung<br>
-                                                Jawa Barat.<br>
-                                            </address>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 col-md-push-8 col-sm-4 col-xs-12">
-                                <div class="footer-inner">
-                                    <div class="footer-content">
-                                       <h4>CONTACT INFO</h4>
-                                        <p>
-                                            T:+62 811-2131-496 <br>
-                                            E:smnanan@gmail.com
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                <div class="footer-inner">
-                                    <div class="footer-content">
-                                    <ul class="social-media">
-                                      <li><a href="https://www.facebook.com/nanansoe/"><i class="iconmoon-facebook"></i></a></li>
-                                      <li><a href="https://id.pinterest.com/nanansm/"><i class="iconmoon-pinterest"></i></a></li>
-                                      <li><a href="https://www.instagram.com/nanan.sm/"><i class="ion-social-instagram"></i></a></li>
-                                      <li><a href="https://www.linkedin.com/in/nanansm/"><i class="iconmoon-linkedin2"></i></a></li>
-                                    </ul>
-                                    <span class="copyright-mark">&copy; 2022 NananSm</span>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
+                
+                <!-- Copyright -->
+                <div class="mt-24 pt-8 border-t border-gray-100">
+                    <p class="text-sm text-secondary">&copy; <span id="current-year">2024</span> Nanan SM. All rights reserved.</p>
                 </div>
             </div>
-
-            <a href="javascript:void(0)" class="scroll-top" id="scroll-top"><i class="pe-7s-angle-up"></i></a>
-
-            <script src="js/vendor/jquery-1.11.2.min.js"></script>
-            <script data-pace-options='{ "ajax": false }' src="js/vendor/pace.min.js"></script>
-            <script src="js/vendor/bootstrap.min.js"></script>
-            <script src="js/vendor/classie.js"></script>
-            <script src="js/vendor/isotope.pkgd.min.js"></script>
-            <script src="js/vendor/jquery.velocity.min.js"></script>
-            <script src="js/vendor/jquery.kenburnsy.min.js"></script>
-            <script src="js/vendor/textslide.js"></script>
-            <script src="js/vendor/imagesloaded.pkgd.min.js"></script>
-            <script src="js/vendor/tabs.js"></script>
-            <script src="js/ef-slider.js"></script>
-            <script src="js/vendor/owl.carousel.min.js"></script>
-            <script src="js/vendor/jquery.magnific-popup.min.js"></script>
-            <script src="js/vendor/jquery.social-buttons.min.js"></script>
-            <script src="js/vendor/wow.min.js"></script>
-            <script src="js/main.js"></script>
-            <script src="js/ajax.js"></script>
-        </body>
-        </html>
+        </div>
+    </section>
+    
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
