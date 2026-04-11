@@ -1,292 +1,1490 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nanan SM - Strategic Marketing Analyst Portfolio">
-    <meta name="author" content="Nanan SM">
-    
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="Nanan SM - Strategic Marketing Analyst">
-    <meta property="og:description" content="Portfolio of Nanan SM, a strategic marketing analyst specializing in digital campaigns and brand strategy.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nanansm.github.io">
-    
-    <title>Nanan SM — Strategic Marketing Analyst</title>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN for rapid development -->
-    <link rel="stylesheet" href="./css/main.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#0a0a0a',
-                        secondary: '#6b6b6b',
-                        background: '#fafafa',
-                    },
-                    spacing: {
-                        '128': '32rem',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nanan Somanan — Business Consultant & Digital Marketing Strategist</title>
+  <meta name="description" content="Business Consultant, Digital Marketing Strategist & AI Automation Specialist berbasis di Bandung. Spesialis growth strategy yang profitable dan sustainable." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream:     #f7f4ef;
+      --orange:    #c45d3e;
+      --orange-lt: #e8825f;
+      --green:     #5a7a6a;
+      --charcoal:  #1a1a1a;
+      --gray:      #8a8478;
+      --gray-lt:   #d4cfc8;
+      --white:     #ffffff;
+      --card-bg:   #f0ece4;
+
+      --ff-serif:  'Fraunces', Georgia, serif;
+      --ff-sans:   'Outfit', sans-serif;
+
+      --nav-h: 68px;
+      --radius: 16px;
+      --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--ff-sans);
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ─── SCROLL PROGRESS BAR ──────────────────────────────────── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--orange), var(--green));
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── CUSTOM CURSOR ────────────────────────────────────────── */
+    #cursor-dot {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--orange);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s, height 0.2s, background 0.2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--orange);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.25s, height 0.25s, opacity 0.25s;
+      opacity: 0.6;
+    }
+    body.cursor-hover #cursor-dot { width: 16px; height: 16px; background: var(--green); }
+    body.cursor-hover #cursor-ring { width: 50px; height: 50px; opacity: 0.35; border-color: var(--green); }
+
+    /* ─── NAVBAR ───────────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(247, 244, 239, 0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 24px rgba(26,26,26,0.07);
+    }
+    .nav-logo {
+      font-family: var(--ff-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      opacity: 0.75;
+      transition: opacity var(--transition), color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--orange);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--orange);
+      color: #fff !important;
+      opacity: 1 !important;
+      padding: 0.5rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background var(--transition), transform var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--green) !important; transform: scale(1.04); }
+    .nav-cta::after { display: none !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--charcoal);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    #mobile-nav {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(80vw, 300px);
+      height: 100vh;
+      background: var(--cream);
+      z-index: 490;
+      padding: calc(var(--nav-h) + 2rem) 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+      transition: right var(--transition);
+    }
+    #mobile-nav.open { right: 0; }
+    #mobile-nav a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      opacity: 0.8;
+    }
+    #mobile-nav a:hover { opacity: 1; color: var(--orange); }
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,26,26,0.45);
+      z-index: 480;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    #overlay.visible { opacity: 1; pointer-events: auto; }
+
+    /* ─── SECTION COMMON ───────────────────────────────────────── */
+    section { padding: 6rem 5%; }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1.5px;
+      background: var(--orange);
+    }
+    h2.section-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: var(--nav-h);
+      background: var(--cream);
+    }
+
+    /* Animated background shapes */
+    .hero-shapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.18;
+      animation: float 12s ease-in-out infinite;
+    }
+    .shape-1 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, var(--orange), transparent 70%);
+      top: -120px; right: -80px;
+      animation-duration: 14s;
+    }
+    .shape-2 {
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, var(--green), transparent 70%);
+      bottom: -60px; left: -60px;
+      animation-duration: 10s;
+      animation-delay: -3s;
+    }
+    .shape-3 {
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, var(--orange-lt), transparent 70%);
+      top: 40%; left: 35%;
+      animation-duration: 8s;
+      animation-delay: -6s;
+      opacity: 0.1;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33%       { transform: translateY(-24px) rotate(8deg); }
+      66%       { transform: translateY(14px) rotate(-5deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.85rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border: 1.5px solid var(--gray-lt);
+      color: var(--gray);
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+    }
+    h1.hero-headline {
+      font-family: var(--ff-serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    h1.hero-headline em {
+      font-style: italic;
+      color: var(--orange);
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--gray);
+      max-width: 540px;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+    }
+    .hero-sub strong { color: var(--charcoal); font-weight: 600; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--orange);
+      color: #fff;
+      padding: 0.9rem 1.8rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: var(--ff-sans);
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 8px 30px rgba(196, 93, 62, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--green);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(90, 122, 106, 0.35);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--charcoal);
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.7;
+      transition: opacity var(--transition);
+    }
+    .btn-secondary:hover { opacity: 1; }
+    .btn-secondary svg { transition: transform var(--transition); }
+    .btn-secondary:hover svg { transform: translateX(4px); }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--gray);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: scroll-bounce 2.5s ease-in-out infinite;
+    }
+    .scroll-indicator .scroll-line {
+      width: 1.5px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--orange), transparent);
+    }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── ABOUT ────────────────────────────────────────────────── */
+    #about {
+      background: var(--charcoal);
+      color: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    #about::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(196,93,62,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-box {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--orange);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+    }
+    .about-img-box img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      mix-blend-mode: multiply;
+      filter: grayscale(20%) contrast(1.05);
+      opacity: 0.9;
+    }
+    .about-img-badge {
+      position: absolute;
+      bottom: -1.5rem; right: -1.5rem;
+      background: var(--green);
+      color: #fff;
+      padding: 1rem 1.4rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.3;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .about-img-badge strong { display: block; font-size: 1.6rem; font-family: var(--ff-serif); }
+
+    .about-text .section-label { color: var(--orange-lt); }
+    .about-text .section-label::before { background: var(--orange-lt); }
+    .about-text h2 { color: var(--cream); }
+    .about-quote {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      color: var(--orange-lt);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-left: 1.2rem;
+      border-left: 3px solid var(--orange);
+    }
+    .about-body {
+      color: rgba(247,244,239,0.75);
+      line-height: 1.75;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+    }
+    .stat-num {
+      font-family: var(--ff-serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--orange-lt);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: rgba(247,244,239,0.5);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── EXPERIENCE ───────────────────────────────────────────── */
+    #experience { background: var(--cream); }
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .exp-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-lt);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+    .exp-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(26,26,26,0.1);
+    }
+    .exp-card-img {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      background: var(--card-bg);
+    }
+    .exp-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .exp-card:hover .exp-card-img img { transform: scale(1.05); }
+    .exp-card-body { padding: 1.3rem; }
+    .exp-card-brand {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--charcoal);
+      margin-bottom: 0.2rem;
+    }
+    .exp-card-role {
+      font-size: 0.82rem;
+      color: var(--orange);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+    .exp-card-desc {
+      font-size: 0.82rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+    .exp-industry-tag {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: var(--card-bg);
+      color: var(--gray);
+    }
+
+    /* ─── SERVICES ─────────────────────────────────────────────── */
+    #services {
+      background: #efeae2;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      border: 1px solid var(--gray-lt);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(26,26,26,0.09);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--green));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .service-name {
+      font-family: var(--ff-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.6rem;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+
+    /* ─── AI STRATEGY FLOW ─────────────────────────────────────── */
+    #strategy {
+      background: var(--charcoal);
+      overflow: hidden;
+      position: relative;
+    }
+    #strategy::after {
+      content: '';
+      position: absolute;
+      bottom: -150px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(90,122,106,0.12), transparent 65%);
+      pointer-events: none;
+    }
+    .strategy-header { text-align: center; margin-bottom: 4rem; }
+    .strategy-header .section-label {
+      color: var(--orange-lt);
+      justify-content: center;
+    }
+    .strategy-header .section-label::before { display: none; }
+    .strategy-header h2 { color: var(--cream); }
+    .strategy-header p {
+      color: rgba(247,244,239,0.6);
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* Steps container */
+    .strategy-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Connecting line */
+    .strategy-steps::before {
+      content: '';
+      position: absolute;
+      left: 2.6rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--orange), var(--green));
+      opacity: 0.25;
+    }
+
+    .step-item {
+      position: relative;
+      padding-left: 5.5rem;
+    }
+    .step-number {
+      position: absolute;
+      left: 0; top: 1.25rem;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      z-index: 1;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .step-1 .step-number { background: var(--orange); }
+    .step-2 .step-number { background: #b5704f; }
+    .step-3 .step-number { background: var(--green); }
+    .step-4 .step-number { background: #3d5c4e; }
+    .step-5 .step-number { background: #7a5230; }
+
+    .step-panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .step-panel:hover { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.07); }
+    .step-panel.active { border-color: rgba(196,93,62,0.4); background: rgba(255,255,255,0.08); }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.3rem 1.5rem;
+      gap: 1rem;
+    }
+    .step-title-group { flex: 1; }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 0.25rem;
+    }
+    .step-title {
+      font-family: var(--ff-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .step-arrow {
+      width: 28px; height: 28px;
+      color: rgba(247,244,239,0.4);
+      transition: transform var(--transition), color var(--transition);
+      flex-shrink: 0;
+    }
+    .step-panel.active .step-arrow { transform: rotate(180deg); color: var(--orange-lt); }
+
+    .step-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .step-body.open { max-height: 600px; }
+    .step-body-inner {
+      padding: 0 1.5rem 1.5rem;
+    }
+    .step-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.6rem;
+    }
+    .step-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.9rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      font-size: 0.83rem;
+      color: rgba(247,244,239,0.8);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .step-chip:hover { background: rgba(255,255,255,0.1); border-color: rgba(196,93,62,0.4); }
+    .step-chip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+    .step-desc {
+      font-size: 0.88rem;
+      color: rgba(247,244,239,0.55);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── CONTACT ──────────────────────────────────────────────── */
+    #contact { background: var(--cream); }
+    .contact-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contact-inner h2 { font-size: clamp(2rem, 5vw, 3.5rem); }
+    .contact-inner p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #25D366;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.3);
+    }
+    .btn-wa:hover {
+      background: #1ebe5a;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(37,211,102,0.4);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px solid var(--orange);
+      color: var(--orange);
+      padding: 0.9rem 1.8rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-outline:hover { background: var(--orange); color: #fff; }
+
+    .contact-divider {
+      width: 40px; height: 1.5px;
+      background: var(--gray-lt);
+      margin: 2rem auto;
+    }
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .contact-item-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); }
+    .contact-item-val { font-size: 0.95rem; font-weight: 500; color: var(--charcoal); }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.1rem;
+      border: 1.5px solid var(--gray-lt);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+    }
+    .social-link:hover { border-color: var(--orange); background: var(--orange); color: #fff; }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(247,244,239,0.45);
+      text-align: center;
+      padding: 2rem 5%;
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--orange-lt); }
+    footer a:hover { color: var(--cream); }
+
+    /* ─── BACK TO TOP ──────────────────────────────────────────── */
+    #back-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 46px; height: 46px;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(196,93,62,0.4);
+      border: none;
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; }
+    #back-top:hover { transform: translateY(-3px); }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img-wrap { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 4rem 5%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .strategy-steps::before { left: 1.6rem; }
+      .step-item { padding-left: 3.8rem; }
+      .step-number { width: 36px; height: 36px; font-size: 0.95rem; top: 1.2rem; }
+      .about-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      h1.hero-headline { font-size: 2.6rem; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .contact-info { flex-direction: column; align-items: center; }
+      .social-links { flex-wrap: wrap; }
+    }
+
+    /* ─── MEDIA: reduce motion ─────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .shape { animation: none; }
+      .scroll-indicator { animation: none; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* Touch devices: hide custom cursor */
+    @media (hover: none) {
+      #cursor-dot, #cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
 </head>
-<body class="bg-background text-primary font-sans antialiased">
-    
-    <!-- Navbar (Fixed) -->
-    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="logo text-xl font-semibold tracking-tighter hover:opacity-60 transition-opacity">NANAN.</a>
-            
-            <!-- Desktop Menu -->
-            <ul class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-wider">
-                <li><a href="#work" class="hover:opacity-60 transition-opacity">Work</a></li>
-                <li><a href="#about" class="hover:opacity-60 transition-opacity">About</a></li>
-                <li><a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a></li>
-            </ul>
-            
-            <!-- Mobile Toggle -->
-            <button id="mobile-menu-toggle" class="md:hidden p-2" aria-label="Toggle menu">
-                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
-                <span class="block w-6 h-0.5 bg-primary mb-1.5 transition-all"></span>
-                <span class="block w-6 h-0.5 bg-primary transition-all"></span>
-            </button>
+<body>
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Back to top -->
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- Mobile nav overlay -->
+<div id="overlay" onclick="closeMobileNav()"></div>
+
+<!-- ─────────── NAVBAR ─────────── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Nanan<span>SM</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#experience">Pengalaman</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#strategy">Strategi</a></li>
+    <li><a href="#contact" class="nav-cta">Let's Talk →</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div id="mobile-nav">
+  <a href="#about" onclick="closeMobileNav()">Tentang</a>
+  <a href="#experience" onclick="closeMobileNav()">Pengalaman</a>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#strategy" onclick="closeMobileNav()">Strategi AI</a>
+  <a href="#contact" onclick="closeMobileNav()" style="display:inline-flex;align-items:center;justify-content:center;background:var(--orange);color:#fff;padding:0.75rem 1.5rem;border-radius:100px;font-weight:600;">Let's Talk →</a>
+</div>
+
+<!-- ─────────── HERO ─────────── -->
+<section id="hero">
+  <div class="hero-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badges reveal">
+      <span class="badge">Business Consultant</span>
+      <span class="badge">Digital Marketing</span>
+      <span class="badge">AI Automation</span>
+      <span class="badge">Bandung, Indonesia</span>
+    </div>
+
+    <h1 class="hero-headline reveal reveal-delay-1">
+      Bisnis Lo<br>Harus <em>Untung.</em><br>Titik.
+    </h1>
+
+    <p class="hero-sub reveal reveal-delay-2">
+      Halo, gue <strong>Nanan Somanan</strong> — Business Consultant & Digital Marketing Strategist.
+      Spesialis ngebantu bisnis tumbuh <strong>sustainable</strong> dan <strong>profitable</strong>
+      lewat strategi yang bener dan eksekusi yang konsisten.
+    </p>
+
+    <div class="hero-actions reveal reveal-delay-3">
+      <a href="https://wa.me/62XXXXXXXXXXX" target="_blank" rel="noopener" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.113 1.524 5.843L.054 23.293a.75.75 0 00.923.924l5.517-1.48A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.934 0-3.741-.498-5.31-1.373l-.38-.222-3.915 1.05 1.063-3.826-.245-.399A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Let's Talk di WhatsApp
+      </a>
+      <a href="#about" class="btn-secondary">
+        Kenalan dulu
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- ─────────── ABOUT ─────────── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-box">
+        <img src="img/nn.png" alt="Nanan Somanan" loading="lazy" onerror="this.parentElement.style.background='var(--green)'" />
+      </div>
+      <div class="about-img-badge">
+        <strong>7+</strong>
+        Tahun Experience
+      </div>
+    </div>
+
+    <div class="about-text">
+      <p class="section-label reveal">Tentang Gue</p>
+      <h2 class="section-title reveal reveal-delay-1">Bukan Sekadar<br>Konsultan Biasa</h2>
+
+      <blockquote class="about-quote reveal reveal-delay-2">
+        "Bisnis yang bagus itu harus bisa jalan terus — dan harus menghasilkan. Sederhana. Yang susah itu eksekusinya."
+      </blockquote>
+
+      <p class="about-body reveal reveal-delay-3">
+        Gue Nanan, lulusan Akuntansi dari Universitas Sangga Buana YPKP, Bandung.
+        Tapi jalan hidup gue ternyata lebih ke arah marketing, strategi bisnis, dan teknologi —
+        dan gue gak nyesel sama sekali.
+        <br><br>
+        Selama 7+ tahun, gue udah handle 14+ brand dari berbagai industri: F&B, Retail, Klinik/Beauty,
+        hingga Creative Agency. Sekarang gue aktif sebagai <strong>Business Manager di Diksian Creative</strong>
+        sekaligus freelance <strong>Business Consultant</strong>.
+        <br><br>
+        Pendekatan gue? <strong>Data-driven, tapi tetap human</strong>.
+        Strategi yang keren tapi gak bisa dieksekusi itu percuma.
+        Gue percaya pada action nyata yang bisa diukur hasilnya.
+      </p>
+
+      <div class="about-stats reveal reveal-delay-4">
+        <div class="stat-item">
+          <span class="stat-num">7+</span>
+          <span class="stat-label">Tahun Experience</span>
         </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100">
-            <ul class="flex flex-col py-4">
-                <li><a href="#work" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Work</a></li>
-                <li><a href="#about" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">About</a></li>
-                <li><a href="#contact" class="block px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-gray-50 mobile-link">Contact</a></li>
-            </ul>
+        <div class="stat-item">
+          <span class="stat-num">14+</span>
+          <span class="stat-label">Brand Handled</span>
         </div>
-    </nav>
-    
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-20">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl">
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-6 opacity-0 translate-y-4" data-aos="fade-up">
-                    Strategic<br>
-                    <span class="text-secondary">Marketing</span><br>
-                    Analyst
-                </h1>
-                <p class="text-lg md:text-xl text-secondary font-light max-w-2xl mt-8 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
-                    Crafting data-driven marketing strategies that elevate brands and drive meaningful engagement across digital platforms.
-                </p>
+        <div class="stat-item">
+          <span class="stat-num">5+</span>
+          <span class="stat-label">Industri</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── EXPERIENCE ─────────── -->
+<section id="experience">
+  <p class="section-label reveal">Track Record</p>
+  <h2 class="section-title reveal reveal-delay-1">Brand yang<br>Pernah Gue Handle</h2>
+  <p class="reveal reveal-delay-2" style="color:var(--gray);max-width:540px;line-height:1.7;margin-bottom:0.5rem;">
+    Dari warung kopi sampai klinik kecantikan, dari startup tech sampai brand cemilan —
+    tiap industri punya tantangannya sendiri, dan gue suka itu.
+  </p>
+
+  <div class="exp-grid">
+    <div class="exp-card reveal reveal-delay-1">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_1.jpg" alt="Diksian Creative" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">Diksian Creative</p>
+        <p class="exp-card-role">Business Manager</p>
+        <p class="exp-card-desc">Mengelola operasional bisnis, strategi growth, dan tim kreatif agensi.</p>
+        <span class="exp-industry-tag">Creative Agency</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal reveal-delay-2">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_2.jpg" alt="150 Coffee & Garden" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">150 Coffee & Garden</p>
+        <p class="exp-card-role">Manager Digital Marketing</p>
+        <p class="exp-card-desc">Full digital marketing management untuk brand F&B dengan konsep garden café.</p>
+        <span class="exp-industry-tag">F&B</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal reveal-delay-3">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_3.jpg" alt="Tivaza Clinic" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">Tivaza Clinic</p>
+        <p class="exp-card-role">Marketing Advertising Specialist</p>
+        <p class="exp-card-desc">Meta Ads & Google Ads untuk klinik kecantikan, fokus pada lead generation dan conversion.</p>
+        <span class="exp-industry-tag">Klinik / Beauty</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal reveal-delay-4">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_4.jpg" alt="LidiGeli" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">LidiGeli</p>
+        <p class="exp-card-role">Marketing Planning · Ads Specialist · Sales Optimizer</p>
+        <p class="exp-card-desc">End-to-end marketing untuk brand cemilan jadul — dari campaign planning sampai digital development.</p>
+        <span class="exp-industry-tag">FMCG / Retail</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal reveal-delay-5">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_5.jpg" alt="PORTEE" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">PORTEE</p>
+        <p class="exp-card-role">Social Media Project Manager</p>
+        <p class="exp-card-desc">Mengelola content strategy dan social media project end-to-end untuk brand fashion.</p>
+        <span class="exp-industry-tag">Fashion</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal reveal-delay-1">
+      <div class="exp-card-img">
+        <img src="img/portfolio-2column/img_6.jpg" alt="Kopi Anjis" loading="lazy" />
+      </div>
+      <div class="exp-card-body">
+        <p class="exp-card-brand">Kopi Anjis & Athenary Coffee</p>
+        <p class="exp-card-role">Digital Marketing</p>
+        <p class="exp-card-desc">Brand awareness, paid ads, dan social media growth untuk brand kopi lokal Bandung.</p>
+        <span class="exp-industry-tag">F&B</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2.5rem;padding:1.5rem 2rem;background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-lt);" class="reveal">
+    <p style="font-size:0.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Dan masih banyak lagi...</p>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
+      <span class="exp-industry-tag">Eight Digital Marketing</span>
+      <span class="exp-industry-tag">The Beutik</span>
+      <span class="exp-industry-tag">The White Clover</span>
+      <span class="exp-industry-tag">PT. LSHA Innovation</span>
+      <span class="exp-industry-tag">PT. Makmur Sagala Jaya</span>
+      <span class="exp-industry-tag">Just Color</span>
+      <span class="exp-industry-tag">Juragan Laptop ID</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── SERVICES ─────────── -->
+<section id="services">
+  <p class="section-label reveal">Apa yang Gue Bisa</p>
+  <h2 class="section-title reveal reveal-delay-1">Services</h2>
+  <p class="reveal reveal-delay-2" style="color:var(--gray);max-width:500px;line-height:1.7;margin-bottom:0.5rem;">
+    Gue bukan tipe yang cuma kasih slide deck terus cabut.
+    Gue terlibat dari strategi sampai eksekusi.
+  </p>
+
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-icon">🎯</span>
+      <p class="service-name">Business Consulting</p>
+      <p class="service-desc">Audit bisnis, strategi sustainable & profitable, business planning yang realistis dan bisa dieksekusi tim lo.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon">📣</span>
+      <p class="service-name">Digital Marketing Full-Stack</p>
+      <p class="service-desc">Dari paid ads sampai organic growth — Meta, Google, TikTok, Marketplace, SEO, Content Strategy, KOL Management.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-icon">🤖</span>
+      <p class="service-name">AI Automation</p>
+      <p class="service-desc">Implementasi AI agent & chatbot untuk efisiensi bisnis — auto-reply, lead qualification, CRM automation, workflow AI.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <span class="service-icon">📊</span>
+      <p class="service-name">Advertising Management</p>
+      <p class="service-desc">Meta Ads, Google Ads, TikTok Ads, Marketplace Ads, CPAS Ads — full management dari setup, optimasi, sampai reporting.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-5">
+      <span class="service-icon">💻</span>
+      <p class="service-name">Web Development</p>
+      <p class="service-desc">Landing page high-converting dan simple web app yang cepat, clean, dan dioptimasi untuk conversion.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── AI STRATEGY FLOW ─────────── -->
+<section id="strategy">
+  <div class="strategy-header">
+    <p class="section-label reveal">Expertise Gue</p>
+    <h2 class="section-title reveal reveal-delay-1">Full-Stack Digital Marketing<br>Strategy dengan AI</h2>
+    <p class="reveal reveal-delay-2">
+      Ini bukan sekadar "pasang iklan". Ini ekosistem marketing yang terintegrasi —
+      dari awareness sampai repeat purchase, semuanya terhubung dan terukur.
+    </p>
+  </div>
+
+  <div class="strategy-steps">
+
+    <div class="step-item step-1 reveal">
+      <div class="step-number">1</div>
+      <div class="step-panel active" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-title-group">
+            <p class="step-label">Tahap Pertama</p>
+            <p class="step-title">Paid Activation — Nyalain Mesin Iklan</p>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="step-body open">
+          <div class="step-body-inner">
+            <p class="step-desc">Traffic berbayar yang terstruktur untuk menjangkau target market dengan presisi. Multi-platform, multi-format, satu tujuan: konversi.</p>
+            <div class="step-items">
+              <div class="step-chip"><div class="step-chip-dot"></div>Meta Ads (FB & IG)</div>
+              <div class="step-chip"><div class="step-chip-dot"></div>Google Ads Search & Display</div>
+              <div class="step-chip"><div class="step-chip-dot"></div>TikTok Ads</div>
+              <div class="step-chip"><div class="step-chip-dot"></div>Marketplace Ads</div>
+              <div class="step-chip"><div class="step-chip-dot"></div>CPAS Ads</div>
             </div>
+          </div>
         </div>
-    </section>
-    
-    <!-- Work Section -->
-    <section id="work" class="py-24 md:py-32">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-light mb-16 opacity-0 translate-y-4" data-aos="fade-up">Selected Work</h2>
-            
-            <!-- Project Grid (2 columns on desktop) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-                
-                <!-- Project Card 1: Juragan Laptop -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_1.jpg" 
-                            alt="Juragan Laptop Digital Campaign"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Juragan Laptop</h3>
-                        <span class="text-sm text-secondary">Digital Campaign</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Strategic Marketing • 2017-2019</p>
-                </article>
-                
-                <!-- Project Card 2: BTH -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_2.jpg" 
-                            alt="BTH Brand Strategy"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">BTH</h3>
-                        <span class="text-sm text-secondary">Brand Strategy</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Brand Consultant • 2018-2020</p>
-                </article>
-                
-                <!-- Project Card 3 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_3.jpg" 
-                            alt="Marketing Analytics Dashboard"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Analytics Dashboard</h3>
-                        <span class="text-sm text-secondary">Data Visualization</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Data Analyst • 2019-2021</p>
-                </article>
-                
-                <!-- Project Card 4 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_4.jpg" 
-                            alt="Social Media Campaign"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Social Campaign</h3>
-                        <span class="text-sm text-secondary">Social Media</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Content Strategy • 2020-2022</p>
-                </article>
-                
-                <!-- Project Card 5 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_5.jpg" 
-                            alt="E-commerce Growth Strategy"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">E-commerce Growth</h3>
-                        <span class="text-sm text-secondary">Growth Marketing</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Growth Lead • 2021-2023</p>
-                </article>
-                
-                <!-- Project Card 6 -->
-                <article class="project-card group cursor-pointer opacity-0 translate-y-4" data-aos="fade-up">
-                    <div class="overflow-hidden aspect-[4/3] bg-gray-100 mb-4">
-                        <img 
-                            src="img/portfolio-2column/img_6.jpg" 
-                            alt="Market Research Analysis"
-                            class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                            width="800" 
-                            height="600"
-                        >
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-semibold">Market Research</h3>
-                        <span class="text-sm text-secondary">Research</span>
-                    </div>
-                    <p class="text-secondary text-sm mt-1">Market Analyst • 2022-Present</p>
-                </article>
-                
+      </div>
+    </div>
+
+    <div class="step-item step-2 reveal reveal-delay-1">
+      <div class="step-number">2</div>
+      <div class="step-panel" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-title-group">
+            <p class="step-label">Tahap Kedua</p>
+            <p class="step-title">Organic Growth — Bangun Authority</p>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <p class="step-desc">Paid ads bisa beli perhatian, tapi trust dibangun lewat konten organik yang konsisten dan relevan.</p>
+            <div class="step-items">
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Content Strategy</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Community Building</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>SEO & Content Marketing</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>KOL / Influencer Collab</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Social Media Management</div>
             </div>
+          </div>
         </div>
-    </section>
-    
-    <!-- About Section -->
-    <section id="about" class="py-24 md:py-32 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-light opacity-0 translate-y-4" data-aos="fade-up">About Me</h2>
-                </div>
-                <div class="opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
-                    <p class="text-secondary font-light leading-relaxed mb-6">
-                        With over 5 years of experience in strategic marketing and data analysis, I help brands navigate the complex digital landscape. My approach combines analytical rigor with creative thinking to deliver measurable results.
-                    </p>
-                    <p class="text-secondary font-light leading-relaxed mb-8">
-                        I specialize in developing comprehensive marketing strategies that align business objectives with customer insights, ensuring every campaign drives meaningful engagement and ROI.
-                    </p>
-                    
-                    <h3 class="text-lg font-semibold mb-4">Core Skills</h3>
-                    <ul class="space-y-2 text-secondary font-light">
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
-                            Strategic Planning & Market Analysis
-                        </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
-                            Digital Campaign Management
-                        </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
-                            Data Visualization & Reporting
-                        </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
-                            Brand Strategy & Positioning
-                        </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-primary mr-3"></span>
-                            Social Media & Content Strategy
-                        </li>
-                    </ul>
-                </div>
+      </div>
+    </div>
+
+    <div class="step-item step-3 reveal reveal-delay-2">
+      <div class="step-number">3</div>
+      <div class="step-panel" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-title-group">
+            <p class="step-label">Tahap Ketiga</p>
+            <p class="step-title">WhatsApp + AI Agent — Conversation to Conversion</p>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <p class="step-desc">Semua traffic diarahkan ke WhatsApp. Di sini AI bekerja keras 24/7 — qualify lead, jawab FAQ, rekomendasikan produk — sebelum human closer take over.</p>
+            <div class="step-items">
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>WhatsApp Business API</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>AI Chatbot & Auto-Reply</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Lead Qualification AI</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Product Recommendation</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:var(--green)"></div>Human Handover (Closing)</div>
             </div>
+          </div>
         </div>
-    </section>
-    
-    <!-- Contact / Footer Section -->
-    <section id="contact" class="py-24 md:py-32">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl">
-                <h2 class="text-3xl md:text-4xl font-light mb-12 opacity-0 translate-y-4" data-aos="fade-up">Get In Touch</h2>
-                
-                <a href="mailto:hello@nanansm.com" class="block text-4xl md:text-5xl lg:text-6xl font-light hover:opacity-60 transition-opacity mb-16 opacity-0 translate-y-4" data-aos="fade-up">
-                    hello@nanansm.com
-                </a>
-                
-                <!-- Social Links -->
-                <div class="flex space-x-6 opacity-0 translate-y-4" data-aos="fade-up" data-aos-delay="200">
-                    <a href="https://www.linkedin.com/in/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">LinkedIn</a>
-                    <a href="https://www.instagram.com/nanan.sm/" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">Instagram</a>
-                    <a href="https://github.com/nanansm" target="_blank" rel="noopener noreferrer" class="text-sm font-medium uppercase tracking-wider hover:opacity-60 transition-opacity">GitHub</a>
-                </div>
-                
-                <!-- Copyright -->
-                <div class="mt-24 pt-8 border-t border-gray-100">
-                    <p class="text-sm text-secondary">&copy; <span id="current-year">2024</span> Nanan SM. All rights reserved.</p>
-                </div>
+      </div>
+    </div>
+
+    <div class="step-item step-4 reveal reveal-delay-3">
+      <div class="step-number">4</div>
+      <div class="step-panel" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-title-group">
+            <p class="step-label">Tahap Keempat</p>
+            <p class="step-title">Database Building — Aset Jangka Panjang</p>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <p class="step-desc">Data pelanggan adalah aset paling berharga bisnis lo. Semua touchpoint diintegrasikan untuk membangun database yang clean, terstruktur, dan actionable.</p>
+            <div class="step-items">
+              <div class="step-chip"><div class="step-chip-dot" style="background:#3d5c4e"></div>Data Collection Multi-Touchpoint</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#3d5c4e"></div>CRM Integration</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#3d5c4e"></div>Customer Segmentation</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#3d5c4e"></div>Lead Scoring</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#3d5c4e"></div>Behavioral Analytics</div>
             </div>
+          </div>
         </div>
-    </section>
-    
-    <!-- JavaScript -->
-    <script src="js/main.js"></script>
+      </div>
+    </div>
+
+    <div class="step-item step-5 reveal reveal-delay-4">
+      <div class="step-number">5</div>
+      <div class="step-panel" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-title-group">
+            <p class="step-label">Tahap Kelima</p>
+            <p class="step-title">Re-Activation — Bikin Pelanggan Balik Lagi</p>
+          </div>
+          <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <p class="step-desc">Closing sekali itu bagus. Tapi repeat purchase itu yang bikin bisnis sustainable. Database yang udah dibangun di Step 4 sekarang dikerjain untuk retensi.</p>
+            <div class="step-items">
+              <div class="step-chip"><div class="step-chip-dot" style="background:#7a5230"></div>WhatsApp Broadcast</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#7a5230"></div>Email Marketing</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#7a5230"></div>Retargeting Ads</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#7a5230"></div>Personalized Offers</div>
+              <div class="step-chip"><div class="step-chip-dot" style="background:#7a5230"></div>Loyalty Program</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─────────── CONTACT ─────────── -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="section-label reveal" style="justify-content:center;">Yuk Ngobrol</p>
+    <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:1rem;">
+      Siap Bikin Bisnis Lo<br>Lebih <em style="font-style:italic;color:var(--orange)">Profitable</em>?
+    </h2>
+    <p class="reveal reveal-delay-2">
+      Konsultasi gratis 30 menit. Ceritain situasi bisnis lo — gue kasih honest feedback
+      dan kita lihat bareng apakah gue bisa bantu.
+      <br>Gak ada hard sell, gak ada basa-basi.
+    </p>
+
+    <div class="contact-actions reveal reveal-delay-3">
+      <a href="https://wa.me/62XXXXXXXXXXX" target="_blank" rel="noopener" class="btn-wa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.113 1.524 5.843L.054 23.293a.75.75 0 00.923.924l5.517-1.48A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.934 0-3.741-.498-5.31-1.373l-.38-.222-3.915 1.05 1.063-3.826-.245-.399A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Chat di WhatsApp
+      </a>
+      <a href="mailto:hello@nanansm.com" class="btn-outline">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Email Gue
+      </a>
+    </div>
+
+    <div class="contact-divider reveal"></div>
+
+    <div class="contact-info reveal reveal-delay-1">
+      <div class="contact-item">
+        <span class="contact-item-label">Lokasi</span>
+        <span class="contact-item-val">Bandung, Indonesia</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Email</span>
+        <span class="contact-item-val">hello@nanansm.com</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Status</span>
+        <span class="contact-item-val" style="color:var(--green)">● Available for Projects</span>
+      </div>
+    </div>
+
+    <div class="social-links reveal reveal-delay-2">
+      <a href="https://www.linkedin.com/in/nanansm/" target="_blank" rel="noopener" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://www.instagram.com/nanan.sm/" target="_blank" rel="noopener" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://github.com/nanansm" target="_blank" rel="noopener" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── FOOTER ─────────── -->
+<footer>
+  <p>&copy; 2024 Nanan Somanan. Dibuat dengan penuh semangat di Bandung.</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://www.linkedin.com/in/nanansm/">LinkedIn</a> &middot;
+    <a href="https://www.instagram.com/nanan.sm/">Instagram</a> &middot;
+    <a href="https://github.com/nanansm">GitHub</a>
+  </p>
+</footer>
+
+<!-- ─────────── SCRIPTS ─────────── -->
+<script>
+  /* ── Custom Cursor ── */
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    dot.style.left  = e.clientX + 'px';
+    dot.style.top   = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, [onclick], .exp-card, .service-card, .step-panel').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  /* ── Scroll events ── */
+  const bar     = document.getElementById('scroll-progress');
+  const backTop = document.getElementById('back-top');
+  const navbar  = document.getElementById('navbar');
+
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total    = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+    backTop.classList.toggle('visible', scrolled > 400);
+    navbar.classList.toggle('scrolled', scrolled > 60);
+  }, { passive: true });
+
+  /* ── Mobile nav ── */
+  function toggleMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const hbg = document.getElementById('hamburger');
+    const ovl = document.getElementById('overlay');
+    const open = nav.classList.toggle('open');
+    hbg.classList.toggle('open', open);
+    ovl.classList.toggle('visible', open);
+  }
+  function closeMobileNav() {
+    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('overlay').classList.remove('visible');
+  }
+
+  /* ── Strategy accordion ── */
+  function toggleStep(panel) {
+    const body   = panel.querySelector('.step-body');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    panel.classList.toggle('active', !isOpen);
+  }
+
+  /* ── Reveal on scroll ── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ── Trigger hero reveals immediately ── */
+  window.addEventListener('load', () => {
+    document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  });
+</script>
 </body>
 </html>
