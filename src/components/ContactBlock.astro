@@ -1,0 +1,403 @@
+---
+import { site, contactInfo, waLink } from '../data/site';
+
+interface Props {
+  idPrefix: string;
+  tone?: 'light' | 'dark' | 'green';
+}
+
+const { idPrefix, tone = 'light' } = Astro.props;
+
+const headingId = `${idPrefix}-contact-h`;
+const statusId = `${idPrefix}-contact-status`;
+
+const hrefFor = (label: string): string => {
+  switch (label) {
+    case 'WhatsApp':
+      return waLink(site.contact.waPrefill);
+    case 'Email':
+      return `mailto:${contactInfo.email}`;
+    case 'LinkedIn':
+      return contactInfo.linkedin;
+    case 'Instagram':
+      return contactInfo.instagram;
+    default:
+      return '#';
+  }
+};
+
+const isExternal = (label: string): boolean => label !== 'Email';
+
+const maxLengths: Record<string, number> = {
+  nama: 80,
+  bisnis: 120,
+  kebutuhan: 1000,
+  kontak: 120,
+};
+
+const autocompletes: Record<string, string> = {
+  nama: 'name',
+  bisnis: 'organization',
+  kontak: 'email',
+};
+
+const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000000AA';
+---
+
+<section class="contact" data-tone={tone} aria-labelledby={headingId}>
+  <p class="player2" data-player2 data-template={site.player2.withGeo}>{site.player2.fallback}</p>
+
+  <h2 id={headingId} class="heading">{site.contact.heading}</h2>
+  <p class="sub">{site.contact.sub}</p>
+
+  <p class="cta">
+    <a class="btn btn--primary" href={waLink(site.contact.waPrefill)} target="_blank" rel="noopener">{site.contact.cta}</a>
+  </p>
+
+  <dl class="links">
+    {site.contact.links.map((link) => (
+      <div class="links__row">
+        <dt>{link.label}</dt>
+        <dd>
+          <a
+            href={hrefFor(link.label)}
+            target={isExternal(link.label) ? '_blank' : undefined}
+            rel={isExternal(link.label) ? 'noopener' : undefined}
+          >{link.value}</a>
+        </dd>
+      </div>
+    ))}
+  </dl>
+
+  <form data-contact-form method="post" action="/api/contact" novalidate class="form">
+    {site.contact.form.fields.map((field) => {
+      const fieldId = `${idPrefix}-${field.name}`;
+      return (
+        <div class="field">
+          <label for={fieldId}>{field.label}</label>
+          {field.name === 'kebutuhan' ? (
+            <textarea
+              id={fieldId}
+              name={field.name}
+              rows="4"
+              required
+              maxlength={maxLengths[field.name]}
+              placeholder={field.placeholder}
+            ></textarea>
+          ) : (
+            <input
+              id={fieldId}
+              type="text"
+              name={field.name}
+              required
+              maxlength={maxLengths[field.name]}
+              autocomplete={autocompletes[field.name]}
+              placeholder={field.placeholder}
+            />
+          )}
+        </div>
+      );
+    })}
+
+    <div class="sr-only" aria-hidden="true">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="cf-turnstile" data-sitekey={sitekey} data-theme="light"></div>
+
+    <button type="submit" class="btn btn--primary">{site.contact.form.submit}</button>
+
+    <p
+      id={statusId}
+      class="status"
+      role="status"
+      aria-live="polite"
+      data-status
+      data-msg-success={site.contact.messages.success}
+      data-msg-error={site.contact.messages.error}
+      data-msg-empty={site.contact.messages.empty}
+      hidden
+    ></p>
+  </form>
+</section>
+
+<style>
+  .contact {
+    --c-bg: var(--paper);
+    --c-fg: var(--ink);
+    --c-accent: var(--brick);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
+    min-width: 0;
+    max-width: var(--max);
+    padding: var(--s4) var(--s2);
+    margin-inline: auto;
+    color: var(--c-fg);
+    background: var(--c-bg);
+    border: var(--border) solid var(--c-fg);
+    box-shadow: 4px 4px 0 var(--c-fg);
+  }
+
+  .contact[data-tone="dark"] {
+    --c-bg: #14111c;
+    --c-fg: var(--paper);
+    --c-accent: var(--coin);
+  }
+
+  .contact[data-tone="green"] {
+    --c-bg: #9bbc0f;
+    --c-fg: #0f380f;
+    --c-accent: #306230;
+  }
+
+  .contact > * {
+    min-width: 0;
+  }
+
+  .player2 {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--c-accent);
+    overflow-wrap: anywhere;
+  }
+
+  .heading {
+    font-family: var(--font-display);
+    font-size: clamp(0.75rem, 2.6vw, 1.25rem);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .sub {
+    font-size: 1.125rem;
+  }
+
+  .links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s1);
+    padding: var(--s2);
+    border: var(--border) solid var(--c-fg);
+    container-type: inline-size;
+  }
+
+  .links__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  @container (width >= 400px) {
+    .links__row {
+      grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
+      gap: var(--s2);
+      align-items: baseline;
+    }
+  }
+
+  .links dt {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .links dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .links a {
+    color: inherit;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+    min-width: 0;
+  }
+
+  .field {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .field label {
+    font-family: var(--font-label);
+    font-size: 1rem;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 10px var(--s2);
+    font-size: 1rem;
+    color: #1a1622;
+    background: var(--paper);
+    border: var(--border) solid var(--c-fg);
+    border-radius: 0;
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .field input.is-invalid,
+  .field textarea.is-invalid {
+    border-color: var(--brick);
+  }
+
+  .form .btn {
+    justify-self: start;
+    max-width: 100%;
+  }
+
+  .form .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .status {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .cta .btn {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .contact {
+      padding: var(--s5);
+    }
+  }
+</style>
+
+<script>
+  declare global {
+    interface Window {
+      turnstile?: { reset: () => void };
+    }
+  }
+
+  interface WhereResponse {
+    city?: string;
+    distanceKm?: number;
+  }
+
+  interface ContactResponse {
+    ok?: boolean;
+  }
+
+  const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+
+  if (
+    document.querySelector('.cf-turnstile') &&
+    !document.querySelector(`script[src="${TURNSTILE_SRC}"]`)
+  ) {
+    const s = document.createElement('script');
+    s.src = TURNSTILE_SRC;
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+
+  const player2Els = document.querySelectorAll<HTMLElement>('[data-player2]');
+  if (player2Els.length > 0) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 3000);
+    fetch('/api/where', { signal: controller.signal })
+      .then((res) => (res.ok ? (res.json() as Promise<WhereResponse>) : null))
+      .then((data) => {
+        if (!data || typeof data.city !== 'string' || typeof data.distanceKm !== 'number') return;
+        const city = data.city;
+        const km = Math.round(data.distanceKm).toLocaleString('id-ID');
+        player2Els.forEach((el) => {
+          const tpl = el.dataset.template;
+          if (!tpl) return;
+          el.textContent = tpl.replace('{kota}', city).replace('{jarak}', km);
+        });
+      })
+      .catch(() => {})
+      .finally(() => window.clearTimeout(timer));
+  }
+
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const show = (key: 'success' | 'error' | 'empty'): void => {
+      if (!status) return;
+      status.textContent = status.dataset[`msg${key.charAt(0).toUpperCase()}${key.slice(1)}`] ?? '';
+      status.hidden = false;
+    };
+
+    const valueOf = (name: string): string => {
+      const el = form.elements.namedItem(name);
+      return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement ? el.value : '';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const required = Array.from(
+        form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'),
+      );
+      const invalid = required.filter((el) => el.value.trim() === '');
+      required.forEach((el) => {
+        const bad = invalid.includes(el);
+        el.classList.toggle('is-invalid', bad);
+        if (bad) el.setAttribute('aria-invalid', 'true');
+        else el.removeAttribute('aria-invalid');
+      });
+
+      if (invalid.length > 0) {
+        show('empty');
+        invalid[0]?.focus();
+        return;
+      }
+
+      const tokenEl = form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+      const payload = {
+        nama: valueOf('nama').trim(),
+        bisnis: valueOf('bisnis').trim(),
+        kebutuhan: valueOf('kebutuhan').trim(),
+        kontak: valueOf('kontak').trim(),
+        website: valueOf('website'),
+        token: tokenEl?.value ?? '',
+      };
+
+      if (submitBtn) submitBtn.disabled = true;
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = (await res.json()) as ContactResponse;
+        if (res.ok && json.ok === true) {
+          form.reset();
+          window.turnstile?.reset();
+          show('success');
+        } else {
+          show('error');
+        }
+      } catch {
+        show('error');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  });
+
+  export {};
+</script>

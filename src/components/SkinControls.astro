@@ -1,0 +1,110 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  lockSkin?: 'manual' | 'tv' | 'handheld' | undefined;
+}
+
+const { lockSkin } = Astro.props;
+const names = site.boot.skinNames;
+const current = lockSkin ?? 'manual';
+const switchAria = `${site.boot.switchLabel}: ${names[current]}`;
+---
+
+<div
+  class="skin-controls"
+  data-skin-controls
+  data-names={JSON.stringify(names)}
+  data-switch-label={site.boot.switchLabel}
+>
+  {
+    lockSkin ? (
+      <a class="btn" href="/" aria-label={switchAria}>
+        {site.boot.switchLabel}
+      </a>
+    ) : (
+      <button type="button" class="btn" data-skin-switch aria-label={switchAria}>
+        {site.boot.switchLabel}
+      </button>
+    )
+  }
+  <button
+    type="button"
+    class="btn"
+    data-sound-toggle
+    aria-pressed="false"
+    data-on={site.ui.sound.on}
+    data-off={site.ui.sound.off}
+  >
+    {site.ui.sound.off}
+  </button>
+</div>
+
+<script>
+  type Skin = 'tv' | 'handheld' | 'manual';
+
+  const NEXT: Record<Skin, Skin> = { tv: 'handheld', handheld: 'manual', manual: 'tv' };
+
+  function isSkin(v: string | undefined | null): v is Skin {
+    return v === 'tv' || v === 'handheld' || v === 'manual';
+  }
+
+  const box = document.querySelector<HTMLElement>('[data-skin-controls]');
+  if (box) {
+    const names = JSON.parse(box.dataset.names ?? '{}') as Record<Skin, string>;
+    const label = box.dataset.switchLabel ?? '';
+    const switchBtn = box.querySelector<HTMLButtonElement>('[data-skin-switch]');
+    const soundBtn = box.querySelector<HTMLButtonElement>('[data-sound-toggle]');
+
+    if (switchBtn) {
+      switchBtn.addEventListener('click', () => {
+        const cur = document.documentElement.dataset.skin;
+        const next = NEXT[isSkin(cur) ? cur : 'manual'];
+        document.documentElement.dataset.skin = next;
+        switchBtn.setAttribute('aria-label', `${label}: ${names[next]}`);
+        try {
+          window.localStorage.setItem('skin', next);
+        } catch {
+          /* storage blocked */
+        }
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('skin', next);
+          window.history.replaceState(null, '', url.toString());
+        } catch {
+          /* history blocked */
+        }
+        window.dispatchEvent(new CustomEvent<Skin>('skinchange', { detail: next }));
+      });
+
+      const active = document.documentElement.dataset.skin;
+      if (isSkin(active)) switchBtn.setAttribute('aria-label', `${label}: ${names[active]}`);
+    }
+
+    if (soundBtn) {
+      const render = (on: boolean) => {
+        soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        soundBtn.textContent = (on ? soundBtn.dataset.on : soundBtn.dataset.off) ?? '';
+      };
+
+      let on = false;
+      try {
+        on = window.localStorage.getItem('sound') === 'on';
+      } catch {
+        on = false;
+      }
+      render(on);
+
+      soundBtn.addEventListener('click', () => {
+        on = !on;
+        render(on);
+        try {
+          window.localStorage.setItem('sound', on ? 'on' : 'off');
+        } catch {
+          /* storage blocked */
+        }
+        window.dispatchEvent(new CustomEvent<boolean>('soundchange', { detail: on }));
+      });
+    }
+  }
+</script>

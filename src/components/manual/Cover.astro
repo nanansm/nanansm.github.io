@@ -1,0 +1,254 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../../assets/nn.png';
+import { site, waLink } from '../../data/site';
+
+const logoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/logos/*.{jpg,webp}',
+  { eager: true },
+);
+
+const logos = site.marquee.logos.map((l) => {
+  const key = `../../assets/logos/${l.file}.${l.ext}`;
+  const mod = logoModules[key];
+  if (!mod) throw new Error(`logo missing: ${key}`);
+  return { name: l.name, src: mod.default };
+});
+---
+
+<header class="cover">
+  <div class="cover__box">
+    <div class="cover__text">
+      <p class="cover__badge">{site.boot.pressStart}</p>
+      <h1 class="cover__name">{site.hero.name}</h1>
+      <p class="cover__greeting">{site.boot.greeting}</p>
+      <p class="cover__tagline">{site.hero.tagline}</p>
+      <div class="cover__cta">
+        <a
+          class="btn btn--primary"
+          href={waLink(site.contact.waPrefill)}
+          target="_blank"
+          rel="noopener">{site.hero.ctaPrimary}</a
+        >
+        <a class="btn btn--ghost" href="#case-study">{site.hero.ctaSecondary}</a>
+      </div>
+    </div>
+    <div class="cover__photo">
+      <Image
+        src={photo}
+        alt={site.hero.name}
+        width={480}
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+
+  <section class="marquee" aria-label={site.marquee.intro} data-marquee>
+    <p class="marquee__intro">{site.marquee.intro}</p>
+    <div class="marquee__view">
+      <ul class="marquee__track">
+        {
+          logos.map((l) => (
+            <li class="marquee__item">
+              <Image src={l.src} width={160} height={160} format="webp" alt="" loading="lazy" />
+              <span class="marquee__name">{l.name}</span>
+            </li>
+          ))
+        }
+        {
+          logos.map((l) => (
+            <li class="marquee__item marquee__item--dup" aria-hidden="true">
+              <Image src={l.src} width={160} height={160} format="webp" alt="" loading="lazy" />
+              <span class="marquee__name">{l.name}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</header>
+
+<style>
+  .cover {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: var(--s4) var(--s2) var(--s6);
+  }
+
+  .cover__box {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s4);
+    padding: var(--s3);
+    border: var(--border) solid var(--ink);
+    background: var(--paper-2);
+    box-shadow: var(--shadow);
+  }
+
+  .cover__text {
+    min-width: 0;
+  }
+
+  .cover__badge {
+    display: inline-block;
+    margin-bottom: var(--s2);
+    padding: var(--s1) var(--s2);
+    border: var(--border) solid var(--ink);
+    background: var(--coin);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    animation: cover-blink 1s steps(2) infinite;
+  }
+
+  .cover__name {
+    margin-bottom: var(--s2);
+    font-family: var(--font-display);
+    font-size: clamp(20px, 5vw, 44px);
+    line-height: 1.4;
+    color: var(--brick);
+    overflow-wrap: anywhere;
+  }
+
+  .cover__greeting {
+    margin-bottom: var(--s2);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .cover__tagline {
+    margin-bottom: var(--s3);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .cover__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s2);
+  }
+
+  .cover__photo {
+    min-width: 0;
+    width: 100%;
+    max-width: 280px;
+    justify-self: center;
+    border: var(--border) solid var(--ink);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+  }
+
+  .cover__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .marquee {
+    margin-top: var(--s6);
+  }
+
+  .marquee__intro {
+    margin-bottom: var(--s2);
+    font-family: var(--font-label);
+    font-size: 16px;
+    line-height: 1.6;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .marquee__view {
+    overflow: hidden;
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    gap: var(--s2);
+    padding: 0 var(--s1) 0 0;
+    margin: 0;
+    list-style: none;
+    animation: cover-scroll 40s linear infinite;
+  }
+
+  .marquee__item {
+    flex: none;
+    width: 96px;
+  }
+
+  .marquee__item :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: var(--border) solid var(--ink);
+    background: #fff;
+  }
+
+  .marquee__name {
+    display: block;
+    margin-top: var(--s1);
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  @keyframes cover-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes cover-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (width >= 768px) {
+    .cover {
+      padding-inline: var(--s4);
+    }
+
+    .cover__box {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+      align-items: center;
+      padding: var(--s5);
+    }
+
+    .cover__photo {
+      max-width: none;
+    }
+
+    .marquee__item {
+      width: 120px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cover__badge {
+      animation: none;
+    }
+
+    .marquee__track {
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: none;
+    }
+
+    .marquee__item--dup {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import Cover from './Cover.astro';
+import LevelAbout from './LevelAbout.astro';
+import LevelServices from './LevelServices.astro';
+import LevelCases from './LevelCases.astro';
+import LevelProjects from './LevelProjects.astro';
+import LevelSaves from './LevelSaves.astro';
+import LevelSteps from './LevelSteps.astro';
+import GameOverFaq from './GameOverFaq.astro';
+import Footer from './Footer.astro';
+import ContactBlock from '../ContactBlock.astro';
+---
+
+<div data-skin-root="manual" class="manual">
+  <Cover />
+  <main id="main">
+    <LevelAbout />
+    <LevelServices />
+    <LevelCases />
+    <LevelProjects />
+    <LevelSaves />
+    <LevelSteps />
+    <GameOverFaq />
+    <section id="contact" class="manual__contact">
+      <ContactBlock idPrefix="m" tone="light" />
+    </section>
+  </main>
+  <Footer />
+</div>
+
+<style>
+  .manual__contact {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: var(--s8) var(--s2);
+  }
+
+  @media (width >= 768px) {
+    .manual__contact {
+      padding-inline: var(--s4);
+    }
+  }
+</style>

@@ -1,0 +1,190 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+
+const { gameOver, faq } = site;
+const pad = (n: number): string => String(n).padStart(2, '0');
+---
+
+<ManualSection id="game-over" page={8} eyebrow="GAME OVER" heading={gameOver.heading} icon="skull">
+  <div class="screen">
+    <ol class="lessons">
+      {
+        gameOver.lessons.map((lesson, i) => (
+          <li class="lesson">
+            <span class="lesson__num" aria-hidden="true">{i + 1}</span>
+            <div class="lesson__text">
+              <h3 class="lesson__title">{lesson.title}</h3>
+              {lesson.body.split('\n').map((line) => (
+                <p class="lesson__body">{line}</p>
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</ManualSection>
+
+<ManualSection id="faq" page={9} eyebrow="FAQ" heading={faq.heading} icon="chat">
+  <div class="faq">
+    {
+      faq.items.map((item, i) => (
+        <details class="faq__item">
+          <summary class="faq__sum">
+            <span class="faq__no" aria-hidden="true">{pad(i + 1)}</span>
+            <span class="faq__q">{item.q}</span>
+          </summary>
+          <p class="faq__a">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</ManualSection>
+
+<style>
+  .screen {
+    min-width: 0;
+    padding: var(--s3) var(--s2);
+    border: var(--border) solid var(--ink);
+    border-radius: 0;
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: var(--shadow);
+  }
+
+  .lessons {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lesson {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: var(--s2);
+    min-width: 0;
+  }
+
+  .lesson__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: var(--border) solid var(--paper);
+    background: var(--brick);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .lesson__text {
+    min-width: 0;
+  }
+
+  .lesson__title {
+    margin: 0 0 var(--s1);
+    color: var(--coin);
+    font-family: var(--font-label);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson__body {
+    margin: 0 0 var(--s1);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson__body:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+  }
+
+  .faq__item {
+    min-width: 0;
+    border: var(--border) solid var(--ink);
+    border-radius: 0;
+    background: var(--paper-2);
+    box-shadow: var(--shadow);
+  }
+
+  .faq__sum {
+    display: flex;
+    align-items: center;
+    gap: var(--s2);
+    min-height: 44px;
+    padding: var(--s1) var(--s2);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__sum::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__sum::after {
+    content: '+';
+    flex: none;
+    margin-left: auto;
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1;
+    color: var(--brick);
+  }
+
+  .faq__item[open] > .faq__sum::after {
+    content: '−';
+  }
+
+  .faq__sum:focus-visible {
+    outline: var(--border) solid var(--sky);
+    outline-offset: 2px;
+  }
+
+  .faq__no {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1;
+    color: var(--brick-dark);
+  }
+
+  .faq__q {
+    min-width: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .faq__a {
+    margin: 0;
+    padding: var(--s2);
+    border-top: var(--border) dashed var(--ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  @media (width >= 768px) {
+    .screen {
+      padding: var(--s4);
+    }
+  }
+</style>

@@ -1,0 +1,106 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+import type { StepsLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is StepsLevel => l.id === '3-2');
+if (!lvl) throw new Error('Level 3-2 tidak ada di site.levels');
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={7}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="chat"
+>
+  <ol class="path">
+    {
+      lvl.steps.map((step, i) => (
+        <li class="path__step">
+          <span class="path__num" aria-hidden="true">{i + 1}</span>
+          <h3 class="path__title">{step.title}</h3>
+          <p class="path__body">{step.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</ManualSection>
+
+<style>
+  .path {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .path__step {
+    position: relative;
+    min-width: 0;
+    padding: var(--s2);
+    border: var(--border) solid var(--ink);
+    border-radius: 0;
+    background: var(--paper-2);
+    box-shadow: var(--shadow);
+  }
+
+  .path__step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 42px;
+    height: var(--s5);
+    border-left: var(--border) dashed var(--ink);
+  }
+
+  .path__num {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: var(--s2);
+    border: var(--border) solid var(--ink);
+    background: var(--coin);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .path__title {
+    margin: 0 0 var(--s1);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .path__body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  @media (width >= 1024px) {
+    .path {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .path__step:not(:last-child)::after {
+      top: 50%;
+      left: calc(100% + 12px);
+      width: 0;
+      height: 0;
+      border-block: 12px solid transparent;
+      border-right: 0;
+      border-left: 16px solid var(--ink);
+      transform: translateY(-50%);
+    }
+  }
+</style>

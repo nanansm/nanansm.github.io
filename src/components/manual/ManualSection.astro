@@ -1,0 +1,96 @@
+---
+// Frame bersama tiap section skin Manual: nomor halaman manual + label level + judul.
+interface Props {
+  id: string;
+  page: number;
+  eyebrow: string;
+  heading: string;
+  icon?: 'coin' | 'star' | 'heart' | 'key' | 'flag' | 'skull' | 'chat';
+}
+
+const { id, page, eyebrow, heading, icon = 'coin' } = Astro.props;
+const pageNo = String(page).padStart(2, '0');
+
+// Ikon pixel 8x8, tiap string = 1 baris, '1' = piksel terisi.
+const ICONS: Record<NonNullable<Props['icon']>, string[]> = {
+  coin: ['00111100', '01111110', '11011011', '11011011', '11011011', '11011011', '01111110', '00111100'],
+  star: ['00011000', '00011000', '11111111', '01111110', '00111100', '01111110', '01100110', '11000011'],
+  heart: ['01100110', '11111111', '11111111', '11111111', '01111110', '00111100', '00011000', '00000000'],
+  key: ['01110000', '10001000', '10001000', '01111111', '00000101', '00000101', '00000000', '00000000'],
+  flag: ['11111100', '11111110', '11111100', '11000000', '11000000', '11000000', '11000000', '11000000'],
+  skull: ['01111110', '11111111', '10011001', '10011001', '11111111', '01100110', '01011010', '00000000'],
+  chat: ['11111111', '10000001', '10110101', '10000001', '11111111', '00110000', '01100000', '00000000'],
+};
+const pixels = ICONS[icon].flatMap((row, y) =>
+  [...row].map((c, x) => (c === '1' ? { x, y } : null)).filter((p) => p !== null),
+);
+---
+
+<section class="m-sec" id={id} aria-labelledby={`${id}-h`}>
+  <header class="m-sec__head">
+    <svg class="m-sec__icon" viewBox="0 0 8 8" width="32" height="32" aria-hidden="true" shape-rendering="crispEdges">
+      {pixels.map((p) => <rect x={p.x} y={p.y} width="1" height="1" />)}
+    </svg>
+    <p class="m-sec__eyebrow">{eyebrow}</p>
+    <span class="m-sec__page" aria-hidden="true">P.{pageNo}</span>
+  </header>
+  <h2 class="m-sec__h" id={`${id}-h`}>{heading}</h2>
+  <div class="m-sec__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .m-sec {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: var(--s8) var(--s2);
+    border-bottom: var(--border) dashed var(--ink);
+    scroll-margin-top: var(--s2);
+  }
+
+  .m-sec__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s2);
+    margin-bottom: var(--s2);
+  }
+
+  .m-sec__icon {
+    flex: none;
+    fill: var(--brick);
+  }
+
+  .m-sec__eyebrow {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--brick);
+    text-transform: uppercase;
+  }
+
+  .m-sec__page {
+    margin-left: auto;
+    font-family: var(--font-label);
+    font-size: 14px;
+    padding: 4px var(--s1);
+    border: 2px solid var(--ink);
+    background: var(--paper-2);
+  }
+
+  .m-sec__h {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+    line-height: 1.25;
+    margin-bottom: var(--s4);
+    max-width: 30ch;
+    overflow-wrap: break-word;
+  }
+
+  @media (width >= 768px) {
+    .m-sec {
+      padding-inline: var(--s4);
+    }
+  }
+</style>

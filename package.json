@@ -1,0 +1,40 @@
+{
+  "name": "nanansm-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro build && wrangler dev --port 8787",
+    "check": "astro check && tsc --noEmit && eslint . && stylelint \"src/**/*.{css,astro}\" && vitest run",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "@fontsource/press-start-2p": "^5.3.0",
+    "@fontsource/silkscreen": "^5.3.0",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.14.0",
+    "@cloudflare/vitest-pool-workers": "^0.23.0",
+    "@cloudflare/workers-types": "^5.20261018.1",
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.1",
+    "astro-eslint-parser": "^3.2.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-astro": "^1.7.0",
+    "husky": "^9.1.7",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^16.26.1",
+    "stylelint-config-html": "^2.0.0",
+    "stylelint-config-standard": "^39.0.1",
+    "typescript": "~5.9",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^4.1.12",
+    "wrangler": "^4.151.1"
+  }
+}

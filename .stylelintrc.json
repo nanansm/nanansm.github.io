@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-html/astro"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "no-descending-specificity": null,
+    "font-family-name-quotes": null,
+    "media-feature-range-notation": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": [
+          "global"
+        ]
+      }
+    ],
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [
+          "text-size-adjust"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,159 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+import type { ProjectsLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is ProjectsLevel => l.id === '2-2');
+if (!lvl) throw new Error('Level 2-2 tidak ada di site.levels');
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={5}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="key"
+>
+  <ul class="carts">
+    {
+      lvl.projects.map((p) => (
+        <li class="cart">
+          <div class="cart__grooves" aria-hidden="true" />
+          <div class="cart__label">
+            <h3 class="cart__name">{p.name}</h3>
+            <span class={`cart__status cart__status--${p.status.toLowerCase()}`}>{p.status}</span>
+            <p class="cart__desc">{p.desc}</p>
+          </div>
+          {p.url && (
+            <a class="btn btn--primary cart__btn" href={p.url} target="_blank" rel="noopener">
+              {p.button}
+              <span class="sr-only"> {p.name}</span>
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+  <p class="carts__note">{lvl.note}</p>
+</ManualSection>
+
+<style>
+  .carts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    min-width: 0;
+    padding: var(--s2);
+    background: #5a5566;
+    border: var(--border) solid var(--ink);
+    box-shadow: var(--shadow);
+    transition: transform 0.1s steps(2);
+  }
+
+  .cart::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--border) * -1);
+    right: calc(var(--border) * -1);
+    width: var(--s3);
+    height: var(--s3);
+    background: var(--paper);
+    border-bottom: var(--border) solid var(--ink);
+    border-left: var(--border) solid var(--ink);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+
+  .cart:hover,
+  .cart:focus-within {
+    transform: translateY(-4px);
+  }
+
+  .cart__grooves {
+    height: var(--s2);
+    margin-right: var(--s3);
+    background: repeating-linear-gradient(0deg, var(--ink) 0 2px, transparent 2px 4px);
+  }
+
+  .cart__label {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s1);
+    min-width: 0;
+    padding: var(--s2);
+    background: var(--paper);
+    border: var(--border) solid var(--ink);
+  }
+
+  .cart__name {
+    max-width: 100%;
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .cart__status {
+    padding: 2px var(--s1);
+    font-family: var(--font-label);
+    font-size: 14px;
+    line-height: 1.4;
+    border: 2px solid var(--ink);
+  }
+
+  .cart__status--live {
+    background: var(--pipe);
+    color: #fff;
+  }
+
+  .cart__status--beta {
+    background: var(--coin);
+    color: var(--ink);
+  }
+
+  .cart__desc {
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .cart__btn {
+    align-self: flex-start;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .carts__note {
+    margin-top: var(--s4);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  @media (width >= 560px) {
+    .carts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 1024px) {
+    .carts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

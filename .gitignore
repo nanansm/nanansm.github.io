@@ -1,20 +1,18 @@
 
-# Build artifacts
-# Compressed files
-# Coverage reports
-# Dependencies
-# Editors
-# Environment
-# Logs
-# MyPy cache
-# OS generated files
-# Pytest cache
-# Python
-# Temporary files
-# Virtual environments
-**/.DS_Store
+__pycache__/
+.astro/
+.dev.vars
+.DS_Store
+.env
+.env.local
+.idea/
+.mypy_cache/
+.playwright-mcp/
+.pytest_cache/
+.venv/
+.vscode/
+.wrangler/
 *.7z
-*.Z
 *.arj
 *.bz2
 *.cab
@@ -43,19 +41,23 @@
 *.tgz
 *.tmp
 *.xz
+*.Z
 *.zip
 *.zst
-.DS_Store
-.env
-.env.local
-.idea/
-.mypy_cache/
-.playwright-mcp/
-.pytest_cache/
-.venv/
-.vscode/
-Thumbs.db
-__pycache__/
+**/.DS_Store
+# Build artifacts
+# Compressed files
+# Coverage reports
+# Dependencies
+# Editors
+# Environment
+# Logs
+# MyPy cache
+# OS generated files
+# Pytest cache
+# Python
+# Temporary files
+# Virtual environments
 ```
 ```.DS_Store
 build/
@@ -64,5 +66,9 @@ dist/
 env/
 htmlcov/
 node_modules/
+playwright-report/
 target/
+test-results/
+tests/screens/
+Thumbs.db
 venv/

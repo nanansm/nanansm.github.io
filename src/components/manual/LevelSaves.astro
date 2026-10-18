@@ -1,0 +1,136 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+import type { SavesLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is SavesLevel => l.id === '3-1');
+if (!lvl) throw new Error('Level 3-1 tidak ada di site.levels');
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={6}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="flag"
+>
+  <ol class="saves">
+    {
+      lvl.rows.map((row, i) => (
+        <li class="save">
+          <span class="save__no">{i + 1}</span>
+          <div class="save__cell">
+            <span class="save__k">{lvl.headers.year}</span>
+            <span class="save__year">{row.year}</span>
+          </div>
+          <div class="save__cell">
+            <span class="save__k">{lvl.headers.role}</span>
+            <span class="save__role">{row.role}</span>
+          </div>
+          <div class="save__cell">
+            <span class="save__k">{lvl.headers.result}</span>
+            <span class="save__result">{row.result}</span>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</ManualSection>
+
+<style>
+  .saves {
+    position: relative;
+    display: grid;
+    gap: var(--s3);
+    margin: 0;
+    padding: 0 0 0 var(--s3);
+    list-style: none;
+  }
+
+  .saves::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 6px;
+    width: var(--border);
+    background: repeating-linear-gradient(180deg, var(--ink) 0 8px, transparent 8px 16px);
+  }
+
+  .save {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+    min-width: 0;
+    padding: var(--s2);
+    background: var(--paper-2);
+    border: var(--border) solid var(--ink);
+    box-shadow: var(--shadow);
+  }
+
+  .save::before {
+    content: '';
+    position: absolute;
+    top: var(--s3);
+    left: calc(var(--s3) * -1 + 2px);
+    width: var(--s1);
+    height: var(--s1);
+    background: var(--brick);
+    border: 2px solid var(--ink);
+  }
+
+  .save__no {
+    justify-self: start;
+    min-width: var(--s6);
+    padding: var(--s1);
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--paper);
+    background: var(--ink);
+  }
+
+  .save__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .save__k {
+    font-family: var(--font-label);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .save__year {
+    font-family: var(--font-label);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--brick);
+    overflow-wrap: anywhere;
+  }
+
+  .save__role,
+  .save__result {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .save__role {
+    font-weight: 700;
+  }
+
+  @media (width >= 768px) {
+    .save {
+      grid-template-columns: auto minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+      align-items: start;
+    }
+  }
+</style>

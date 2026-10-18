@@ -1,0 +1,103 @@
+---
+import { site, contactInfo } from '../../data/site';
+
+const hrefFor = (label: string): string => {
+  switch (label) {
+    case 'LinkedIn':
+      return contactInfo.linkedin;
+    case 'Instagram':
+      return contactInfo.instagram;
+    case 'GitHub':
+      return contactInfo.github;
+    default:
+      return '#';
+  }
+};
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p class="footer__copy">{site.footer.copyright}</p>
+
+    <ul class="footer__links">
+      {site.footer.links.map((label) => (
+        <li>
+          <a href={hrefFor(label)} target="_blank" rel="noopener">{label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="footer__tech">
+      <a href="/llms.txt">llms.txt</a>
+      <a href="/api/mcp">MCP</a>
+    </p>
+  </div>
+
+  <div class="footer__mark" aria-hidden="true" data-marquee>
+    <span class="footer__word">{site.hero.name}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: var(--s6) var(--s2) 0;
+    overflow: hidden;
+    color: var(--paper);
+    background: var(--ink);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
+    max-width: var(--max);
+    margin-inline: auto;
+  }
+
+  .footer__inner > * {
+    min-width: 0;
+  }
+
+  .footer__copy {
+    overflow-wrap: anywhere;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s2) var(--s3);
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__links a,
+  .footer__tech a {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    color: var(--paper);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .footer__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s2) var(--s3);
+  }
+
+  .footer__mark {
+    max-width: 100%;
+    margin-top: var(--s5);
+    overflow: hidden;
+  }
+
+  .footer__word {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(24px, 6vw, 64px);
+    line-height: 1.2;
+    color: var(--paper);
+    white-space: nowrap;
+    opacity: 0.9;
+  }
+</style>

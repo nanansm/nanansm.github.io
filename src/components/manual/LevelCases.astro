@@ -1,0 +1,358 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+import type { CasesLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is CasesLevel => l.id === '2-1');
+if (!lvl) throw new Error('LevelCases: level 2-1 tidak ada di site.levels');
+
+interface Bar {
+  label: string;
+  text: string;
+  pct: number;
+  hot: boolean;
+}
+
+const fmt2 = (v: number): string =>
+  v.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const makeBars = (labels: string[], values: number[], texts: string[], max: number, hotIndex: number): Bar[] =>
+  values.map((v, i) => ({
+    label: labels[i] ?? '',
+    text: texts[i] ?? '',
+    pct: max > 0 ? Math.max(0, Math.min(100, (v / max) * 100)) : 0,
+    hot: i === hotIndex,
+  }));
+
+const chartFor = (c: CasesLevel['cases'][number]): Bar[] => {
+  if (c.roasSeries && c.months) {
+    const max = Math.max(...c.roasSeries);
+    return makeBars(c.months, c.roasSeries, c.roasSeries.map(fmt2), max, c.roasSeries.indexOf(max));
+  }
+  if (c.occupancy) {
+    const labels = [c.table.headers[0] ?? '', c.table.headers[1] ?? ''];
+    const texts = c.occupancy.map((v) => `${v.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%`);
+    return makeBars(labels, c.occupancy, texts, 100, c.occupancy.length - 1);
+  }
+  if (c.cpl && c.cplLabels) {
+    const texts = c.cpl.map((v) => `Rp${v.toLocaleString('id-ID')}`);
+    return makeBars(c.cplLabels, c.cpl, texts, Math.max(...c.cpl), c.cpl.length - 1);
+  }
+  return [];
+};
+
+const cases = lvl.cases.map((c) => {
+  const bars = chartFor(c);
+  return { c, bars, aria: bars.map((b) => `${b.label} ${b.text}`).join(', ') };
+});
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={4}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="coin"
+>
+  <div class="cs-list">
+    {
+      cases.map(({ c, bars, aria }) => (
+        <article class="cs">
+          <div class="cs__main">
+            <p class="cs__client">{c.client}</p>
+            <h3 class="cs__title">{c.title}</h3>
+            <p class="cs__text">{c.intro}</p>
+            <table class="cs__table">
+              <thead>
+                <tr>
+                  {c.table.headers.map((h) => (
+                    <th scope="col">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {c.table.rows.map((row) => (
+                  <tr>
+                    {row.map((cell, i) => (
+                      <td data-label={c.table.headers[i] ?? ''}>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {c.glossary !== null && <p class="cs__text cs__note">{c.glossary}</p>}
+            {c.extra !== null && <p class="cs__text cs__note">{c.extra}</p>}
+          </div>
+          <div class="cs__side">
+            {bars.length > 0 && (
+              <figure class="cs__chart" role="img" aria-label={aria}>
+                {bars.map((b) => (
+                  <div class="bar" aria-hidden="true">
+                    <div class="bar__top">
+                      <span class="bar__label">{b.label}</span>
+                      <span class="bar__value">{b.text}</span>
+                    </div>
+                    <div class="bar__track">
+                      <div class:list={['bar__fill', { 'bar__fill--hot': b.hot }]} style={`width:${b.pct}%`} />
+                    </div>
+                  </div>
+                ))}
+              </figure>
+            )}
+            <p class="cs__lesson">
+              <strong>{c.lessonLabel}</strong> {c.lesson}
+            </p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</ManualSection>
+
+<style>
+  .cs-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s4);
+  }
+
+  .cs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
+    min-width: 0;
+    padding: var(--s3);
+    background: var(--paper);
+    border: var(--border) solid var(--ink);
+    border-radius: 0;
+    box-shadow: var(--shadow);
+  }
+
+  .cs__main,
+  .cs__side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    min-width: 0;
+  }
+
+  .cs__main {
+    container-type: inline-size;
+  }
+
+  .cs__client {
+    font-family: var(--font-label);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--brick);
+    text-transform: uppercase;
+    overflow-wrap: normal;
+  }
+
+  .cs__title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.3;
+    overflow-wrap: normal;
+  }
+
+  .cs__text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: normal;
+  }
+
+  .cs__note {
+    color: var(--ink-soft);
+  }
+
+  /* tabel: stack di mobile */
+  .cs__table {
+    display: block;
+    width: 100%;
+    border: 4px solid var(--ink);
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .cs__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .cs__table tbody,
+  .cs__table tr {
+    display: block;
+    min-width: 0;
+  }
+
+  .cs__table tr + tr {
+    border-top: 4px solid var(--ink);
+  }
+
+  .cs__table td {
+    display: block;
+    min-width: 0;
+    padding: var(--s1) var(--s2);
+    overflow-wrap: normal;
+  }
+
+  .cs__table td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-label);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .cs__table td[data-label='']::before {
+    content: none;
+  }
+
+  /* chart */
+  .cs__chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    min-width: 0;
+    margin: 0;
+    padding: var(--s2);
+    background: var(--paper-2);
+    border: 4px solid var(--ink);
+  }
+
+  .bar {
+    min-width: 0;
+  }
+
+  .bar__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px var(--s2);
+    margin-bottom: 4px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .bar__label {
+    min-width: 0;
+    overflow-wrap: normal;
+  }
+
+  .bar__value {
+    font-family: var(--font-label);
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: normal;
+  }
+
+  .bar__track {
+    height: 32px;
+    background: var(--paper);
+    border: 4px solid var(--ink);
+    overflow: hidden;
+  }
+
+  .bar__fill {
+    height: 100%;
+    background-color: var(--sky);
+    background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(0 0 0 / 12%) 6px 8px);
+    border-right: 4px solid var(--ink);
+    box-sizing: border-box;
+  }
+
+  .bar__fill--hot {
+    background-color: var(--brick);
+  }
+
+  .cs__lesson {
+    padding: var(--s2);
+    background: var(--paper-2);
+    border: 4px dashed var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: normal;
+  }
+
+  @container (width >= 560px) {
+    .cs__table {
+      display: table;
+      table-layout: fixed;
+    }
+
+    .cs__table thead {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+      white-space: normal;
+      background: var(--paper-2);
+      border-bottom: 4px solid var(--ink);
+    }
+
+    .cs__table tbody {
+      display: table-row-group;
+    }
+
+    .cs__table tr {
+      display: table-row;
+    }
+
+    .cs__table th {
+      padding: var(--s1) var(--s2);
+      font-family: var(--font-label);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      text-align: right;
+      overflow-wrap: normal;
+    }
+
+    .cs__table th:first-child {
+      text-align: left;
+    }
+
+    .cs__table td {
+      display: table-cell;
+      text-align: right;
+      overflow-wrap: normal;
+    }
+
+    .cs__table td:first-child {
+      text-align: left;
+    }
+
+    .cs__table td::before {
+      content: none;
+    }
+  }
+
+  @media (width >= 768px) {
+    .cs {
+      padding: var(--s4);
+    }
+  }
+
+  @media (width >= 1024px) {
+    .cs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s4);
+    }
+  }
+</style>

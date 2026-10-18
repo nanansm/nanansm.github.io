@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base lockSkin="manual" noindex>
+  <div data-skin-root="manual">
+    <main class="nf">
+      <p class="nf__code" aria-hidden="true">404</p>
+      <h1 class="nf__title">{site.ui.notFound.title}</h1>
+      <p class="nf__body">{site.ui.notFound.body}</p>
+      <a class="btn btn--primary" href="/">{site.ui.notFound.button}</a>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100dvh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--s3);
+    padding: var(--s4) var(--s2);
+    text-align: center;
+  }
+
+  .nf__code {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 12vw, 96px);
+    color: var(--brick);
+    text-shadow: var(--shadow);
+  }
+
+  .nf__title {
+    font-family: var(--font-display);
+    font-size: clamp(16px, 4vw, 28px);
+    line-height: 1.5;
+  }
+
+  .nf__body {
+    max-width: 40ch;
+  }
+</style>

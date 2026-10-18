@@ -1,0 +1,170 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site, waLink } from '../../data/site';
+import type { ServicesLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is ServicesLevel => l.id === '1-2');
+if (!lvl) throw new Error('LevelServices: level 1-2 tidak ada di site.levels');
+
+const COIN = ['00111100', '01111110', '11011011', '11011011', '11011011', '11011011', '01111110', '00111100'];
+const coinPixels = COIN.flatMap((row, y) =>
+  [...row].map((c, x) => (c === '1' ? { x, y } : null)).filter((p) => p !== null),
+);
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={3}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="star"
+>
+  <ul class="svc-grid">
+    {
+      lvl.cards.map((card) => (
+        <li class="svc-card">
+          <p class="svc-card__label">{card.label}</p>
+          <h3 class="svc-card__title">{card.title}</h3>
+          <p class="svc-card__body">{card.body}</p>
+          {card.price !== null && <p class="svc-card__price">{card.price}</p>}
+          <p class="svc-card__proof">
+            <svg
+              class="svc-card__coin"
+              viewBox="0 0 8 8"
+              width="16"
+              height="16"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              {coinPixels.map((p) => (
+                <rect x={p.x} y={p.y} width="1" height="1" />
+              ))}
+            </svg>
+            <span>{card.proof}</span>
+          </p>
+          {card.button === 'BUKA LIBRARY' ? (
+            <a class="btn btn--ghost svc-card__btn" href="#cartridge-library">
+              {card.button}
+            </a>
+          ) : (
+            <a
+              class="btn btn--primary svc-card__btn"
+              href={waLink(site.contact.waPrefill)}
+              target="_blank"
+              rel="noopener"
+            >
+              {card.button}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</ManualSection>
+
+<style>
+  .svc-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .svc-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s2);
+    min-width: 0;
+    padding: var(--s3);
+    background: var(--paper);
+    border: var(--border) solid var(--ink);
+    border-radius: 0;
+    box-shadow: var(--shadow);
+  }
+
+  .svc-card__label {
+    display: inline-block;
+    max-width: 100%;
+    padding: 4px var(--s1);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-label);
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .svc-card__title {
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .svc-card__body {
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .svc-card__price {
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: var(--s1) var(--s2);
+    border: 4px dashed var(--coin);
+    background: var(--paper);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .svc-card__proof {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s1);
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .svc-card__proof span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .svc-card__coin {
+    flex: none;
+    margin-top: 4px;
+    fill: var(--coin);
+  }
+
+  .svc-card__btn {
+    margin-top: auto;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  @media (width >= 768px) {
+    .svc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 1024px) {
+    .svc-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

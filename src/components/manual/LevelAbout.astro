@@ -1,0 +1,104 @@
+---
+import ManualSection from './ManualSection.astro';
+import { site } from '../../data/site';
+import type { AboutLevel } from '../../data/site';
+
+const lvl = site.levels.find((l): l is AboutLevel => l.id === '1-1');
+if (!lvl) throw new Error('level 1-1 missing');
+---
+
+<ManualSection
+  id={lvl.slug}
+  page={2}
+  eyebrow={`${site.ui.hud.level} ${lvl.id} · ${lvl.title}`}
+  heading={lvl.heading}
+  icon="heart"
+>
+  <div class="about__text">
+    {lvl.paragraphs.map((p) => <p>{p}</p>)}
+  </div>
+
+  <section class="score" aria-labelledby="about-score-h">
+    <h3 class="score__title" id="about-score-h">{lvl.highScoreLabel}</h3>
+    <ul class="score__grid">
+      {
+        lvl.stats.map((s) => (
+          <li class="score__stat">
+            <span class="score__value">{s.value}</span>
+            <span class="score__label">{s.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</ManualSection>
+
+<style>
+  .about__text {
+    max-width: 65ch;
+  }
+
+  .about__text p {
+    margin-bottom: var(--s2);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .score {
+    margin-top: var(--s4);
+    border: var(--border) solid var(--ink);
+    background: var(--paper-2);
+    box-shadow: var(--shadow);
+  }
+
+  .score__title {
+    padding: var(--s1) var(--s2);
+    background: var(--ink);
+    color: var(--coin);
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .score__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s2);
+    padding: var(--s2);
+    margin: 0;
+    list-style: none;
+  }
+
+  .score__stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s1);
+    min-width: 0;
+  }
+
+  .score__value {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 4vw, 32px);
+    line-height: 1.4;
+    color: var(--brick);
+    overflow-wrap: anywhere;
+  }
+
+  .score__label {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  @media (width >= 1024px) {
+    .score__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: var(--s3);
+      gap: var(--s3);
+    }
+  }
+</style>

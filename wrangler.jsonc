@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nanansm-portfolio",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-08-20",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "kv_namespaces": [
+    { "binding": "HITS", "id": "local-hits" },
+    { "binding": "CONTACT", "id": "local-contact" }
+  ],
+  "vars": { "TURNSTILE_SITEKEY": "1x00000000000000000000AA" }
+  // send_email binding + real KV ids ditambah saat go-live (fase 10)
+}

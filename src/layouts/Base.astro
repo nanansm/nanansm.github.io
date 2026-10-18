@@ -1,0 +1,117 @@
+---
+import '@fontsource/press-start-2p/400.css';
+import '@fontsource/silkscreen/400.css';
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import '../styles/global.css';
+import SkinControls from '../components/SkinControls.astro';
+import { site, contactInfo } from '../data/site';
+
+interface Props {
+  lockSkin?: 'manual' | 'tv' | 'handheld';
+  noindex?: boolean;
+}
+
+const { lockSkin, noindex } = Astro.props;
+const canonical = new URL('/', Astro.site).href;
+const ogImage = new URL('/og.png', Astro.site).href;
+
+const person = {
+  '@type': 'Person',
+  '@id': `${canonical}#person`,
+  name: 'Nanan Somanan',
+  url: canonical,
+  sameAs: [
+    contactInfo.linkedin,
+    contactInfo.instagram,
+    contactInfo.github,
+  ],
+};
+const service = {
+  '@type': 'ProfessionalService',
+  '@id': `${canonical}#service`,
+  name: site.meta.title,
+  description: site.meta.description,
+  url: canonical,
+  image: ogImage,
+  founder: { '@id': `${canonical}#person` },
+  areaServed: 'Indonesia',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Bandung',
+    addressCountry: 'ID',
+  },
+};
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, service] });
+---
+
+<!doctype html>
+<html lang="id" data-skin="manual">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{site.meta.title}</title>
+    <meta name="description" content={site.meta.description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#1A1622" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={site.meta.ogTitle} />
+    <meta property="og:description" content={site.meta.ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.meta.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={site.meta.ogTitle} />
+    <meta name="twitter:description" content={site.meta.ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={site.meta.ogImageAlt} />
+
+    <script is:inline define:vars={{ lockSkin: lockSkin ?? null }}>
+      (function () {
+        const root = document.documentElement;
+        const valid = { tv: 1, handheld: 1, manual: 1 };
+        let skin = null;
+        try {
+          if (lockSkin && valid[lockSkin] === 1) skin = lockSkin;
+          if (!skin) {
+            const q = new URLSearchParams(window.location.search).get('skin');
+            if (q && valid[q] === 1) skin = q;
+          }
+          if (!skin) {
+            const s = window.localStorage.getItem('skin');
+            if (s && valid[s] === 1) skin = s;
+          }
+        } catch {
+          /* storage/matchMedia diblok: pakai default */
+        }
+        if (!skin) {
+          let reduced = false;
+          try {
+            reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+          } catch {
+          /* storage/matchMedia diblok: pakai default */
+        }
+          const w = window.innerWidth;
+          if (reduced) skin = 'manual';
+          else if (w >= 1024) skin = 'tv';
+          else if (w < 768) skin = 'handheld';
+          else skin = 'manual';
+        }
+        root.setAttribute('data-skin', skin);
+        root.className = (root.className ? root.className + ' ' : '') + 'js';
+      })();
+    </script>
+
+    <script type="application/ld+json" set:html={jsonLd} />
+  </head>
+  <body>
+    <slot />
+    <SkinControls lockSkin={lockSkin} />
+  </body>
+</html>
