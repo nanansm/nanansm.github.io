@@ -241,6 +241,11 @@ function init(): void {
       window.dispatchEvent(new CustomEvent('roasrunner:open'));
       return;
     }
+    if (id === 'checkout') {
+      play('coin');
+      window.dispatchEvent(new CustomEvent('checkoutrun:open'));
+      return;
+    }
     if (isKind(id)) openPanel(id);
   };
 

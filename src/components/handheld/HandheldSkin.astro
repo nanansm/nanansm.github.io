@@ -43,6 +43,12 @@ const items = kinds.map((kind) => ({ kind, label: menuLabel(kind) }));
                 </li>
               ))
             }
+            <li>
+              <button type="button" class="hh__item" data-menu="checkout" data-open-checkout>
+                <span class="hh__mark" aria-hidden="true">★</span>
+                <span class="hh__label">{site.ui.game.name}</span>
+              </button>
+            </li>
           </ul>
         </section>
 

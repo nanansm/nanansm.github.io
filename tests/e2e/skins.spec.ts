@@ -214,3 +214,138 @@ test('tv: keyboard map diam saat ROAS Runner terbuka', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(page.locator('dialog.rr')).toBeHidden();
 });
+
+// --- CHECKOUT RUN ---------------------------------------------------------
+
+interface CrState {
+  x: number;
+  y: number;
+  vy: number;
+  onGround: boolean;
+  mode: string;
+  retries: number;
+  cpReached: boolean;
+  need: boolean;
+}
+
+// Baca state lewat hook ?crdebug, plus keputusan "perlu lompat" dari tile & musuh di depan.
+const crState = (page: Page): Promise<CrState> =>
+  page.evaluate(() => {
+    type Raw = Omit<CrState, 'need'> & {
+      grid: string[][];
+      enemies: { x: number; y: number; alive: boolean }[];
+    };
+    const s = (window as unknown as { __checkoutRun: () => Raw }).__checkoutRun();
+    const T = 16;
+    const solid = (c: number, r: number): boolean => '#B?U'.includes(s.grid[r]?.[c] ?? '.');
+    const feet = Math.floor((s.y + 15) / T);
+    const body = Math.floor((s.y + 7) / T);
+    const head = Math.floor(s.y / T);
+    let need = !solid(Math.floor((s.x + 13) / T), feet);
+    for (const dx of [14, 22, 30]) {
+      const c = Math.floor((s.x + dx) / T);
+      if (solid(c, body) || solid(c, head)) need = true;
+    }
+    for (const e of s.enemies) {
+      if (e.alive && e.x - s.x > 0 && e.x - s.x < 44 && Math.abs(e.y - s.y) < 20) need = true;
+    }
+    return { x: s.x, y: s.y, vy: s.vy, onGround: s.onGround, mode: s.mode, retries: s.retries, cpReached: s.cpReached, need };
+  });
+
+test('checkout run: buka dari manual, TV, handheld; Esc tutup + fokus balik', async ({ page }) => {
+  const errs = watchConsole(page);
+  const dlg = page.locator('dialog.cr');
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/?skin=manual');
+  const opener = page.locator('[data-skin-root="manual"] [data-open-checkout]');
+  await opener.click();
+  await expect(dlg).toBeVisible();
+  expect(await axeSerious(page, 'dialog.cr')).toEqual([]);
+  await page.keyboard.press('Escape');
+  await expect(dlg).toBeHidden();
+  await expect(opener).toBeFocused();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?skin=tv');
+  await page.keyboard.press('Enter');
+  await page.locator('[data-skin-root="tv"] [data-node="checkout"]').click();
+  await expect(dlg).toBeVisible();
+  // dialog harus di tengah viewport, bukan nempel kiri-atas
+  const box = await dlg.boundingBox();
+  expect(box && Math.abs(box.x + box.width / 2 - 720)).toBeLessThan(4);
+  await page.keyboard.press('Escape');
+  await expect(dlg).toBeHidden();
+
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto('/?skin=handheld');
+  await page.locator('[data-btn="start"]').click();
+  await page.locator('[data-skin-root="handheld"] [data-menu="checkout"]').click();
+  await expect(dlg).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dlg).toBeHidden();
+  expect(errs).toEqual([]);
+});
+
+test('checkout run: bot tamat level → layar CTA WhatsApp', async ({ page }) => {
+  test.setTimeout(150_000);
+  const errs = watchConsole(page);
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.goto('/?skin=manual&crdebug');
+  await page.locator('[data-skin-root="manual"] [data-open-checkout]').click();
+  await page.keyboard.press('Space');
+  await page.keyboard.down('ArrowRight');
+  const t0 = Date.now();
+  let jumpUntil = 0;
+  let st = await crState(page);
+  while (st.mode !== 'clear' && Date.now() - t0 < 120_000) {
+    const now = Date.now();
+    if (now > jumpUntil && st.onGround && st.need) {
+      await page.keyboard.down('Space');
+      jumpUntil = now + 380;
+    } else if (now > jumpUntil) {
+      await page.keyboard.up('Space');
+    }
+    await page.waitForTimeout(16);
+    st = await crState(page);
+  }
+  await page.keyboard.up('ArrowRight');
+  expect(st.mode).toBe('clear');
+  expect(st.cpReached).toBe(true);
+  const clear = page.locator('[data-cr-clear]');
+  await expect(clear).toBeVisible();
+  await expect(clear.locator('a')).toHaveAttribute('href', /^https:\/\/wa\.me\//);
+  await expect(clear.locator('a')).toBeFocused();
+  expect(Number(await page.locator('[data-cr-high]').textContent())).toBeGreaterThan(0);
+  expect(await axeSerious(page, 'dialog.cr')).toEqual([]);
+  // main lagi: reset ke awal level
+  await page.locator('[data-cr-replay]').click();
+  await expect(clear).toBeHidden();
+  expect((await crState(page)).x).toBeLessThan(80);
+  expect(errs).toEqual([]);
+});
+
+test.describe('checkout run: HP', () => {
+  test.use({ viewport: { width: 390, height: 800 }, hasTouch: true, isMobile: true });
+
+  test('tombol ◀ ▶ A jalan + lompat', async ({ page }) => {
+    const errs = watchConsole(page);
+    await page.goto('/?skin=manual&crdebug');
+    await page.locator('[data-skin-root="manual"] [data-open-checkout]').click();
+    const jump = page.locator('[data-cr-pad="jump"]');
+    const right = page.locator('[data-cr-pad="right"]');
+    await expect(jump).toBeVisible();
+    await expect(right).toBeVisible();
+    await jump.tap(); // mulai
+    await expect.poll(async () => (await crState(page)).mode).toBe('run');
+    const x0 = (await crState(page)).x;
+    await right.hover();
+    await page.mouse.down();
+    await page.waitForTimeout(700);
+    await page.mouse.up();
+    expect((await crState(page)).x).toBeGreaterThan(x0 + 20);
+    await jump.tap();
+    await expect.poll(async () => (await crState(page)).onGround, { timeout: 1000 }).toBe(false);
+    expect(errs).toEqual([]);
+  });
+});

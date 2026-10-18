@@ -41,6 +41,11 @@
   margin: 0;
 }
 
+/* reset di atas mematikan auto-center bawaan <dialog> */
+dialog {
+  margin: auto;
+}
+
 img,
 svg,
 canvas,

@@ -138,6 +138,7 @@ function init(): void {
         } else if (state === 'menu') {
           const k = items[sel]?.dataset['menu'];
           if (isKind(k)) show(k, 'select');
+          else items[sel]?.click();
         } else {
           screenOf(state)?.querySelector<HTMLElement>('[data-primary]')?.click();
         }

@@ -1,0 +1,969 @@
+---
+import { site, waLink } from '../data/site';
+
+const g = site.ui.game;
+---
+
+<dialog class="cr" aria-labelledby="cr-title" tabindex="-1">
+  <div class="cr__body">
+    <h2 id="cr-title" class="cr__title">{g.name}</h2>
+    <p class="cr__hud">
+      <span>{g.coin} <span data-cr-coin>0</span></span>
+      <span>{g.time} <span data-cr-time>0</span></span>
+      <span>{g.retry} <span data-cr-retry>0</span></span>
+      <span>{site.ui.hud.highScore} <span data-cr-high>0</span></span>
+    </p>
+    <canvas class="cr__canvas" width="320" height="176" aria-label={`${g.name}. ${g.controlsDesktop} ${g.controlsMobile}`}
+    ></canvas>
+    <p class="cr__ctl cr__ctl-desk">{g.controlsDesktop}</p>
+    <p class="cr__ctl cr__ctl-mob">{g.controlsMobile}</p>
+    <div class="cr__pad">
+      <div class="cr__dir">
+        <button type="button" class="cr__key" data-cr-pad="left" aria-label={g.left}>◀</button>
+        <button type="button" class="cr__key" data-cr-pad="right" aria-label={g.right}>▶</button>
+      </div>
+      <button type="button" class="cr__key" data-cr-pad="jump" aria-label={g.jump}>A</button>
+    </div>
+    <div class="cr__clear" data-cr-clear hidden>
+      <h3 class="cr__clear-title">{g.clear}</h3>
+      <p class="cr__text">{g.clearBody}</p>
+      <p class="cr__score" data-cr-score>0</p>
+      <a class="cr__btn cr__cta" href={waLink(site.contact.waPrefill)} target="_blank" rel="noopener"
+        >{site.ui.easterEgg.button}</a
+      >
+      <button type="button" class="cr__btn" data-cr-replay>{g.replay}</button>
+    </div>
+    <p class="cr__sr" aria-live="polite" data-cr-live></p>
+    <button type="button" class="cr__btn" data-cr-close>{site.ui.hud.back}</button>
+  </div>
+</dialog>
+
+<script>
+  import { play } from '../scripts/sfx';
+  import { site } from '../data/site';
+  import {
+    LEVEL,
+    TILE as T,
+    VIEW_W,
+    VIEW_H,
+    GRAVITY,
+    JUMP_V,
+    MAX_RUN,
+    ACCEL,
+    FRICTION,
+    COYOTE,
+    JUMP_BUFFER,
+    ENEMY_SPEED,
+    TIME_PAR,
+  } from '../scripts/checkout-level';
+
+  const KEY = 'checkoutRunHigh';
+  const STEP = 1 / 120;
+  const LEDGE = 8;
+const PW = 12;
+  const PH = 14;
+  const EW = 12;
+  const EH = 12;
+  const SOLID = '#BU?';
+  const INK = '#1A1622';
+  const PAPER = '#F7EED6';
+  const COIN = '#F0A800';
+  const BRICK = '#A33A06';
+  const BLUE = '#3C6FD8';
+  const GREEN = '#00873A';
+  const SKY = '#9FD3E8';
+  const LEFT = ['ArrowLeft', 'KeyA', 'pad-left'];
+  const RIGHT = ['ArrowRight', 'KeyD', 'pad-right'];
+  const JUMP = ['Space', 'ArrowUp', 'KeyW', 'KeyZ', 'pad-jump'];
+  // Blok voucher diskon: glyph % (bukan tanda tanya).
+  const PCT = ['11001', '11010', '00010', '00100', '01000', '01011', '10011'];
+
+  type Mode = 'idle' | 'run' | 'clear';
+  interface Body {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    vx: number;
+    vy: number;
+  }
+  interface Enemy extends Body {
+    dir: number;
+    alive: boolean;
+  }
+  interface Snap {
+    grid: string[][];
+    coins: number;
+    kills: number;
+    enemies: Enemy[];
+  }
+  interface YHit {
+    ground: boolean;
+    headC: number;
+    headR: number;
+  }
+
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.cr');
+  const canvas = dialog?.querySelector<HTMLCanvasElement>('canvas.cr__canvas') ?? null;
+  const ctx = canvas?.getContext('2d') ?? null;
+  const coinEl = dialog?.querySelector<HTMLElement>('[data-cr-coin]') ?? null;
+  const timeEl = dialog?.querySelector<HTMLElement>('[data-cr-time]') ?? null;
+  const retryEl = dialog?.querySelector<HTMLElement>('[data-cr-retry]') ?? null;
+  const highEl = dialog?.querySelector<HTMLElement>('[data-cr-high]') ?? null;
+  const clearPanel = dialog?.querySelector<HTMLElement>('[data-cr-clear]') ?? null;
+  const scoreEl = dialog?.querySelector<HTMLElement>('[data-cr-score]') ?? null;
+  const liveEl = dialog?.querySelector<HTMLElement>('[data-cr-live]') ?? null;
+  const winLink = dialog?.querySelector<HTMLAnchorElement>('[data-cr-clear] a') ?? null;
+  const replayBtn = dialog?.querySelector<HTMLButtonElement>('[data-cr-replay]') ?? null;
+  const closeBtn = dialog?.querySelector<HTMLButtonElement>('[data-cr-close]') ?? null;
+  const pads = dialog?.querySelectorAll<HTMLButtonElement>('[data-cr-pad]') ?? [];
+
+  if (
+    dialog &&
+    canvas &&
+    ctx &&
+    coinEl &&
+    timeEl &&
+    retryEl &&
+    highEl &&
+    clearPanel &&
+    scoreEl &&
+    liveEl &&
+    winLink &&
+    replayBtn &&
+    closeBtn
+  ) {
+    const rows = LEVEL.length;
+    const cols = LEVEL[0]?.length ?? 0;
+    const levelW = cols * T;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const held = new Set<string>();
+
+    let mode: Mode = 'idle';
+    let raf = 0;
+    let last = 0;
+    let acc = 0;
+    let grid: string[][] = [];
+    let enemies: Enemy[] = [];
+    const p: Body = { x: 0, y: 0, w: PW, h: PH, vx: 0, vy: 0 };
+    let face = 1;
+    let onGround = false;
+    let jumping = false;
+    let coyote = 0;
+    let buffer = 0;
+    let animT = 0;
+    let clock = 0;
+    let coins = 0;
+    let kills = 0;
+    let retries = 0;
+    let time = 0;
+    let startX = 0;
+    let startY = 0;
+    let cpCol = -1;
+    let cpRow = 0;
+    let cpReached = false;
+    let snap: Snap = { grid: [], coins: 0, kills: 0, enemies: [] };
+    let high = 0;
+    let trigger: HTMLElement | null = null;
+
+    // Hook baca-saja untuk bot e2e; hanya aktif dengan ?crdebug di URL.
+    if (new URLSearchParams(location.search).has('crdebug')) {
+      Object.defineProperty(window, '__checkoutRun', {
+        value: () => ({ x: p.x, y: p.y, vy: p.vy, onGround, mode, retries, kills, cpReached, grid, enemies }),
+      });
+    }
+
+    const readHigh = (): number => {
+      try {
+        const n = Number.parseInt(localStorage.getItem(KEY) ?? '0', 10);
+        return Number.isFinite(n) && n > 0 ? n : 0;
+      } catch {
+        return 0;
+      }
+    };
+    const writeHigh = (n: number): void => {
+      try {
+        localStorage.setItem(KEY, String(n));
+      } catch {
+        // storage unavailable
+      }
+    };
+
+    const down = (keys: readonly string[]): boolean => keys.some((k) => held.has(k));
+    const setText = (el: HTMLElement, s: string): void => {
+      if (el.textContent !== s) el.textContent = s;
+    };
+    const hit = (a: Body, b: Body): boolean =>
+      a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+
+    const takeSnap = (): void => {
+      snap = {
+        grid: grid.map((r) => r.slice()),
+        coins,
+        kills,
+        enemies: enemies.map((e) => ({ ...e })),
+      };
+    };
+    const restoreSnap = (): void => {
+      grid = snap.grid.map((r) => r.slice());
+      coins = snap.coins;
+      kills = snap.kills;
+      enemies = snap.enemies.map((e) => ({ ...e }));
+    };
+    const placePlayer = (x: number, y: number): void => {
+      p.x = x;
+      p.y = y;
+      p.vx = 0;
+      p.vy = 0;
+      onGround = false;
+      jumping = false;
+      coyote = 0;
+      buffer = 0;
+    };
+
+    const load = (): void => {
+      grid = LEVEL.map((r) => r.split(''));
+      enemies = [];
+      cpCol = -1;
+      startX = T + 2;
+      startY = (rows - 3) * T - PH;
+      grid.forEach((row, r) => {
+        row.forEach((ch, c) => {
+          if (ch === 'P') {
+            startX = c * T + (T - PW) / 2;
+            startY = (r + 1) * T - PH;
+            row[c] = '.';
+          } else if (ch === 'C') {
+            cpCol = c;
+            cpRow = r;
+          } else if (ch === 'e') {
+            enemies.push({
+              x: c * T + 2,
+              y: (r + 1) * T - EH,
+              w: EW,
+              h: EH,
+              vx: -ENEMY_SPEED,
+              vy: 0,
+              dir: -1,
+              alive: true,
+            });
+            row[c] = '.';
+          }
+        });
+      });
+      coins = 0;
+      kills = 0;
+      retries = 0;
+      time = 0;
+      clock = 0;
+      animT = 0;
+      acc = 0;
+      face = 1;
+      cpReached = false;
+      placePlayer(startX, startY);
+      takeSnap();
+    };
+
+    const isSolid = (c: number, r: number): boolean => {
+      if (c < 0 || c >= cols) return true;
+      if (r < 0 || r >= rows) return false;
+      return SOLID.includes(grid[r]?.[c] ?? '.');
+    };
+
+    const moveX = (b: Body, dt: number): boolean => {
+      if (b.vx === 0) return false;
+      const right = b.vx > 0;
+      b.x += b.vx * dt;
+      const r0 = Math.floor(b.y / T);
+      const r1 = Math.floor((b.y + b.h - 0.01) / T);
+      const c = right ? Math.floor((b.x + b.w - 0.01) / T) : Math.floor(b.x / T);
+      for (let r = r0; r <= r1; r++) {
+        if (isSolid(c, r)) {
+          // Ledge assist: kaki cuma nyangkut sedikit di bibir tile → naikkan ke atasnya.
+          const lift = b.y + b.h - r * T;
+          if (b === p && r === r1 && b.vy >= 0 && lift <= LEDGE && !isSolid(c, Math.floor((b.y - lift) / T))) {
+            b.y -= lift;
+            b.vy = 0;
+            return false;
+          }
+          b.x = right ? c * T - b.w : (c + 1) * T;
+          b.vx = 0;
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const moveY = (b: Body, dt: number): YHit => {
+      const res: YHit = { ground: false, headC: -1, headR: -1 };
+      b.y += b.vy * dt;
+      const c0 = Math.floor(b.x / T);
+      const c1 = Math.floor((b.x + b.w - 0.01) / T);
+      if (b.vy > 0) {
+        const r = Math.floor((b.y + b.h - 0.01) / T);
+        for (let c = c0; c <= c1; c++) {
+          if (isSolid(c, r)) {
+            b.y = r * T - b.h;
+            b.vy = 0;
+            res.ground = true;
+            break;
+          }
+        }
+      } else if (b.vy < 0) {
+        const r = Math.floor(b.y / T);
+        const cx = b.x + b.w / 2;
+        let best = -1;
+        let bestD = Number.POSITIVE_INFINITY;
+        for (let c = c0; c <= c1; c++) {
+          if (isSolid(c, r)) {
+            const d = Math.abs(c * T + T / 2 - cx);
+            if (d < bestD) {
+              bestD = d;
+              best = c;
+            }
+          }
+        }
+        if (best >= 0) {
+          b.y = (r + 1) * T;
+          b.vy = 0;
+          res.headC = best;
+          res.headR = r;
+        }
+      }
+      return res;
+    };
+
+    const cameraX = (): number =>
+      Math.min(Math.max(0, Math.round(p.x + p.w / 2 - VIEW_W * 0.4)), Math.max(0, levelW - VIEW_W));
+
+    const die = (): void => {
+      retries += 1;
+      restoreSnap();
+      if (cpReached) placePlayer(cpCol * T + (T - PW) / 2, (cpRow + 1) * T - PH);
+      else placePlayer(startX, startY);
+    };
+
+    const finish = (): void => {
+      mode = 'clear';
+      play('start');
+      const s = coins * 100 + kills * 200 + Math.max(0, TIME_PAR - Math.floor(time)) * 10;
+      if (s > high) {
+        high = s;
+        writeHigh(s);
+        highEl.textContent = String(s);
+      }
+      scoreEl.textContent = String(s);
+      liveEl.textContent = `${site.ui.game.clear} ${site.ui.game.clearBody} ${s}`;
+      clearPanel.hidden = false;
+      winLink.focus();
+    };
+
+    const step = (dt: number): void => {
+      const prevBottom = p.y + p.h;
+      time += dt;
+      clock += dt;
+
+      const l = down(LEFT);
+      const r = down(RIGHT);
+      if (l && !r) {
+        p.vx = Math.max(-MAX_RUN, p.vx - ACCEL * dt);
+        face = -1;
+      } else if (r && !l) {
+        p.vx = Math.min(MAX_RUN, p.vx + ACCEL * dt);
+        face = 1;
+      } else if (p.vx > 0) {
+        p.vx = Math.max(0, p.vx - FRICTION * dt);
+      } else if (p.vx < 0) {
+        p.vx = Math.min(0, p.vx + FRICTION * dt);
+      }
+      if (Math.abs(p.vx) > 5 && onGround) animT += dt;
+
+      coyote = onGround ? COYOTE : coyote - dt;
+      buffer = Math.max(0, buffer - dt);
+      if (buffer > 0 && coyote > 0) {
+        p.vy = JUMP_V;
+        buffer = 0;
+        coyote = 0;
+        jumping = true;
+        onGround = false;
+        play('jump');
+      }
+      if (jumping && !down(JUMP) && p.vy < -120) p.vy = -120;
+      p.vy = Math.min(400, p.vy + GRAVITY * dt);
+
+      moveX(p, dt);
+      const hy = moveY(p, dt);
+      onGround = hy.ground;
+      if (onGround) jumping = false;
+      if (hy.headC >= 0) {
+        const row = grid[hy.headR];
+        if (row && row[hy.headC] === '?') {
+          row[hy.headC] = 'U';
+          coins += 1;
+          play('coin');
+        }
+      }
+
+      const c0 = Math.floor(p.x / T);
+      const c1 = Math.floor((p.x + p.w - 0.01) / T);
+      const r0 = Math.floor(p.y / T);
+      const r1 = Math.floor((p.y + p.h - 0.01) / T);
+      let reachedFinish = false;
+      for (let rr = r0; rr <= r1; rr++) {
+        const row = grid[rr];
+        if (!row) continue;
+        for (let cc = c0; cc <= c1; cc++) {
+          const ch = row[cc];
+          if (ch === 'o') {
+            row[cc] = '.';
+            coins += 1;
+            play('coin');
+          } else if (ch === 'F') {
+            reachedFinish = true;
+          }
+        }
+      }
+
+      if (!cpReached && cpCol >= 0 && p.x >= cpCol * T) {
+        cpReached = true;
+        takeSnap();
+        play('select');
+      }
+
+      const camX = cameraX();
+      for (const e of enemies) {
+        if (!e.alive) continue;
+        if (e.x < camX - 32 || e.x > camX + VIEW_W + 64) continue;
+        e.vx = e.dir * ENEMY_SPEED;
+        if (moveX(e, dt)) e.dir = -e.dir;
+        e.vy = Math.min(400, e.vy + GRAVITY * dt);
+        const ey = moveY(e, dt);
+        if (ey.ground) {
+          const fx = e.dir > 0 ? e.x + e.w + 1 : e.x - 1;
+          if (!isSolid(Math.floor(fx / T), Math.floor((e.y + e.h + 1) / T))) e.dir = -e.dir;
+        }
+        if (e.y > VIEW_H + 32) e.alive = false;
+      }
+
+      for (const e of enemies) {
+        if (!e.alive || !hit(p, e)) continue;
+        if (p.vy > 0 && prevBottom <= e.y + e.h / 2) {
+          e.alive = false;
+          p.vy = -200;
+          jumping = false;
+          kills += 1;
+          play('jump');
+        } else {
+          die();
+          return;
+        }
+      }
+
+      if (p.y > VIEW_H + 16) {
+        die();
+        return;
+      }
+      if (reachedFinish) finish();
+    };
+
+    const fr = (color: string, x: number, y: number, w: number, h: number): void => {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, w, h);
+    };
+
+    const drawTile = (ch: string, x: number, y: number, above: string): void => {
+      if (ch === '#') {
+        fr('#6B3A1E', x, y, T, T);
+        fr('#4A2810', x + 3, y + 8, 2, 2);
+        fr('#4A2810', x + 10, y + 12, 2, 2);
+        if (!SOLID.includes(above)) fr(GREEN, x, y, T, 4);
+      } else if (ch === 'B') {
+        fr(BRICK, x, y, T, T);
+        fr(INK, x, y + 7, T, 1);
+        fr(INK, x, y + 15, T, 1);
+        fr(INK, x + 7, y, 1, 7);
+        fr(INK, x + 3, y + 8, 1, 7);
+        fr(INK, x + 11, y + 8, 1, 7);
+      } else if (ch === '?' || ch === 'U') {
+        const used = ch === 'U';
+        fr(INK, x, y, T, T);
+        fr(used ? '#3D5A47' : GREEN, x + 1, y + 1, T - 2, T - 2);
+        if (!used) {
+          PCT.forEach((line, qy) => {
+            for (let qx = 0; qx < line.length; qx++) {
+              if (line[qx] === '1') fr(PAPER, x + 3 + qx * 2, y + 1 + qy * 2, 2, 2);
+            }
+          });
+        }
+      } else if (ch === 'o') {
+        fr(COIN, x + 5, y + 3, 6, 10);
+        fr(COIN, x + 4, y + 5, 8, 6);
+        fr(PAPER, x + 6, y + 5, 2, 4);
+      } else if (ch === 'C') {
+        fr(INK, x + 7, y - 8, 2, 24);
+        fr(cpReached ? GREEN : PAPER, x + 9, y - 8, 6, 5);
+      } else if (ch === 'F') {
+        fr(INK, x + 5, y, 6, T);
+        fr(PAPER, x + 6, y, 4, T);
+        fr(BRICK, x + 6, y + 4, 4, 4);
+        fr(BRICK, x + 6, y + 12, 4, 4);
+        if (above !== 'F') {
+          fr(INK, x - 4, y + 1, 24, 12);
+          fr(GREEN, x - 3, y + 2, 22, 10);
+          fr(PAPER, x + 2, y + 6, 2, 2);
+          fr(PAPER, x + 4, y + 8, 2, 2);
+          fr(PAPER, x + 6, y + 6, 2, 2);
+          fr(PAPER, x + 8, y + 4, 2, 2);
+          fr(PAPER, x + 10, y + 3, 2, 2);
+        }
+      }
+    };
+
+    const drawEnemy = (e: Enemy): void => {
+      const x = Math.round(e.x);
+      const y = Math.round(e.y);
+      const f = Math.floor(clock * 6) % 2 === 0;
+      // Troli belanja: gagang menghadap arah jalan, roda berputar.
+      const hx = e.dir > 0 ? x : x + 9;
+      fr(INK, hx, y, 3, 2);
+      fr(INK, x + 1, y + 2, 10, 7);
+      fr(BRICK, x + 2, y + 3, 8, 5);
+      fr(INK, x + 4, y + 3, 1, 5);
+      fr(INK, x + 7, y + 3, 1, 5);
+      fr(INK, x + 2, y + 9, 8, 1);
+      fr(INK, x + 2, y + 10, 3, 2);
+      fr(INK, x + 7, y + 10, 3, 2);
+      fr(PAPER, x + (f ? 2 : 4), y + 10, 1, 1);
+      fr(PAPER, x + (f ? 7 : 9), y + 10, 1, 1);
+    };
+
+    const drawPlayer = (): void => {
+      const x = Math.round(p.x);
+      const y = Math.round(p.y);
+      fr(INK, x + 1, y, 10, 2);
+      fr(BLUE, x + 1, y + 2, 10, 5);
+      fr(INK, face > 0 ? x + 7 : x + 3, y + 4, 2, 2);
+      fr(PAPER, x, y + 7, 12, 4);
+      fr(INK, x + 5, y + 7, 2, 3);
+      if (!onGround || Math.abs(p.vx) <= 5) {
+        fr(INK, x + 2, y + 11, 3, 3);
+        fr(INK, x + 7, y + 11, 3, 3);
+      } else if (Math.floor(animT * 10) % 2 === 0) {
+        fr(INK, x + 2, y + 11, 3, 2);
+        fr(INK, x + 7, y + 11, 3, 3);
+      } else {
+        fr(INK, x + 2, y + 11, 3, 3);
+        fr(INK, x + 7, y + 11, 3, 2);
+      }
+    };
+
+    const render = (): void => {
+      const camX = cameraX();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.imageSmoothingEnabled = false;
+      fr(SKY, 0, 0, VIEW_W, VIEW_H);
+      const f = reduced.matches ? 0 : 0.3;
+      const span = VIEW_W + 96;
+      [16, 40, 24, 48].forEach((cy, i) => {
+        const cx = ((((i * 104 + 20 - camX * f) % span) + span) % span) - 48;
+        const rx = Math.round(cx);
+        fr(PAPER, rx + 8, cy, 16, 4);
+        fr(PAPER, rx, cy + 4, 32, 8);
+      });
+
+      ctx.setTransform(1, 0, 0, 1, -camX, 0);
+      const t0 = Math.max(0, Math.floor(camX / T));
+      const t1 = Math.min(cols - 1, Math.floor((camX + VIEW_W) / T));
+      for (let r = 0; r < rows; r++) {
+        const row = grid[r];
+        if (!row) continue;
+        for (let c = t0; c <= t1; c++) {
+          const ch = row[c] ?? '.';
+          if (ch !== '.') drawTile(ch, c * T, r * T, grid[r - 1]?.[c] ?? '.');
+        }
+      }
+      for (const e of enemies) if (e.alive) drawEnemy(e);
+      drawPlayer();
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (mode === 'idle') {
+        const label = site.boot.pressStart;
+        ctx.font = '8px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const w = Math.ceil(ctx.measureText(label).width) + 16;
+        const bx = Math.round((VIEW_W - w) / 2);
+        fr(INK, bx - 2, 46, w + 4, 24);
+        fr(PAPER, bx, 48, w, 20);
+        ctx.fillStyle = INK;
+        ctx.fillText(label, VIEW_W / 2, 58);
+      }
+
+      setText(coinEl, String(coins));
+      setText(timeEl, String(Math.floor(time)));
+      setText(retryEl, String(retries));
+    };
+
+    const tick = (now: number): void => {
+      raf = 0;
+      if (!dialog.open || mode !== 'run') return;
+      if (last === 0) last = now;
+      const dt = Math.min(0.25, (now - last) / 1000);
+      last = now;
+      acc += dt;
+      while (acc >= STEP) {
+        step(STEP);
+        acc -= STEP;
+        if (mode !== 'run') break;
+      }
+      render();
+      if (mode === 'run') raf = requestAnimationFrame(tick);
+    };
+
+    const kickLoop = (): void => {
+      cancelAnimationFrame(raf);
+      last = 0;
+      acc = 0;
+      raf = requestAnimationFrame(tick);
+    };
+
+    const start = (): void => {
+      load();
+      clearPanel.hidden = true;
+      liveEl.textContent = '';
+      scoreEl.textContent = '0';
+      mode = 'run';
+      play('start');
+      dialog.focus();
+      kickLoop();
+    };
+
+    const pressJump = (): void => {
+      if (mode === 'run') buffer = JUMP_BUFFER;
+      else if (mode === 'idle') start();
+    };
+
+    const open = (from: HTMLElement | null): void => {
+      if (dialog.open) return;
+      trigger = from;
+      high = readHigh();
+      highEl.textContent = String(high);
+      load();
+      clearPanel.hidden = true;
+      liveEl.textContent = '';
+      mode = 'idle';
+      dialog.showModal();
+      dialog.focus();
+      render();
+    };
+
+    document.addEventListener('click', (e) => {
+      const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-open-checkout]') : null;
+      if (t) open(t);
+    });
+    window.addEventListener('checkoutrun:open', () => {
+      const a = document.activeElement;
+      open(a instanceof HTMLElement ? a : null);
+    });
+
+    closeBtn.addEventListener('click', () => dialog.close());
+    replayBtn.addEventListener('click', () => start());
+    // Tutup lewat backdrop hanya kalau tekan DAN lepas di backdrop (drag dari canvas tidak menutup).
+    let downOnBackdrop = false;
+    dialog.addEventListener('pointerdown', (e) => {
+      downOnBackdrop = e.target === dialog;
+    });
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog && downOnBackdrop && mode !== 'run') dialog.close();
+      downOnBackdrop = false;
+    });
+    dialog.addEventListener('close', () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      held.clear();
+      load();
+      clearPanel.hidden = true;
+      mode = 'idle';
+      trigger?.focus();
+      trigger = null;
+    });
+
+    canvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (mode !== 'run') start();
+    });
+
+    dialog.addEventListener('keydown', (e) => {
+      if (!dialog.open || e.ctrlKey || e.metaKey || e.altKey) return;
+      const tgt = e.target instanceof Element ? e.target : null;
+      if (tgt?.closest('[data-cr-close], [data-cr-replay], a')) return;
+      const isJump = JUMP.includes(e.code);
+      if (isJump || LEFT.includes(e.code) || RIGHT.includes(e.code)) {
+        e.preventDefault();
+        held.add(e.code);
+        if (isJump && !e.repeat) pressJump();
+      } else if (e.code === 'Enter' && mode === 'idle') {
+        e.preventDefault();
+        start();
+      }
+    });
+    dialog.addEventListener('keyup', (e) => {
+      held.delete(e.code);
+    });
+    window.addEventListener('blur', () => held.clear());
+
+    pads.forEach((btn) => {
+      const name = `pad-${btn.getAttribute('data-cr-pad') ?? ''}`;
+      const release = (): void => {
+        held.delete(name);
+      };
+      btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        try {
+          btn.setPointerCapture(e.pointerId);
+        } catch {
+          // capture unavailable
+        }
+        held.add(name);
+        if (name === 'pad-jump') pressJump();
+      });
+      btn.addEventListener('pointerup', release);
+      btn.addEventListener('pointercancel', release);
+      btn.addEventListener('lostpointercapture', release);
+      btn.addEventListener('contextmenu', (e) => e.preventDefault());
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      } else if (dialog.open && mode === 'run' && raf === 0) {
+        kickLoop();
+      }
+    });
+
+    void document.fonts?.ready.then(() => {
+      if (dialog.open && mode !== 'run') render();
+    });
+  }
+</script>
+
+<style>
+  .cr {
+    box-sizing: border-box;
+    width: min(92vw, 720px);
+    max-height: 92vh;
+    max-height: 92dvh;
+    padding: 0;
+    overflow: auto;
+    color: #1a1622;
+    background: #f7eed6;
+    border: 4px solid #1a1622;
+    border-radius: 0;
+    box-shadow: 8px 8px 0 #1a1622;
+  }
+
+  .cr:focus {
+    outline: none;
+  }
+
+  .cr::backdrop {
+    background: rgb(26 22 34 / 85%);
+  }
+
+  .cr__body {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    padding: 16px;
+  }
+
+  .cr__title {
+    margin: 0;
+    font-family: "Press Start 2P", monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .cr__hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: min(100%, 640px);
+    margin: 0;
+    font-family: "Press Start 2P", monospace;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .cr__canvas {
+    display: block;
+    width: min(100%, 640px);
+    aspect-ratio: 320 / 176;
+    touch-action: none;
+    /* stylelint-disable-next-line property-no-vendor-prefix -- Safari iOS butuh prefix */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    cursor: pointer;
+    image-rendering: pixelated;
+    border: 4px solid #1a1622;
+  }
+
+  .cr__ctl {
+    margin: 0;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .cr__ctl-desk {
+    display: none;
+  }
+
+  .cr__pad {
+    display: none;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+    width: min(100%, 640px);
+  }
+
+  .cr__dir {
+    display: flex;
+    gap: 12px;
+  }
+
+  .cr__key {
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    min-height: 56px;
+    padding: 0;
+    font-family: "Press Start 2P", monospace;
+    font-size: 16px;
+    color: #1a1622;
+    touch-action: none;
+    /* stylelint-disable-next-line property-no-vendor-prefix -- Safari iOS butuh prefix */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    cursor: pointer;
+    background: #f0a800;
+    border: 4px solid #1a1622;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 #1a1622;
+  }
+
+  .cr__key:active {
+    box-shadow: none;
+    transform: translate(4px, 4px);
+  }
+
+  .cr__clear {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    box-sizing: border-box;
+    width: min(100%, 640px);
+    padding: 16px;
+    text-align: center;
+    background: #f7eed6;
+    border: 4px solid #1a1622;
+    box-shadow: 4px 4px 0 #1a1622;
+  }
+
+  .cr__clear[hidden] {
+    display: none;
+  }
+
+  .cr__clear-title {
+    margin: 0;
+    font-family: "Press Start 2P", monospace;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .cr__text {
+    margin: 0;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .cr__score {
+    margin: 0;
+    font-family: "Press Start 2P", monospace;
+    font-size: 16px;
+  }
+
+  .cr__sr {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .cr__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 120px;
+    min-height: 44px;
+    padding: 8px 16px;
+    font-family: "Silkscreen", monospace;
+    font-size: 14px;
+    color: #f7eed6;
+    text-decoration: none;
+    cursor: pointer;
+    background: #a33a06;
+    border: 4px solid #1a1622;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 #1a1622;
+  }
+
+  .cr__cta {
+    color: #1a1622;
+    background: #f0a800;
+  }
+
+  .cr__btn:focus-visible,
+  .cr__key:focus-visible,
+  .cr__canvas:focus-visible {
+    outline: 3px solid #3c6fd8;
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cr__ctl-desk {
+      display: block;
+    }
+
+    .cr__ctl-mob {
+      display: none;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .cr__pad {
+      display: flex;
+    }
+  }
+
+  /* HP landscape: canvas + pad harus muat satu layar tanpa scroll */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .cr__canvas {
+      width: auto;
+      height: calc(100dvh - 200px);
+      max-width: 100%;
+    }
+  }
+</style>

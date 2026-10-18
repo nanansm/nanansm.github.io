@@ -43,6 +43,7 @@ const nodes: NodeDef[] = [
   })),
   { id: 'contact', x: 288, y: 60, hud: ui.hud.levelLast, caption: contact.cta },
   { id: 'roas', x: 124, y: 60, hud: `${ui.hud.level} ★`, caption: 'ROAS RUNNER' },
+  { id: 'checkout', x: 206, y: 60, hud: `${ui.hud.level} ★`, caption: ui.game.name },
 ];
 
 const pathPoints = [...levelPos, { id: 'contact', x: 288, y: 60 }]
@@ -106,7 +107,7 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
                 nodes.map((n) => (
                   <button
                     type="button"
-                    class={`tv-node${n.id === 'roas' ? ' tv-node-bonus' : ''}`}
+                    class={`tv-node${n.id === 'roas' || n.id === 'checkout' ? ' tv-node-bonus' : ''}`}
                     data-node={n.id}
                     data-hud={n.hud}
                     data-caption={n.caption}
@@ -131,7 +132,7 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
                         <rect x="4" y="8" width="1" height="2" fill="#1a1622" />
                         <rect x="11" y="8" width="1" height="2" fill="#1a1622" />
                       </svg>
-                    ) : n.id === 'roas' ? (
+                    ) : n.id === 'roas' || n.id === 'checkout' ? (
                       <span aria-hidden="true">▶</span>
                     ) : (
                       <span>{n.id}</span>

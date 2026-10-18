@@ -177,6 +177,20 @@ export interface Ui {
   notFound: { title: string; body: string; button: string };
   easterEgg: { trigger: string; text: string; button: string };
   controls: { desktop: string; mobile: string };
+  game: {
+    name: string;
+    clear: string;
+    clearBody: string;
+    replay: string;
+    coin: string;
+    time: string;
+    retry: string;
+    controlsDesktop: string;
+    controlsMobile: string;
+    left: string;
+    right: string;
+    jump: string;
+  };
 }
 
 export interface ContactInfo {
@@ -695,6 +709,20 @@ Kontak: hello@nanansm.com, WhatsApp 0811-2131-496, linkedin.com/in/nanansm`,
     controls: {
       desktop: 'Panah atas-bawah untuk pindah level, Enter untuk pilih.',
       mobile: 'Geser untuk pindah level, ketuk untuk pilih.',
+    },
+    game: {
+      name: 'CHECKOUT RUN',
+      clear: 'CHECKOUT!',
+      clearBody: 'Kamu sampai checkout. Iklan bisnismu juga bisa sampai sana, kita hitung angkanya lewat WhatsApp.',
+      replay: 'MAIN LAGI',
+      coin: 'COIN',
+      time: 'TIME',
+      retry: 'RETRY',
+      controlsDesktop: 'Panah kiri-kanan untuk jalan, Spasi untuk lompat.',
+      controlsMobile: 'Tahan ◀ ▶ untuk jalan, A untuk lompat.',
+      left: 'Kiri',
+      right: 'Kanan',
+      jump: 'Lompat',
     },
   },
 };
