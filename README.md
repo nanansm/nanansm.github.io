@@ -1,84 +1,30 @@
 # nanansm.github.io
 
-Personal portfolio website built with HTML5, Tailwind CSS, and Vanilla JavaScript. Minimalist, high-end design inspired by [Jonah Lmadeya](https://www.jonahlmadeya.com).
+Web portofolio Nanan Somanan. Astro 5 (static) + Cloudflare Workers Static Assets. Tiga skin dari data yang sama (`src/data/site.ts`): TV console (desktop), handheld (mobile), manual (tanpa JS / reduced motion). Pilih manual lewat `?skin=tv|handheld|manual`.
 
-## 🚀 Live Site
+## Prasyarat
 
-Visit: [https://nanansm.github.io](https://nanansm.github.io)
+- Node 22 (arm64 di Mac Apple Silicon).
+- `npm install`
 
-## 📁 Project Structure
+## Perintah
 
-```
-nanansm.github.io/
-├── index.html          # Main HTML file
-├── css/
-│   ├── main.css        # Custom styles
-│   └── main-old.css    # Backup of old styles
-├── js/
-│   ├── main.js         # Animations & interactions
-│   └── main-old.js     # Backup of old scripts
-├── img/                # Images and assets
-└── README.md           # This file
-```
+| Perintah | Fungsi |
+|---|---|
+| `npm run dev` | Astro dev server (tanpa worker API) |
+| `npm run build` | Build statis ke `dist/` |
+| `npm run preview` | Build + `wrangler dev` di http://localhost:8787 (worker `/api/*` aktif, Turnstile test key) |
+| `npm run check` | astro check + tsc + eslint + stylelint + vitest (worker) |
+| `npm run test:e2e` | Playwright: 3 skin x 5 lebar, axe, keyboard, form contact |
+| `npm run og` | Render `/og` jadi `public/og.png` (butuh `preview` jalan) |
 
-## 🎨 Design Features
+## Struktur
 
-- **Minimalist aesthetic** with clean typography (Inter font)
-- **Responsive design** (mobile-first approach)
-- **Smooth scroll** navigation
-- **Fade-in animations** on scroll using Intersection Observer
-- **2-column project grid** on desktop
-- **Backdrop blur** navbar on scroll
+- `src/data/site.ts`: semua teks + angka. Komponen cuma baca dari sini.
+- `src/components/{manual,handheld,tv,shared}/`: tiga skin + panel bersama.
+- `src/worker.ts`: `/api/where`, `/api/contact`, `/api/hit`, `/api/mcp`, header keamanan.
+- `wrangler.jsonc`: binding KV `HITS`, `CONTACT`. Secret produksi `TURNSTILE_SECRET` diset lewat `wrangler secret put`.
 
-## 🛠️ Technologies
+## Deploy
 
-- HTML5
-- Tailwind CSS (via CDN)
-- Vanilla JavaScript ES6+
-- Google Fonts (Inter)
-
-## 📝 How to Update Content
-
-### Adding a New Project
-
-1. Open `index.html`
-2. Find the Work section (`<!-- Work Section -->`)
-3. Copy an existing project card `<article>` block
-4. Update the following fields:
-   - `src`: Path to project image
-   - `alt`: Image alt text
-   - Project title in `<h3>`
-   - Category and role text
-   - Optional: Add `data-aos-delay` for staggered animation
-
-### Updating Contact Information
-
-Find the Contact section and update:
-- Email address in `mailto:` link
-- Social media links (LinkedIn, Instagram, GitHub)
-
-### Changing Hero Text
-
-Edit the Hero section heading and subheading to match your current focus.
-
-## 🚀 Deployment
-
-This site is deployed via GitHub Pages:
-
-1. Push changes to the `main` branch
-2. Go to GitHub Repo → Settings → Pages
-3. Ensure Source is set to "Deploy from branch" → `main` / `(root)`
-4. Changes will be live within 1-2 minutes
-
-## ✅ Performance Checklist
-
-- [x] Lazy loading images (`loading="lazy"`)
-- [x] Semantic HTML structure
-- [x] Accessible navigation (keyboard support)
-- [x] Responsive breakpoints (320px - 1920px+)
-- [x] Minimal external dependencies
-- [x] Smooth animations with CSS transitions
-
-## 📄 License
-
-© 2024 Nanan SM. All rights reserved.
+Belum otomatis. Setelah KV dibuat dan ID-nya diisi di `wrangler.jsonc`: `npx wrangler deploy`.

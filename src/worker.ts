@@ -126,6 +126,42 @@ const verifyTurnstile = async (env: Env, token: string, ip: string): Promise<boo
 
 const headerSafe = (s: string): string => s.replace(/[\r\n]+/g, ' ').slice(0, 200);
 
+// RFC 2047: header email wajib ASCII, nama ber-aksen dikirim sebagai base64 UTF-8.
+const encodeHeader = (s: string): string => {
+  let bin = '';
+  new TextEncoder().encode(s).forEach((b) => {
+    bin += String.fromCharCode(b);
+  });
+  return `=?UTF-8?B?${btoa(bin)}?=`;
+};
+
+// Baca body maksimal MAX_BODY byte; null kalau lebih (termasuk body chunked tanpa Content-Length).
+const readBody = async (req: Request): Promise<string | null> => {
+  const declared = Number(req.headers.get('content-length') ?? '0');
+  if (Number.isFinite(declared) && declared > MAX_BODY) return null;
+  if (!req.body) return '';
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > MAX_BODY) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  const all = new Uint8Array(size);
+  let off = 0;
+  for (const c of chunks) {
+    all.set(c, off);
+    off += c.byteLength;
+  }
+  return new TextDecoder().decode(all);
+};
+
 const sendEmail = async (env: Env, msg: ContactInput, ip: string): Promise<void> => {
   if (!env.EMAIL || !env.CONTACT_TO) return;
   try {
@@ -133,7 +169,7 @@ const sendEmail = async (env: Env, msg: ContactInput, ip: string): Promise<void>
     const raw = [
       `From: ${from}`,
       `To: ${headerSafe(env.CONTACT_TO)}`,
-      `Subject: Pesan baru dari ${headerSafe(msg.nama || msg.kontak)}`,
+      `Subject: ${encodeHeader(`Pesan baru dari ${headerSafe(msg.nama || msg.kontak)}`)}`,
       `Message-ID: <${crypto.randomUUID()}@nanansm.com>`,
       `Date: ${new Date().toUTCString()}`,
       'MIME-Version: 1.0',
@@ -158,10 +194,8 @@ const handleContact = async (req: Request, env: Env): Promise<Response> => {
   if (req.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
   const invalid = (): Response => json({ ok: false, error: 'invalid' }, 400);
 
-  const declared = Number(req.headers.get('content-length') ?? '0');
-  if (Number.isFinite(declared) && declared > MAX_BODY) return invalid();
-  const text = await req.text();
-  if (text.length > MAX_BODY) return invalid();
+  const text = await readBody(req);
+  if (text === null) return invalid();
 
   let body: unknown;
   try {
@@ -213,8 +247,14 @@ const handleHit = async (req: Request, env: Env): Promise<Response> => {
   const current = Number((await env.HITS.get('total')) ?? '0');
   let count = Number.isFinite(current) ? current : 0;
   if (req.method === 'POST') {
-    count += 1;
-    await env.HITS.put('total', String(count));
+    // satu hit per IP per hari: counter tidak bisa digelembungkan & write KV tetap kecil
+    const ip = req.headers.get('cf-connecting-ip') ?? 'local';
+    const seenKey = `seen:${ip}:${new Date().toISOString().slice(0, 10)}`;
+    if ((await env.HITS.get(seenKey)) === null) {
+      await env.HITS.put(seenKey, '1', { expirationTtl: 86400 });
+      count += 1;
+      await env.HITS.put('total', String(count));
+    }
   }
   return json({ count }, 200, headers);
 };
@@ -260,9 +300,11 @@ const rpcError = (id: JsonRpcId, code: number, message: string): Response =>
 
 const handleMcp = async (req: Request): Promise<Response> => {
   if (req.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
+  const text = await readBody(req);
+  if (text === null) return rpcError(null, -32600, 'invalid_request');
   let msg: unknown;
   try {
-    msg = JSON.parse(await req.text());
+    msg = JSON.parse(text);
   } catch {
     return rpcError(null, -32700, 'parse_error');
   }
@@ -316,6 +358,11 @@ const route = async (req: Request, env: Env): Promise<Response> => {
 
 export default {
   async fetch(req, env, _ctx): Promise<Response> {
-    return withSecurityHeaders(await route(req, env));
+    try {
+      return withSecurityHeaders(await route(req, env));
+    } catch {
+      // KV/binding gagal: tetap balas JSON supaya klien bisa tampilkan pesan error
+      return withSecurityHeaders(json({ ok: false, error: 'server' }, 500));
+    }
   },
 } satisfies ExportedHandler<Env>;

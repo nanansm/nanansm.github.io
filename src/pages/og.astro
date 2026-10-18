@@ -1,0 +1,91 @@
+---
+// Sumber public/og.png (1200x630). Di-screenshot lewat `npm run og`, bukan halaman publik.
+import '@fontsource/press-start-2p/400.css';
+import '@fontsource/silkscreen/400.css';
+import { site } from '../data/site';
+
+const { hero, boot, ui } = site;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1200" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{site.meta.ogTitle}</title>
+  </head>
+  <body>
+    <div class="og" role="img" aria-label={site.meta.ogImageAlt}>
+      <div class="og__hud" aria-hidden="true">
+        <span>{ui.hud.levelFirst}</span>
+        <span>{ui.hud.highScore}</span>
+        <span>{ui.hud.brands} 45</span>
+      </div>
+      <p class="og__name">{hero.name}</p>
+      <p class="og__start">{boot.pressStart}</p>
+      <div class="og__ground" aria-hidden="true"></div>
+    </div>
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    background: #14111c;
+  }
+
+  .og {
+    position: relative;
+    box-sizing: border-box;
+    width: 1200px;
+    height: 630px;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 48px;
+    background: #12183a;
+    border: 24px solid #6b4a2b;
+    overflow: hidden;
+  }
+
+  .og__hud {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 32px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 20px;
+    color: #f7eed6;
+    background: #0b0910;
+    border-bottom: 4px solid #f0a800;
+  }
+
+  .og__name {
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 64px;
+    color: #f7eed6;
+    text-shadow: 6px 6px 0 #a33a06;
+  }
+
+  .og__start {
+    margin: 0;
+    padding: 16px 32px;
+    font-family: 'Silkscreen', monospace;
+    font-size: 40px;
+    color: #1a1622;
+    background: #f0a800;
+    box-shadow: 6px 6px 0 #0b0910;
+  }
+
+  .og__ground {
+    position: absolute;
+    inset: auto 0 0;
+    height: 72px;
+    background: #0a4a28;
+    border-top: 12px solid #00873a;
+  }
+</style>

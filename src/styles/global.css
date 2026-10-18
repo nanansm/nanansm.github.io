@@ -5,7 +5,7 @@
   --paper-2: #EFE2C0;
   --ink: #1A1622;
   --ink-soft: #4A4458;
-  --brick: #C84C0C;
+  --brick: #A33A06; /* digelapkan dari #C84C0C: kontras >=5:1 di atas paper & paper-2 (WCAG AA) */
   --brick-dark: #8A3208;
   --sky: #3C6FD8;
   --pipe: #00873A;
@@ -164,6 +164,12 @@ summary:focus-visible,
   z-index: 100;
   display: flex;
   gap: var(--s1);
+}
+
+/* handheld: kontrol konsol ada di bawah, jadi tombol global pindah ke strip atas (padding-top 56px di .hh) */
+html[data-skin="handheld"] .skin-controls {
+  top: calc(6px + env(safe-area-inset-top));
+  bottom: auto;
 }
 
 .skin-controls .btn {

@@ -101,12 +101,29 @@ describe('worker', () => {
     expect(await res.json()).toEqual({ ok: false, error: 'rate_limited' });
   });
 
-  it('POST /api/hit dua kali menghasilkan count 2', async () => {
+  it('POST /api/hit: satu hit per IP per hari', async () => {
     await post('/api/hit', '');
-    const res = await post('/api/hit', '');
+    await post('/api/hit', '');
+    const res = await post('/api/hit', '', '5.6.7.8');
     expect(await res.json()).toEqual({ count: 2 });
     const get = await SELF.fetch('https://example.com/api/hit');
     expect(await get.json()).toEqual({ count: 2 });
+  });
+
+  it('body > 8KB ditolak tanpa Content-Length', async () => {
+    const big = new ReadableStream({
+      start(c) {
+        c.enqueue(new TextEncoder().encode('x'.repeat(9000)));
+        c.close();
+      },
+    });
+    const res = await SELF.fetch('https://example.com/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '9.9.9.9' },
+      body: big,
+      duplex: 'half',
+    } as RequestInit);
+    expect(res.status).toBe(400);
   });
 
   it('/api/mcp tools/list balas 4 tools', async () => {

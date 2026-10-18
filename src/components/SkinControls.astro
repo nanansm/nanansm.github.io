@@ -69,7 +69,8 @@ const switchAria = `${site.boot.switchLabel}: ${names[current]}`;
         }
         try {
           const url = new URL(window.location.href);
-          url.searchParams.set('skin', next);
+          // ?skin dibuang: link yang disalin tidak memaksa skin ke perangkat lain, pilihan tetap di localStorage
+          url.searchParams.delete('skin');
           window.history.replaceState(null, '', url.toString());
         } catch {
           /* history blocked */

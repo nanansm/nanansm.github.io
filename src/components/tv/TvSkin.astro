@@ -1,0 +1,853 @@
+---
+import PanelContent from '../shared/PanelContent.astro';
+import { site } from '../../data/site';
+import type { AboutLevel, ProjectsLevel } from '../../data/site';
+
+type Kind = '1-1' | '1-2' | '2-1' | '2-2' | '3-1' | '3-2' | 'game-over' | 'faq' | 'contact';
+
+const { ui, boot, hero, contact } = site;
+
+const SEQ: Kind[] = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', 'game-over', 'faq', 'contact'];
+
+const about = site.levels.find((l): l is AboutLevel => l.id === '1-1');
+const projectsLevel = site.levels.find((l): l is ProjectsLevel => l.id === '2-2');
+if (!projectsLevel) throw new Error('TvSkin: level 2-2 tidak ada di site.levels');
+
+const brands = about?.stats.find((s) => s.value === '45')?.value ?? '';
+const levelTitle = (id: string): string => site.levels.find((l) => l.id === id)?.title ?? '';
+const hudFor = (k: Kind): string =>
+  k === 'game-over' || k === 'faq' || k === 'contact' ? ui.hud.levelLast : `${ui.hud.level} ${k}`;
+
+interface NodeDef {
+  id: string;
+  x: number;
+  y: number;
+  hud: string;
+  caption: string;
+}
+
+const levelPos = [
+  { id: '1-1', x: 28, y: 140 },
+  { id: '1-2', x: 76, y: 108 },
+  { id: '2-1', x: 124, y: 140 },
+  { id: '2-2', x: 172, y: 108 },
+  { id: '3-1', x: 220, y: 140 },
+  { id: '3-2', x: 262, y: 104 },
+];
+
+const nodes: NodeDef[] = [
+  ...levelPos.map((n) => ({
+    ...n,
+    hud: `${ui.hud.level} ${n.id}`,
+    caption: `${n.id} ${levelTitle(n.id)}`,
+  })),
+  { id: 'contact', x: 288, y: 60, hud: ui.hud.levelLast, caption: contact.cta },
+  { id: 'roas', x: 124, y: 60, hud: `${ui.hud.level} ★`, caption: 'ROAS RUNNER' },
+];
+
+const pathPoints = [...levelPos, { id: 'contact', x: 288, y: 60 }]
+  .map((n) => `${n.x},${n.y}`)
+  .join(' ');
+const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}%`;
+---
+
+<div data-skin-root="tv" class="tv">
+  <div class="tv-stage" data-tv-stage>
+    <div class="tv-frame" data-tv-frame>
+      <div class="tv-body" data-tv-body>
+        <div class="tv-bezel">
+          <div class="tv-screen" data-tv-screen>
+            <div class="tv-hud" data-tv-hud hidden>
+              <span data-hud-level>{ui.hud.levelFirst}</span>
+              <span>{ui.hud.highScore}</span>
+              <span>{ui.hud.brands} {brands}</span>
+            </div>
+
+            <div class="tv-view tv-boot" data-tv-view="boot">
+              <button type="button" class="tv-start" data-start>{boot.pressStart}</button>
+              <p class="tv-name">{hero.name}</p>
+              <p class="tv-text">{boot.greeting}</p>
+              <p class="tv-text tv-dim">{boot.hint}</p>
+              <p class="tv-text tv-dim">{ui.controls.desktop}</p>
+            </div>
+
+            <div class="tv-view tv-map" data-tv-view="map" hidden>
+              <svg
+                class="tv-map-art"
+                viewBox="0 0 320 200"
+                preserveAspectRatio="none"
+                shape-rendering="crispEdges"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect x="20" y="16" width="28" height="6" fill="#2a3a7a"></rect>
+                <rect x="28" y="10" width="12" height="6" fill="#2a3a7a"></rect>
+                <rect x="196" y="24" width="32" height="6" fill="#2a3a7a"></rect>
+                <rect x="204" y="18" width="16" height="6" fill="#2a3a7a"></rect>
+                <rect y="168" width="320" height="32" fill="#0a4a28"></rect>
+                <rect y="164" width="320" height="4" fill="#00873a"></rect>
+                <polyline
+                  points="124,60 172,108"
+                  fill="none"
+                  stroke="#b9b2a3"
+                  stroke-width="3"
+                  stroke-dasharray="2 8"
+                  vector-effect="non-scaling-stroke"></polyline>
+                <polyline
+                  points={pathPoints}
+                  fill="none"
+                  stroke="#f0a800"
+                  stroke-width="4"
+                  stroke-dasharray="8 6"
+                  vector-effect="non-scaling-stroke"></polyline>
+              </svg>
+
+              {
+                nodes.map((n) => (
+                  <button
+                    type="button"
+                    class={`tv-node${n.id === 'roas' ? ' tv-node-bonus' : ''}`}
+                    data-node={n.id}
+                    data-hud={n.hud}
+                    data-caption={n.caption}
+                    aria-label={n.caption}
+                    style={`left:${pct(n.x, 320)};top:${pct(n.y, 200)}`}
+                  >
+                    {n.id === 'contact' ? (
+                      <svg
+                        class="tv-castle"
+                        viewBox="0 0 16 16"
+                        shape-rendering="crispEdges"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <rect x="7" y="0" width="1" height="3" fill="#f0a800" />
+                        <rect x="8" y="0" width="3" height="2" fill="#eb1b22" />
+                        <rect x="2" y="3" width="3" height="3" fill="#f7eed6" />
+                        <rect x="11" y="3" width="3" height="3" fill="#f7eed6" />
+                        <rect x="5" y="6" width="6" height="9" fill="#f7eed6" />
+                        <rect x="2" y="6" width="12" height="9" fill="#f7eed6" />
+                        <rect x="7" y="10" width="2" height="5" fill="#1a1622" />
+                        <rect x="4" y="8" width="1" height="2" fill="#1a1622" />
+                        <rect x="11" y="8" width="1" height="2" fill="#1a1622" />
+                      </svg>
+                    ) : n.id === 'roas' ? (
+                      <span aria-hidden="true">▶</span>
+                    ) : (
+                      <span>{n.id}</span>
+                    )}
+                  </button>
+                ))
+              }
+
+              <svg
+                class="tv-sprite"
+                data-sprite
+                viewBox="0 0 16 16"
+                shape-rendering="crispEdges"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <g class="tv-sprite-bob">
+                  <rect x="7" y="0" width="2" height="2" fill="#f0a800"></rect>
+                  <rect x="4" y="2" width="8" height="6" fill="#f7eed6"></rect>
+                  <rect x="6" y="4" width="1" height="2" fill="#1a1622"></rect>
+                  <rect x="9" y="4" width="1" height="2" fill="#1a1622"></rect>
+                  <rect x="3" y="8" width="10" height="5" fill="#3c6fd8"></rect>
+                  <rect x="1" y="9" width="2" height="3" fill="#f7eed6"></rect>
+                  <rect x="13" y="9" width="2" height="3" fill="#f7eed6"></rect>
+                  <rect x="4" y="13" width="3" height="3" fill="#f7eed6"></rect>
+                  <rect x="9" y="13" width="3" height="3" fill="#f7eed6"></rect>
+                </g>
+              </svg>
+
+              <p class="tv-caption" data-tv-caption aria-live="polite"></p>
+            </div>
+
+            <div class="tv-view tv-panel" data-tv-view="panel" hidden>
+              <div class="tv-scroll" data-tv-scroll>
+                {
+                  SEQ.map((k) =>
+                    k === '2-2' ? (
+                      <section
+                        class="tv-section"
+                        data-view="2-2"
+                        data-hud={hudFor(k)}
+                        aria-labelledby="t-2-2-h"
+                        hidden
+                      >
+                        <p class="tv-eyebrow">
+                          {ui.hud.level} 2-2 · {projectsLevel.title}
+                        </p>
+                        <h2 id="t-2-2-h" tabindex="-1">
+                          {projectsLevel.heading}
+                        </h2>
+                        <ul class="cart-rack" data-cart-rack>
+                          {projectsLevel.projects.map((p, i) => (
+                            <li>
+                              <button type="button" class="cart" data-cart={i}>
+                                <span class="cart-status">{p.status}</span>
+                                <span class="cart-label">{p.name}</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                        {projectsLevel.projects.map((p, i) => (
+                          <article class="cart-card" data-cart-card={i} tabindex="-1" hidden>
+                            <h3>{p.name}</h3>
+                            <p class="cart-status">{p.status}</p>
+                            <p>{p.desc}</p>
+                            <div class="cart-actions">
+                              {p.url !== null && (
+                                <a
+                                  class="tv-btn tv-btn-hot"
+                                  href={p.url}
+                                  target="_blank"
+                                  rel="noopener"
+                                >
+                                  {p.button}
+                                </a>
+                              )}
+                              <button type="button" class="tv-btn" data-cart-back>
+                                {ui.hud.back}
+                              </button>
+                            </div>
+                          </article>
+                        ))}
+                        <p class="tv-note">{projectsLevel.note}</p>
+                      </section>
+                    ) : (
+                      <section
+                        class="tv-section"
+                        data-view={k}
+                        data-hud={hudFor(k)}
+                        aria-labelledby={`t-${k}-h`}
+                        hidden
+                      >
+                        <PanelContent kind={k} idPrefix="t" tone="dark" />
+                      </section>
+                    ),
+                  )
+                }
+              </div>
+              <div class="tv-bar">
+                <button type="button" class="tv-btn" data-tv-back>{ui.hud.back}</button>
+                <button type="button" class="tv-btn tv-btn-hot" data-tv-next>{ui.hud.next}</button>
+              </div>
+            </div>
+
+            <div class="tv-wipe" data-wipe aria-hidden="true"></div>
+            <div class="tv-crt" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="tv-strip" aria-hidden="true">
+          <span class="tv-grill"></span>
+          <span class="tv-knobs">
+            <span class="tv-knob"></span>
+            <span class="tv-knob"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="tv-console">
+        <span class="tv-led" aria-hidden="true"></span>
+        <span class="tv-key" aria-hidden="true"></span>
+        <span class="tv-key" aria-hidden="true"></span>
+        <div class="tv-slot" data-slot>
+          {
+            projectsLevel.projects.map((p, i) => (
+              <span class="tv-slot-cart" data-slot-cart={i} hidden>
+                {p.name}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/tv';
+</script>
+
+<style>
+  .tv {
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: var(--room);
+  }
+
+  .tv :global([hidden]) {
+    display: none !important;
+  }
+
+  .tv-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 12px 4px 64px;
+  }
+
+  .tv-frame {
+    display: grid;
+    flex: none;
+    gap: 4px;
+    width: max-content;
+  }
+
+  .tv-body {
+    padding: 12px 12px 0;
+    background: #6b4a2f;
+    border-radius: 20px 20px 8px 8px;
+    box-shadow: inset 0 0 0 3px #8a6140;
+  }
+
+  .tv-bezel {
+    background: #0b0910;
+    border-radius: 12px;
+    box-shadow: 0 0 0 4px #1d130b;
+  }
+
+  .tv-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(320px * var(--scale, 2));
+    height: calc(240px * var(--scale, 2));
+    overflow: hidden;
+    color: var(--paper);
+    background: #0b0910;
+    border-radius: 8px;
+  }
+
+  .tv-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    padding: 0 8px;
+  }
+
+  .tv-grill {
+    width: 64px;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, #1d130b 0 2px, transparent 2px 6px);
+  }
+
+  .tv-knobs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tv-knob {
+    width: 14px;
+    height: 14px;
+    background: #c9c3b6;
+    border: 2px solid #1d130b;
+    border-radius: 50%;
+  }
+
+  .tv-hud {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 4px 8px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 20px;
+    color: var(--paper);
+    background: #0b0910;
+    border-bottom: 2px solid var(--coin);
+    column-gap: 8px;
+  }
+
+  .tv-view {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .tv-boot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    overflow-y: auto;
+    text-align: center;
+    background: #0b0910;
+    animation: boot-flicker 500ms steps(1) both;
+  }
+
+  .tv-start {
+    padding: 4px 8px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--coin);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .tv-name {
+    font-family: var(--font-display);
+    font-size: max(12px, calc(8px * var(--scale, 2)));
+    line-height: 1.4;
+    color: var(--paper);
+    overflow-wrap: break-word;
+  }
+
+  .tv-text {
+    max-width: 52ch;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--paper);
+    overflow-wrap: break-word;
+  }
+
+  .tv-dim {
+    color: #b9b2a3;
+  }
+
+  .tv-map {
+    overflow: hidden;
+    background: #101a3a;
+  }
+
+  .tv-map-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tv-node {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: max(32px, calc(14px * var(--scale, 2)));
+    aspect-ratio: 1;
+    padding: 0;
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1;
+    color: var(--paper);
+    cursor: pointer;
+    background: var(--brick-dark);
+    border: 3px solid #0b0910;
+    transform: translate(-50%, -50%);
+  }
+
+  .tv-node-bonus {
+    background: #0a4a28;
+  }
+
+  .tv-node[aria-current='true'] {
+    box-shadow: 0 0 0 3px var(--coin);
+  }
+
+  .tv-castle {
+    width: 70%;
+    height: 70%;
+    image-rendering: pixelated;
+  }
+
+  .tv-sprite {
+    position: absolute;
+    z-index: 2;
+    width: max(16px, calc(8px * var(--scale, 2)));
+    height: max(16px, calc(8px * var(--scale, 2)));
+    pointer-events: none;
+    image-rendering: pixelated;
+    transform: translate(-50%, calc(-100% - max(16px, calc(7px * var(--scale, 2)))));
+    transition:
+      left 300ms steps(6),
+      top 300ms steps(6);
+  }
+
+  .tv-sprite-bob {
+    animation: bob 600ms steps(1) infinite;
+  }
+
+  .tv-caption {
+    position: absolute;
+    right: 8px;
+    bottom: 4px;
+    left: 8px;
+    z-index: 3;
+    min-height: 28px;
+    padding: 4px 8px;
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 20px;
+    color: var(--paper);
+    background: #0b0910;
+    border-left: 4px solid var(--coin);
+    overflow-wrap: break-word;
+  }
+
+  .tv-panel {
+    display: flex;
+    flex-direction: column;
+    background: #14111c;
+  }
+
+  .tv-scroll {
+    --c-bg: #14111c;
+    --c-fg: #f7eed6;
+    --c-accent: #f0a800;
+    --c-muted: #b9b2a3;
+
+    flex: 1;
+    min-height: 0;
+    padding: 8px 16px 16px;
+    overflow-y: auto;
+    color: var(--c-fg);
+    background: var(--c-bg);
+    overscroll-behavior: contain;
+  }
+
+  .tv-eyebrow {
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--c-accent);
+    overflow-wrap: break-word;
+  }
+
+  .tv-section h2 {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--c-fg);
+    overflow-wrap: break-word;
+  }
+
+  .tv-bar {
+    display: flex;
+    flex: none;
+    gap: 8px;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: #0b0910;
+    border-top: 2px solid var(--coin);
+  }
+
+  .tv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 4px 12px;
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--ink);
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: var(--paper);
+    border: 3px solid #0b0910;
+  }
+
+  .tv-btn-hot {
+    background: var(--coin);
+  }
+
+  .cart-rack {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+    gap: 16px;
+    padding: 0;
+    margin-top: 16px;
+    list-style: none;
+  }
+
+  .cart {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 8px 16px;
+    text-align: left;
+    cursor: pointer;
+    background: #2f2a3b;
+    border: 3px solid #6b6678;
+    border-radius: 6px 6px 0 0;
+    transition:
+      transform 300ms steps(5),
+      opacity 300ms steps(5);
+  }
+
+  .cart::after {
+    position: absolute;
+    right: 12px;
+    bottom: 0;
+    left: 12px;
+    height: 6px;
+    content: '';
+    background: repeating-linear-gradient(90deg, #f0a800 0 4px, transparent 4px 8px);
+  }
+
+  .cart:hover {
+    transform: translateY(-2px);
+  }
+
+  .cart.is-inserting {
+    opacity: 0.4;
+    transform: translateY(32px) scale(0.92);
+  }
+
+  .cart-status {
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--coin);
+  }
+
+  .cart-label {
+    padding: 4px 6px;
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.3;
+    color: var(--ink);
+    background: var(--paper);
+    overflow-wrap: break-word;
+  }
+
+  .cart-card {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    background: #2f2a3b;
+    border: 3px solid #6b6678;
+  }
+
+  .cart-card h3 {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+  }
+
+  .cart-card p {
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  .cart-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tv-note {
+    margin-top: 16px;
+    color: var(--c-muted);
+    overflow-wrap: break-word;
+  }
+
+  .tv-console {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    height: 56px;
+    padding: 0 12px;
+    background: #8c8a93;
+    border: 4px solid #3b3846;
+    border-radius: 4px 4px 12px 12px;
+  }
+
+  .tv-led {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: #eb1b22;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #eb1b22;
+  }
+
+  .tv-key {
+    flex: none;
+    width: 20px;
+    height: 12px;
+    background: #5a5766;
+    border: 2px solid #3b3846;
+    border-radius: 2px;
+  }
+
+  .tv-slot {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 32px;
+    background: #0b0910;
+    box-shadow: inset 0 0 0 2px #3b3846;
+  }
+
+  .tv-slot-cart {
+    padding: 2px 8px;
+    font-family: var(--font-label);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--paper);
+    background: #2f2a3b;
+    border-top: 3px solid var(--coin);
+    overflow-wrap: break-word;
+    animation: slot-in 300ms steps(3) both;
+  }
+
+  .tv-wipe {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: grid;
+    grid-template: repeat(6, 1fr) / repeat(8, 1fr);
+    pointer-events: none;
+  }
+
+  .tv-wipe :global(span) {
+    background: #0b0910;
+    opacity: 0;
+  }
+
+  .tv-wipe:global(.is-on) :global(span) {
+    animation: wipe-cell 200ms steps(4) both;
+    animation-delay: calc(var(--d, 0) * 16ms);
+  }
+
+  .tv-crt {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgb(0 0 0 / 18%) 0 1px, transparent 1px 3px);
+    animation: crt-flicker 4s steps(1) infinite;
+  }
+
+  @keyframes boot-flicker {
+    0% {
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 1;
+    }
+
+    30% {
+      opacity: 0.3;
+    }
+
+    45% {
+      opacity: 1;
+    }
+
+    60% {
+      opacity: 0.6;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes bob {
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-1px);
+    }
+  }
+
+  @keyframes slot-in {
+    0% {
+      transform: translateY(-24px);
+    }
+
+    100% {
+      transform: none;
+    }
+  }
+
+  @keyframes wipe-cell {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes crt-flicker {
+    0% {
+      opacity: 0.85;
+    }
+
+    92% {
+      opacity: 1;
+    }
+
+    96% {
+      opacity: 0.8;
+    }
+
+    98% {
+      opacity: 0.85;
+    }
+  }
+
+  @media (width < 400px) {
+    .tv-stage {
+      padding-inline: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tv-crt {
+      display: none;
+    }
+
+    .tv-boot,
+    .tv-start,
+    .tv-sprite-bob,
+    .tv-slot-cart {
+      animation: none;
+    }
+
+    .tv-sprite,
+    .cart {
+      transition: none;
+    }
+
+    .tv-wipe {
+      display: none;
+    }
+  }
+</style>

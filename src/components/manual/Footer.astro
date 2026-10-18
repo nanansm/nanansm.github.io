@@ -30,6 +30,7 @@ const hrefFor = (label: string): string => {
     <p class="footer__tech">
       <a href="/llms.txt">llms.txt</a>
       <a href="/api/mcp">MCP</a>
+      <button type="button" class="footer__runner" data-open-runner>ROAS RUNNER</button>
     </p>
   </div>
 
@@ -79,7 +80,19 @@ const hrefFor = (label: string): string => {
     text-underline-offset: 4px;
   }
 
+  .footer__runner {
+    min-height: 44px;
+    padding: 0 var(--s2);
+    font-family: var(--font-label);
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--coin);
+    border: 2px solid var(--paper);
+    cursor: pointer;
+  }
+
   .footer__tech {
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: var(--s2) var(--s3);

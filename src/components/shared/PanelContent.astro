@@ -1,0 +1,655 @@
+---
+import ContactBlock from '../ContactBlock.astro';
+import { site, waLink } from '../../data/site';
+import type { CaseStudy } from '../../data/site';
+
+interface Props {
+  kind: '1-1' | '1-2' | '2-1' | '2-2' | '3-1' | '3-2' | 'game-over' | 'faq' | 'contact';
+  idPrefix: 'h' | 't';
+  tone: 'green' | 'dark';
+}
+
+const { kind, idPrefix, tone } = Astro.props;
+
+const isLevelKind = kind !== 'game-over' && kind !== 'faq' && kind !== 'contact';
+const level = site.levels.find((l) => l.id === kind);
+if (isLevelKind && !level) throw new Error(`PanelContent: level ${kind} tidak ada di site.levels`);
+
+const about = level?.id === '1-1' ? level : null;
+const services = level?.id === '1-2' ? level : null;
+const cases = level?.id === '2-1' ? level : null;
+const projects = level?.id === '2-2' ? level : null;
+const saves = level?.id === '3-1' ? level : null;
+const steps = level?.id === '3-2' ? level : null;
+
+const { gameOver, faq } = site;
+
+let eyebrow = '';
+let heading = '';
+if (level) {
+  eyebrow = `${site.ui.hud.level} ${level.id} · ${level.title}`;
+  heading = level.heading;
+} else if (kind === 'game-over') {
+  eyebrow = 'GAME OVER';
+  heading = gameOver.heading;
+} else if (kind === 'faq') {
+  eyebrow = 'FAQ';
+  heading = faq.heading;
+}
+
+interface Bar {
+  label: string;
+  text: string;
+  pct: number;
+  hot: boolean;
+}
+
+const fmt2 = (v: number): string =>
+  v.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const makeBars = (
+  labels: string[],
+  values: number[],
+  texts: string[],
+  max: number,
+  hotIndex: number,
+): Bar[] =>
+  values.map((v, i) => ({
+    label: labels[i] ?? '',
+    text: texts[i] ?? '',
+    pct: max > 0 ? Math.max(0, Math.min(100, (v / max) * 100)) : 0,
+    hot: i === hotIndex,
+  }));
+
+const chartFor = (c: CaseStudy): Bar[] => {
+  if (c.roasSeries && c.months) {
+    const max = Math.max(...c.roasSeries);
+    return makeBars(c.months, c.roasSeries, c.roasSeries.map(fmt2), max, c.roasSeries.indexOf(max));
+  }
+  if (c.occupancy) {
+    const labels = [c.table.headers[0] ?? '', c.table.headers[1] ?? ''];
+    const texts = c.occupancy.map((v) => `${v.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%`);
+    return makeBars(labels, c.occupancy, texts, 100, c.occupancy.length - 1);
+  }
+  if (c.cpl && c.cplLabels) {
+    const texts = c.cpl.map((v) => `Rp${v.toLocaleString('id-ID')}`);
+    return makeBars(c.cplLabels, c.cpl, texts, Math.max(...c.cpl), c.cpl.length - 1);
+  }
+  return [];
+};
+
+const caseViews = (cases?.cases ?? []).map((c) => {
+  const bars = chartFor(c);
+  return { c, bars, aria: bars.map((b) => `${b.label} ${b.text}`).join(', ') };
+});
+
+const pad = (n: number): string => String(n).padStart(2, '0');
+---
+
+<div class="pc" data-panel={kind} data-tone={tone}>
+  {
+    kind !== 'contact' && (
+      <>
+        <p class="pc__eyebrow">{eyebrow}</p>
+        <h2 class="pc__h" id={`${idPrefix}-${kind}-h`} tabindex="-1">{heading}</h2>
+      </>
+    )
+  }
+
+  {
+    about && (
+      <>
+        {about.paragraphs.map((p) => <p class="pc__text">{p}</p>)}
+        <p class="pc__label">{about.highScoreLabel}</p>
+        <ul class="pc__list pc__stats">
+          {about.stats.map((s) => (
+            <li class="pc__stat">
+              <span class="pc__stat-v">{s.value}</span>
+              <span class="pc__stat-l">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    services && (
+      <ul class="pc__list pc__cards">
+        {services.cards.map((card, i) => (
+          <li class="pc__card">
+            <p class="pc__tag">{card.label}</p>
+            <h3 class="pc__title">{card.title}</h3>
+            <p class="pc__text">{card.body}</p>
+            {card.price !== null && <p class="pc__price">{card.price}</p>}
+            <p class="pc__proof">
+              <span aria-hidden="true">●</span>
+              <span>{card.proof}</span>
+            </p>
+            {card.button === 'BUKA LIBRARY' ? (
+              <a
+                class="btn pc__btn"
+                href={`#${idPrefix}-2-2`}
+                data-goto="2-2"
+                data-primary={i === 0 ? '' : undefined}
+              >
+                {card.button}
+              </a>
+            ) : (
+              <a
+                class="btn pc__btn"
+                href={waLink(site.contact.waPrefill)}
+                target="_blank"
+                rel="noopener"
+                data-primary={i === 0 ? '' : undefined}
+              >
+                {card.button}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    cases && (
+      <div class="pc__stack">
+        {caseViews.map(({ c, bars, aria }) => (
+          <article class="pc__card">
+            <p class="pc__tag">{c.client}</p>
+            <h3 class="pc__title">{c.title}</h3>
+            <p class="pc__text">{c.intro}</p>
+            {c.table.rows.map((row) => (
+              <dl class="pc__kv">
+                {row.map((cell, i) => {
+                  const k = c.table.headers[i] ?? '';
+                  return (
+                    <div class="pc__kv-row">
+                      {k !== '' && <dt>{k}</dt>}
+                      <dd>{cell}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            ))}
+            {c.glossary !== null && <p class="pc__text pc__note">{c.glossary}</p>}
+            {c.extra !== null && <p class="pc__text pc__note">{c.extra}</p>}
+            {bars.length > 0 && (
+              <figure class="pc__chart" role="img" aria-label={aria}>
+                {bars.map((b) => (
+                  <div class="pc__bar" aria-hidden="true">
+                    <div class="pc__bar-top">
+                      <span>{b.label}</span>
+                      <span class="pc__bar-v">{b.text}</span>
+                    </div>
+                    <div class="pc__track">
+                      <div class:list={['pc__fill', { 'pc__fill--hot': b.hot }]} style={`width:${b.pct}%`} />
+                    </div>
+                  </div>
+                ))}
+              </figure>
+            )}
+            <p class="pc__text pc__lesson">
+              <strong>{c.lessonLabel}</strong> {c.lesson}
+            </p>
+          </article>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    projects && (
+      <>
+        <ul class="pc__list pc__cards">
+          {projects.projects.map((p, i) => (
+            <li class="pc__card">
+              <h3 class="pc__name">{p.name}</h3>
+              <span class="pc__badge">{p.status}</span>
+              <p class="pc__text">{p.desc}</p>
+              {p.url && (
+                <a
+                  class="btn pc__btn"
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener"
+                  data-primary={i === 0 ? '' : undefined}
+                >
+                  {p.button}
+                  <span class="pc__sr"> {p.name}</span>
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+        <p class="pc__text pc__note">{projects.note}</p>
+      </>
+    )
+  }
+
+  {
+    saves && (
+      <ol class="pc__list pc__rows">
+        {saves.rows.map((row, i) => (
+          <li class="pc__card">
+            <span class="pc__no" aria-hidden="true">{i + 1}</span>
+            <dl class="pc__kv">
+              <div class="pc__kv-row">
+                <dt>{saves.headers.year}</dt>
+                <dd>{row.year}</dd>
+              </div>
+              <div class="pc__kv-row">
+                <dt>{saves.headers.role}</dt>
+                <dd>{row.role}</dd>
+              </div>
+              <div class="pc__kv-row">
+                <dt>{saves.headers.result}</dt>
+                <dd>{row.result}</dd>
+              </div>
+            </dl>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
+  {
+    steps && (
+      <ol class="pc__list pc__rows">
+        {steps.steps.map((step, i) => (
+          <li class="pc__card">
+            <span class="pc__no" aria-hidden="true">{i + 1}</span>
+            <h3 class="pc__title">{step.title}</h3>
+            <p class="pc__text">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
+  {
+    kind === 'game-over' && (
+      <ol class="pc__list pc__rows">
+        {gameOver.lessons.map((lesson, i) => (
+          <li class="pc__card">
+            <span class="pc__no" aria-hidden="true">{i + 1}</span>
+            <h3 class="pc__title">{lesson.title}</h3>
+            {lesson.body.split('\n').map((line) => (
+              <p class="pc__text">{line}</p>
+            ))}
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
+  {
+    kind === 'faq' && (
+      <div class="pc__stack">
+        {faq.items.map((item, i) => (
+          <details class="pc__faq">
+            <summary class="pc__sum">
+              <span class="pc__sum-no" aria-hidden="true">{pad(i + 1)}</span>
+              <span class="pc__sum-q">{item.q}</span>
+            </summary>
+            <p class="pc__text pc__ans">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    )
+  }
+
+  {kind === 'contact' && <ContactBlock idPrefix={idPrefix} tone={tone} />}
+</div>
+
+<style>
+  .pc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    width: 100%;
+    min-width: 0;
+    container-type: inline-size;
+    color: var(--c-fg);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  .pc > * {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .pc__eyebrow,
+  .pc__label {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--c-muted);
+    text-transform: uppercase;
+  }
+
+  .pc__h {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--c-fg);
+  }
+
+  .pc__h:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 4px;
+  }
+
+  .pc__text,
+  .pc__title,
+  .pc__proof,
+  .pc__price,
+  .pc__tag,
+  .pc__name {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .pc__text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .pc__note {
+    color: var(--c-muted);
+  }
+
+  .pc__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pc__stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+  }
+
+  .pc__card,
+  .pc__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s1);
+    min-width: 0;
+    padding: var(--s2);
+    background: var(--c-bg);
+    border: 2px solid var(--c-fg);
+    border-radius: 0;
+    box-shadow: 4px 4px 0 var(--c-fg);
+  }
+
+  .pc__card > *,
+  .pc__stat > * {
+    max-width: 100%;
+  }
+
+  .pc__tag {
+    padding: 2px var(--s1);
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--c-bg);
+    background: var(--c-fg);
+  }
+
+  .pc__title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  .pc__name {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.8;
+  }
+
+  .pc__badge {
+    padding: 2px var(--s1);
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--c-bg);
+    background: var(--c-accent);
+    border: 2px solid var(--c-fg);
+  }
+
+  .pc__price {
+    padding: var(--s1);
+    font-weight: 700;
+    border: 2px dashed var(--c-accent);
+  }
+
+  .pc__proof {
+    display: flex;
+    gap: var(--s1);
+    font-weight: 700;
+  }
+
+  .pc__proof > span:first-child {
+    flex: none;
+    color: var(--c-accent);
+  }
+
+  .pc__proof > span:last-child {
+    min-width: 0;
+  }
+
+  .pc__stat-v {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--c-accent);
+  }
+
+  .pc__stat-l {
+    min-width: 0;
+  }
+
+  .pc__no {
+    display: grid;
+    flex: none;
+    place-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 var(--s1);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--c-bg);
+    background: var(--c-fg);
+  }
+
+  .pc__kv {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s1);
+    width: 100%;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .pc__kv-row {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .pc__kv dt {
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--c-muted);
+  }
+
+  .pc__kv dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .pc__chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s1);
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: var(--s1);
+    border: 2px solid var(--c-fg);
+  }
+
+  .pc__bar {
+    min-width: 0;
+  }
+
+  .pc__bar-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 var(--s1);
+    line-height: 1.4;
+  }
+
+  .pc__bar-top > span {
+    min-width: 0;
+  }
+
+  .pc__bar-v {
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .pc__track {
+    height: 24px;
+    border: 2px solid var(--c-fg);
+    overflow: hidden;
+  }
+
+  .pc__fill {
+    height: 100%;
+    background: var(--c-fg);
+  }
+
+  .pc__fill--hot {
+    background: var(--c-accent);
+  }
+
+  .pc__lesson {
+    padding: var(--s1);
+    border: 2px dashed var(--c-fg);
+  }
+
+  .pc__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 44px;
+    padding: var(--s1) var(--s2);
+    color: var(--c-bg);
+    background: var(--c-fg);
+    border: var(--border) solid var(--c-fg);
+    border-radius: 0;
+    text-align: center;
+    text-decoration: none;
+    overflow-wrap: break-word;
+  }
+
+  .pc__btn:focus-visible {
+    outline: var(--border) solid var(--c-accent);
+    outline-offset: 2px;
+  }
+
+  .pc__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pc__faq {
+    min-width: 0;
+    border: 2px solid var(--c-fg);
+    box-shadow: 4px 4px 0 var(--c-fg);
+  }
+
+  .pc__sum {
+    display: flex;
+    align-items: center;
+    gap: var(--s1);
+    min-height: 44px;
+    padding: var(--s1);
+    cursor: pointer;
+  }
+
+  .pc__sum::after {
+    content: '+';
+    flex: none;
+    margin-left: auto;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--c-accent);
+  }
+
+  .pc__faq[open] > .pc__sum::after {
+    content: '−';
+  }
+
+  .pc__sum:focus-visible {
+    outline: var(--border) solid var(--c-accent);
+    outline-offset: 2px;
+  }
+
+  .pc__sum-no {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--c-accent);
+  }
+
+  .pc__sum-q {
+    min-width: 0;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .pc__ans {
+    padding: var(--s1);
+    border-top: 2px dashed var(--c-fg);
+  }
+
+  @container (width >= 560px) {
+    .pc__cards,
+    .pc__stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pc__h {
+      font-size: 1rem;
+    }
+  }
+</style>

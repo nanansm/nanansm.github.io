@@ -42,12 +42,16 @@ const autocompletes: Record<string, string> = {
 };
 
 const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000000AA';
+if (!import.meta.env.PUBLIC_TURNSTILE_SITEKEY) {
+  // build produksi tanpa sitekey asli = semua kiriman form ditolak worker (captcha_failed)
+  console.warn('[ContactBlock] PUBLIC_TURNSTILE_SITEKEY kosong, pakai test sitekey. Wajib diisi sebelum deploy.');
+}
 ---
 
 <section class="contact" data-tone={tone} aria-labelledby={headingId}>
   <p class="player2" data-player2 data-template={site.player2.withGeo}>{site.player2.fallback}</p>
 
-  <h2 id={headingId} class="heading">{site.contact.heading}</h2>
+  <h2 id={headingId} class="heading" tabindex="-1">{site.contact.heading}</h2>
   <p class="sub">{site.contact.sub}</p>
 
   <p class="cta">
@@ -285,7 +289,11 @@ const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000
 <script>
   declare global {
     interface Window {
-      turnstile?: { reset: () => void };
+      turnstile?: {
+        render: (el: HTMLElement, opts: { sitekey: string; theme?: string }) => string;
+        reset: (widgetId?: string) => void;
+      };
+      onTurnstileLoad?: () => void;
     }
   }
 
@@ -298,17 +306,32 @@ const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000
     ok?: boolean;
   }
 
-  const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
 
-  if (
-    document.querySelector('.cf-turnstile') &&
-    !document.querySelector(`script[src="${TURNSTILE_SRC}"]`)
-  ) {
+  // Render explicit: widget cuma dibuat di skin aktif. Tiga widget sekaligus (dua di skin
+  // tersembunyi) bikin iframe Turnstile melempar error postMessage di console.
+  const renderActiveTurnstile = (): void => {
+    const ts = window.turnstile;
+    if (!ts) return;
+    const skin = document.documentElement.dataset.skin ?? 'manual';
+    document
+      .querySelectorAll<HTMLElement>(`[data-skin-root="${skin}"] .cf-turnstile:not([data-widget-id])`)
+      .forEach((el) => {
+        const sitekey = el.dataset.sitekey;
+        if (!sitekey) return;
+        el.dataset.widgetId = ts.render(el, { sitekey, theme: el.dataset.theme ?? 'light' });
+      });
+  };
+
+  if (document.querySelector('.cf-turnstile') && !document.querySelector('script[data-turnstile]')) {
+    window.onTurnstileLoad = renderActiveTurnstile;
     const s = document.createElement('script');
     s.src = TURNSTILE_SRC;
     s.async = true;
     s.defer = true;
+    s.dataset.turnstile = '';
     document.head.appendChild(s);
+    window.addEventListener('skinchange', renderActiveTurnstile);
   }
 
   const player2Els = document.querySelectorAll<HTMLElement>('[data-player2]');
@@ -386,7 +409,6 @@ const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000
         const json = (await res.json()) as ContactResponse;
         if (res.ok && json.ok === true) {
           form.reset();
-          window.turnstile?.reset();
           show('success');
         } else {
           show('error');
@@ -394,6 +416,9 @@ const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000
       } catch {
         show('error');
       } finally {
+        // token Turnstile sekali pakai: reset juga saat gagal biar retry dapat token baru
+        const widgetId = form.querySelector<HTMLElement>('.cf-turnstile')?.dataset.widgetId;
+        if (widgetId) window.turnstile?.reset(widgetId);
         if (submitBtn) submitBtn.disabled = false;
       }
     });

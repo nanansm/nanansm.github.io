@@ -11,7 +11,7 @@ for (const skin of skins) {
   for (const w of widths) {
     const page = await browser.newPage({ viewport: { width: w, height: 800 } });
     const errs = [];
-    page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.text()); });
+    page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.text().slice(0, 160)); });
     page.on('pageerror', (e) => errs.push(String(e)));
     await page.goto(`${base}/?skin=${skin}`, { waitUntil: 'load' }); await page.waitForTimeout(1200);
     const over = await page.evaluate(() => {

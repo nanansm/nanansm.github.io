@@ -9,6 +9,7 @@
     "preview": "astro build && wrangler dev --port 8787",
     "check": "astro check && tsc --noEmit && eslint . && stylelint \"src/**/*.{css,astro}\" && vitest run",
     "test:e2e": "playwright test",
+    "og": "node scripts/og.mjs",
     "prepare": "husky"
   },
   "dependencies": {

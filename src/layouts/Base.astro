@@ -83,6 +83,8 @@ const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [per
             const q = new URLSearchParams(window.location.search).get('skin');
             if (q && valid[q] === 1) skin = q;
           }
+          // deep link #anchor cuma hidup di manual; tidak disimpan ke localStorage
+          if (!skin && window.location.hash.length > 1) skin = 'manual';
           if (!skin) {
             const s = window.localStorage.getItem('skin');
             if (s && valid[s] === 1) skin = s;
@@ -113,5 +115,8 @@ const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [per
   <body>
     <slot />
     <SkinControls lockSkin={lockSkin} />
+    <script>
+      import '../scripts/skin-inert';
+    </script>
   </body>
 </html>

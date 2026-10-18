@@ -1,0 +1,445 @@
+---
+import PanelContent from '../shared/PanelContent.astro';
+import { site, waLink } from '../../data/site';
+
+const kinds = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', 'game-over', 'faq', 'contact'] as const;
+type Kind = (typeof kinds)[number];
+
+const levelLabel = (id: string): string => {
+  const lvl = site.levels.find((l) => l.id === id);
+  return lvl ? `${lvl.id} ${lvl.title}` : id;
+};
+
+const menuLabel = (kind: Kind): string => {
+  if (kind === 'game-over') return 'GAME OVER';
+  if (kind === 'faq') return 'FAQ';
+  if (kind === 'contact') return site.contact.cta;
+  return levelLabel(kind);
+};
+
+const items = kinds.map((kind) => ({ kind, label: menuLabel(kind) }));
+---
+
+<div data-skin-root="handheld" class="hh" data-hud-level={site.ui.hud.level}>
+  <div class="hh__bezel">
+    <div class="hh__lcd">
+      <div class="hh__scroll" data-hh-scroll>
+        <section class="hh__screen hh__boot" data-screen="boot" aria-label={site.hero.name}>
+          <p class="hh__name">{site.hero.name}</p>
+          <p class="hh__press hh__blink">{site.boot.pressStart}</p>
+          <p class="hh__greet">{site.boot.greeting}</p>
+          <p class="hh__hint">{site.ui.controls.mobile}</p>
+        </section>
+
+        <section class="hh__screen" data-screen="menu" aria-label={site.hero.name} hidden>
+          <ul class="hh__list">
+            {
+              items.map(({ kind, label }) => (
+                <li>
+                  <button type="button" class="hh__item" data-menu={kind}>
+                    <span class="hh__mark" aria-hidden="true">▶</span>
+                    <span class="hh__label">{label}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {
+          kinds.map((kind) => (
+            <section
+              class="hh__screen"
+              data-screen={kind}
+              aria-labelledby={`h-${kind}-h`}
+              hidden
+            >
+              <PanelContent kind={kind} idPrefix="h" tone="green" />
+            </section>
+          ))
+        }
+
+        <section class="hh__screen" data-screen="egg" aria-label={site.ui.easterEgg.text} hidden>
+          <p class="hh__egg">{site.ui.easterEgg.text}</p>
+          <a
+            class="hh__link"
+            data-primary
+            href={waLink(site.contact.waPrefill)}
+            target="_blank"
+            rel="noopener">{site.ui.easterEgg.button}</a
+          >
+        </section>
+      </div>
+      <div class="hh__wipe" data-hh-wipe aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="hh__controls">
+    <p class="hh__ind" data-hh-ind aria-live="polite"></p>
+
+    <div class="hh__dpad">
+      <button type="button" class="hh__key hh__up" data-btn="up" aria-label="Atas">
+        <span aria-hidden="true">▲</span>
+      </button>
+      <button type="button" class="hh__key hh__left" data-btn="left" aria-label="Kiri">
+        <span aria-hidden="true">◀</span>
+      </button>
+      <button type="button" class="hh__key hh__east" data-btn="right" aria-label="Kanan">
+        <span aria-hidden="true">▶</span>
+      </button>
+      <button type="button" class="hh__key hh__down" data-btn="down" aria-label="Bawah">
+        <span aria-hidden="true">▼</span>
+      </button>
+    </div>
+
+    <div class="hh__right">
+      <div class="hh__ab">
+        <button type="button" class="hh__round hh__round--b" data-btn="b">B</button>
+        <button type="button" class="hh__round" data-btn="a">A</button>
+      </div>
+      <div class="hh__ss">
+        <button type="button" class="hh__pill" data-btn="select">SELECT</button>
+        <button type="button" class="hh__pill" data-btn="start">START</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/handheld';
+</script>
+
+<style>
+  :global(html[data-skin="handheld"]) .hh {
+    display: grid;
+  }
+
+  .hh {
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--s2);
+    height: 100dvh;
+    padding: calc(56px + env(safe-area-inset-top)) var(--s2) calc(var(--s2) + env(safe-area-inset-bottom));
+    overflow: hidden;
+    background: #d8d4c8;
+    box-sizing: border-box;
+  }
+
+  .hh__bezel {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    padding: var(--s2) var(--s2) var(--s3);
+    border: 3px solid #1b1b1b;
+    border-radius: 8px 8px 32px;
+    background: #2b2b33;
+    box-sizing: border-box;
+  }
+
+  .hh__lcd {
+    --c-bg: #9bbc0f;
+    --c-fg: #0f380f;
+    --c-accent: #306230;
+    --c-muted: #0f380f;
+
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border: 2px solid #0f380f;
+    background: #9bbc0f;
+    color: #0f380f;
+  }
+
+  .hh__scroll {
+    position: absolute;
+    inset: 0;
+    padding: var(--s2);
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .hh__screen[hidden] {
+    display: none;
+  }
+
+  .hh__boot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s2);
+    text-align: center;
+  }
+
+  .hh__name {
+    margin: var(--s2) 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(0.875rem, 5vw, 1.25rem);
+    line-height: 1.5;
+  }
+
+  .hh__press {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+  }
+
+  .hh__greet,
+  .hh__hint,
+  .hh__egg {
+    margin: 0;
+  }
+
+  .hh__hint {
+    color: #0f380f;
+  }
+
+  .hh__blink {
+    animation: hh-blink 1s steps(2, start) infinite;
+  }
+
+  .hh__list {
+    display: grid;
+    gap: var(--s1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hh__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s1);
+    width: 100%;
+    min-height: 44px;
+    padding: var(--s1);
+    border: 2px solid transparent;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .hh__item.is-sel {
+    border-color: #0f380f;
+    background: #8bac0f;
+  }
+
+  .hh__mark {
+    flex: none;
+    width: 1.2em;
+    visibility: hidden;
+  }
+
+  .is-sel .hh__mark {
+    visibility: visible;
+  }
+
+  .hh__label {
+    min-width: 0;
+  }
+
+  .hh__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: var(--s2);
+    padding: var(--s1) var(--s2);
+    background: #0f380f;
+    color: #9bbc0f;
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .hh__wipe {
+    position: absolute;
+    inset: 0;
+    background-image: conic-gradient(#0f380f 25%, #306230 0 50%, #0f380f 0 75%, #306230 0);
+    background-size: 32px 32px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hh__controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: var(--s1);
+    place-items: center center;
+  }
+
+  .hh__ind {
+    grid-column: 1 / -1;
+    min-height: 1.5em;
+    margin: 0;
+    color: #1b1b1b;
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .hh__dpad {
+    display: grid;
+    grid-template: repeat(3, 48px) / repeat(3, 48px);
+  }
+
+  .hh__dpad::before {
+    content: "";
+    grid-area: 2 / 2;
+    background: #3a3a40;
+  }
+
+  .hh__up {
+    grid-area: 1 / 2;
+  }
+
+  .hh__left {
+    grid-area: 2 / 1;
+  }
+
+  .hh__east {
+    grid-area: 2 / 3;
+  }
+
+  .hh__right {
+    display: contents;
+  }
+
+  .hh__down {
+    grid-area: 3 / 2;
+  }
+
+  .hh__key,
+  .hh__round,
+  .hh__pill {
+    border: 2px solid #1b1b1b;
+    color: #f5f1e3;
+    font-family: var(--font-label);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .hh__key {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    background: #3a3a40;
+    font-size: 1rem;
+  }
+
+  .hh__round {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    background: #8b2e4a;
+    font-size: 1rem;
+  }
+
+  .hh__round--b {
+    margin-top: var(--s3);
+  }
+
+  .hh__ab {
+    display: flex;
+    gap: var(--s2);
+    align-items: flex-start;
+  }
+
+  .hh__ss {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: var(--s3);
+    justify-content: center;
+  }
+
+  .hh__pill {
+    min-width: 88px;
+    min-height: 44px;
+    padding: 0 var(--s2);
+    border-radius: 22px;
+    background: #3a3a40;
+    font-size: 0.75rem;
+  }
+
+  .hh__key:focus-visible,
+  .hh__round:focus-visible,
+  .hh__pill:focus-visible {
+    outline: 3px solid #1b1b1b;
+    outline-offset: 2px;
+  }
+
+  .hh__item:focus-visible,
+  .hh__link:focus-visible,
+  .hh__scroll :global(:focus-visible) {
+    outline: 3px solid #0f380f;
+    outline-offset: 2px;
+  }
+
+  .hh__scroll :global(h2:focus) {
+    outline: none;
+  }
+
+  @keyframes hh-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hh__blink {
+      animation: none;
+    }
+
+    .hh__wipe {
+      display: none;
+    }
+  }
+
+  @media (orientation: landscape) and (height <= 500px) {
+    .hh {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .hh__bezel {
+      grid-area: 1 / 2;
+      align-self: stretch;
+    }
+
+    .hh__controls {
+      display: contents;
+    }
+
+    .hh__ind {
+      grid-area: 2 / 2;
+      text-align: center;
+    }
+
+    .hh__dpad {
+      grid-area: 1 / 1;
+    }
+
+    .hh__right {
+      display: flex;
+      flex-direction: column;
+      grid-area: 1 / 3;
+      gap: var(--s2);
+      align-items: center;
+    }
+
+    .hh__ss {
+      flex-direction: column;
+      gap: var(--s1);
+    }
+  }
+</style>
