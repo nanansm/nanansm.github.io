@@ -172,7 +172,6 @@ export interface Ui {
     next: string;
     back: string;
   };
-  sound: { on: string; off: string };
   loading: { label: string; slow: string };
   notFound: { title: string; body: string; button: string };
   easterEgg: { trigger: string; text: string; button: string };
@@ -691,7 +690,6 @@ Kontak: hello@nanansm.com, WhatsApp 0811-2131-496, linkedin.com/in/nanansm`,
       next: 'NEXT LEVEL',
       back: 'BACK',
     },
-    sound: { on: 'SOUND ON', off: 'SOUND OFF' },
     loading: {
       label: 'LOADING...',
       slow: 'Sebentar, cartridge-nya lagi ditiup.',

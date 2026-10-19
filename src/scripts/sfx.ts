@@ -1,4 +1,4 @@
-// Chiptune SFX lewat WebAudio. Default OFF, ikut tombol SOUND (localStorage 'sound' + event 'soundchange').
+// Chiptune SFX lewat WebAudio. Dimatikan sejak tombol SOUND dihapus (19 Okt 2026); ubah `enabled` untuk menyalakan lagi.
 export type Sfx = 'select' | 'coin' | 'jump' | 'start';
 
 type Note = [freq: number, dur: number];
@@ -10,18 +10,8 @@ const PATTERNS: Record<Sfx, { wave: OscillatorType; notes: Note[] }> = {
   start: { wave: 'triangle', notes: [[523, 0.08], [659, 0.08], [784, 0.08], [1047, 0.2]] },
 };
 
-let enabled = false;
+const enabled = false;
 let ctx: AudioContext | null = null;
-
-try {
-  enabled = window.localStorage.getItem('sound') === 'on';
-} catch {
-  enabled = false;
-}
-
-window.addEventListener('soundchange', (e) => {
-  enabled = (e as CustomEvent<boolean>).detail === true;
-});
 
 export function play(name: Sfx): void {
   if (!enabled) return;
