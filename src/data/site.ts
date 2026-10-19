@@ -178,6 +178,9 @@ export interface Ui {
   controls: { desktop: string; mobile: string };
   game: {
     name: string;
+    zone: string;
+    zoneNote: string;
+    play: string;
     clear: string;
     clearBody: string;
     replay: string;
@@ -710,6 +713,9 @@ Kontak: hello@nanansm.com, WhatsApp 0811-2131-496, linkedin.com/in/nanansm`,
     },
     game: {
       name: 'CHECKOUT RUN',
+      zone: 'MAIN GAME',
+      zoneNote: 'Selingan di luar portofolio. Satu level platformer, kira-kira semenit.',
+      play: 'MAIN CHECKOUT RUN',
       clear: 'CHECKOUT!',
       clearBody: 'Kamu sampai checkout. Iklan bisnismu juga bisa sampai sana, kita hitung angkanya lewat WhatsApp.',
       replay: 'MAIN LAGI',

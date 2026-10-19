@@ -43,6 +43,10 @@ const items = kinds.map((kind) => ({ kind, label: menuLabel(kind) }));
                 </li>
               ))
             }
+          </ul>
+          <p class="hh__group" id="hh-game-h">{site.ui.game.zone}</p>
+          <p class="hh__group-note">{site.ui.game.zoneNote}</p>
+          <ul class="hh__list" aria-labelledby="hh-game-h">
             <li>
               <button type="button" class="hh__item" data-menu="checkout" data-open-checkout>
                 <span class="hh__mark" aria-hidden="true">★</span>
@@ -214,6 +218,23 @@ const items = kinds.map((kind) => ({ kind, label: menuLabel(kind) }));
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .hh__group {
+    margin: var(--s3) 0 0;
+    padding-top: var(--s2);
+    border-top: 2px dashed #0f380f;
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .hh__group-note {
+    margin: var(--s1) 0 var(--s1);
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 
   .hh__item {

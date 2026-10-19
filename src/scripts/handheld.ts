@@ -240,7 +240,7 @@ function init(): void {
 
   window.addEventListener('keydown', (e) => {
     if (document.documentElement.dataset['skin'] !== 'handheld') return;
-    // modal ROAS Runner pegang keyboard sendiri
+    // modal game pegang keyboard sendiri
     if (e.defaultPrevented || document.querySelector('dialog[open]')) return;
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     const t = e.target;

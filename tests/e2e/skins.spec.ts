@@ -140,22 +140,6 @@ test('tv: map → semua level, NEXT berantai, cartridge, BACK', async ({ page })
   expect(errs).toEqual([]);
 });
 
-test('roas runner: buka dari manual, main, tutup', async ({ page }) => {
-  const errs = watchConsole(page);
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.goto('/?skin=manual');
-  const opener = page.locator('[data-skin-root="manual"] [data-open-runner]');
-  await opener.click();
-  const dlg = page.locator('dialog.rr');
-  await expect(dlg).toBeVisible();
-  await page.keyboard.press('Space');
-  await page.waitForTimeout(500);
-  await page.keyboard.press('Escape');
-  await expect(dlg).toBeHidden();
-  await expect(opener).toBeFocused();
-  expect(errs).toEqual([]);
-});
-
 test('form contact manual: submit sukses (Turnstile test key)', async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.goto('/?skin=manual');
@@ -201,18 +185,18 @@ test('deep link #anchor buka manual, switch membuang ?skin dari URL', async ({ p
   expect(new URL(page.url()).searchParams.has('skin')).toBe(false);
 });
 
-test('tv: keyboard map diam saat ROAS Runner terbuka', async ({ page }) => {
+test('tv: keyboard map diam saat Checkout Run terbuka', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/?skin=tv');
   const root = page.locator('[data-skin-root="tv"]');
   await page.keyboard.press('Enter');
-  await root.locator('[data-node="roas"]').click();
-  await expect(page.locator('dialog.rr')).toBeVisible();
+  await root.locator('[data-node="checkout"]').click();
+  await expect(page.locator('dialog.cr')).toBeVisible();
   await page.keyboard.press('Space');
   await page.keyboard.press('ArrowUp');
   await expect(root.locator('[data-tv-view="panel"]')).toBeHidden();
   await page.keyboard.press('Escape');
-  await expect(page.locator('dialog.rr')).toBeHidden();
+  await expect(page.locator('dialog.cr')).toBeHidden();
 });
 
 // --- CHECKOUT RUN ---------------------------------------------------------
@@ -259,6 +243,10 @@ test('checkout run: buka dari manual, TV, handheld; Esc tutup + fokus balik', as
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/?skin=manual');
   const opener = page.locator('[data-skin-root="manual"] [data-open-checkout]');
+  const footerGame = page.locator('[data-skin-root="manual"] .footer__game');
+  await expect(footerGame).toBeVisible();
+  await expect(footerGame).toContainText('MAIN GAME');
+  await expect(page.locator('dialog.rr')).toHaveCount(0);
   await opener.click();
   await expect(dlg).toBeVisible();
   expect(await axeSerious(page, 'dialog.cr')).toEqual([]);
@@ -269,6 +257,9 @@ test('checkout run: buka dari manual, TV, handheld; Esc tutup + fokus balik', as
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/?skin=tv');
   await page.keyboard.press('Enter');
+  await expect(page.locator('[data-skin-root="tv"] .tv-zone-sign')).toBeVisible();
+  await expect(page.locator('[data-skin-root="tv"] .tv-zone-sign')).toContainText('MAIN GAME');
+  await expect(page.locator('[data-node="roas"]')).toHaveCount(0);
   await page.locator('[data-skin-root="tv"] [data-node="checkout"]').click();
   await expect(dlg).toBeVisible();
   // dialog harus di tengah viewport, bukan nempel kiri-atas
@@ -280,6 +271,7 @@ test('checkout run: buka dari manual, TV, handheld; Esc tutup + fokus balik', as
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto('/?skin=handheld');
   await page.locator('[data-btn="start"]').click();
+  await expect(page.locator('[data-skin-root="handheld"] .hh__group').filter({ hasText: 'MAIN GAME' })).toBeVisible();
   await page.locator('[data-skin-root="handheld"] [data-menu="checkout"]').click();
   await expect(dlg).toBeVisible();
   await page.keyboard.press('Escape');

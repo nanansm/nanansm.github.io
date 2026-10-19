@@ -236,11 +236,6 @@ function init(): void {
 
   const openNode = (i: number): void => {
     const id = nodeIds[i];
-    if (id === 'roas') {
-      play('coin');
-      window.dispatchEvent(new CustomEvent('roasrunner:open'));
-      return;
-    }
     if (id === 'checkout') {
       play('coin');
       window.dispatchEvent(new CustomEvent('checkoutrun:open'));
@@ -316,7 +311,7 @@ function init(): void {
 
   document.addEventListener('keydown', (e) => {
     if (document.documentElement.dataset['skin'] !== 'tv') return;
-    // modal ROAS Runner pegang keyboard sendiri
+    // modal game pegang keyboard sendiri
     if (e.defaultPrevented || document.querySelector('dialog[open]')) return;
     if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
     const t = e.target;

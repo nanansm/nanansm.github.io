@@ -42,8 +42,7 @@ const nodes: NodeDef[] = [
     caption: `${n.id} ${levelTitle(n.id)}`,
   })),
   { id: 'contact', x: 288, y: 60, hud: ui.hud.levelLast, caption: contact.cta },
-  { id: 'roas', x: 124, y: 60, hud: `${ui.hud.level} ★`, caption: 'ROAS RUNNER' },
-  { id: 'checkout', x: 206, y: 60, hud: `${ui.hud.level} ★`, caption: ui.game.name },
+  { id: 'checkout', x: 40, y: 64, hud: ui.game.zone, caption: `${ui.game.zone}: ${ui.game.name}` },
 ];
 
 const pathPoints = [...levelPos, { id: 'contact', x: 288, y: 60 }]
@@ -88,13 +87,6 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
                 <rect y="168" width="320" height="32" fill="#0a4a28"></rect>
                 <rect y="164" width="320" height="4" fill="#00873a"></rect>
                 <polyline
-                  points="124,60 172,108"
-                  fill="none"
-                  stroke="#b9b2a3"
-                  stroke-width="3"
-                  stroke-dasharray="2 8"
-                  vector-effect="non-scaling-stroke"></polyline>
-                <polyline
                   points={pathPoints}
                   fill="none"
                   stroke="#f0a800"
@@ -107,7 +99,7 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
                 nodes.map((n) => (
                   <button
                     type="button"
-                    class={`tv-node${n.id === 'roas' || n.id === 'checkout' ? ' tv-node-bonus' : ''}`}
+                    class={`tv-node${n.id === 'checkout' ? ' tv-node-bonus' : ''}`}
                     data-node={n.id}
                     data-hud={n.hud}
                     data-caption={n.caption}
@@ -132,14 +124,35 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
                         <rect x="4" y="8" width="1" height="2" fill="#1a1622" />
                         <rect x="11" y="8" width="1" height="2" fill="#1a1622" />
                       </svg>
-                    ) : n.id === 'roas' || n.id === 'checkout' ? (
-                      <span aria-hidden="true">▶</span>
+                    ) : n.id === 'checkout' ? (
+                      <svg
+                        class="tv-castle"
+                        viewBox="0 0 16 16"
+                        shape-rendering="crispEdges"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <rect x="2" y="5" width="12" height="7" fill="#f7eed6" />
+                        <rect x="1" y="6" width="14" height="5" fill="#f7eed6" />
+                        <rect x="4" y="7" width="1" height="3" fill="#1a1622" />
+                        <rect x="3" y="8" width="3" height="1" fill="#1a1622" />
+                        <rect x="10" y="9" width="2" height="2" fill="#eb1b22" />
+                        <rect x="12" y="7" width="2" height="2" fill="#f0a800" />
+                      </svg>
                     ) : (
                       <span>{n.id}</span>
                     )}
                   </button>
                 ))
               }
+
+              <p
+                class="tv-zone-sign"
+                aria-hidden="true"
+                style={`left:${pct(40, 320)};top:${pct(38, 200)}`}
+              >
+                {ui.game.zone}
+              </p>
 
               <svg
                 class="tv-sprite"
@@ -447,7 +460,23 @@ const pct = (v: number, max: number): string => `${((v / max) * 100).toFixed(2)}
   }
 
   .tv-node-bonus {
-    background: #0a4a28;
+    background: #6b3fa0;
+  }
+
+  .tv-zone-sign {
+    position: absolute;
+    z-index: 1;
+    margin: 0;
+    padding: 2px 6px;
+    font-family: var(--font-label);
+    font-size: 10px;
+    line-height: 1.2;
+    color: #1a1622;
+    white-space: nowrap;
+    pointer-events: none;
+    background: #f0a800;
+    border: 2px solid #1a1622;
+    transform: translate(-50%, -50%);
   }
 
   .tv-node[aria-current='true'] {

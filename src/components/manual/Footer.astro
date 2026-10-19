@@ -17,6 +17,12 @@ const hrefFor = (label: string): string => {
 
 <footer class="footer">
   <div class="footer__inner">
+    <section class="footer__game" aria-labelledby="footer-game-h">
+      <h2 class="footer__game-title" id="footer-game-h">{site.ui.game.zone}</h2>
+      <p class="footer__game-note">{site.ui.game.zoneNote}</p>
+      <button type="button" class="footer__runner" data-open-checkout>{site.ui.game.play}</button>
+    </section>
+
     <p class="footer__copy">{site.footer.copyright}</p>
 
     <ul class="footer__links">
@@ -30,8 +36,6 @@ const hrefFor = (label: string): string => {
     <p class="footer__tech">
       <a href="/llms.txt">llms.txt</a>
       <a href="/api/mcp">MCP</a>
-      <button type="button" class="footer__runner" data-open-runner>ROAS RUNNER</button>
-      <button type="button" class="footer__runner" data-open-checkout>{site.ui.game.name}</button>
     </p>
   </div>
 
@@ -90,6 +94,30 @@ const hrefFor = (label: string): string => {
     background: var(--coin);
     border: 2px solid var(--paper);
     cursor: pointer;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .footer__game {
+    display: grid;
+    gap: var(--s2);
+    justify-items: start;
+    max-width: 560px;
+    padding: var(--s3);
+    border: 4px dashed var(--coin);
+  }
+
+  .footer__game-title {
+    margin: 0;
+    font-family: var(--font-label);
+    font-size: 20px;
+    color: var(--coin);
+  }
+
+  .footer__game-note {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--paper);
   }
 
   .footer__tech {
