@@ -165,12 +165,12 @@ const readBody = async (req: Request): Promise<string | null> => {
 const sendEmail = async (env: Env, msg: ContactInput, ip: string): Promise<void> => {
   if (!env.EMAIL || !env.CONTACT_TO) return;
   try {
-    const from = 'noreply@nanansm.com';
+    const from = 'noreply@motekreatif.com';
     const raw = [
       `From: ${from}`,
       `To: ${headerSafe(env.CONTACT_TO)}`,
       `Subject: ${encodeHeader(`Pesan baru dari ${headerSafe(msg.nama || msg.kontak)}`)}`,
-      `Message-ID: <${crypto.randomUUID()}@nanansm.com>`,
+      `Message-ID: <${crypto.randomUUID()}@motekreatif.com>`,
       `Date: ${new Date().toUTCString()}`,
       'MIME-Version: 1.0',
       'Content-Type: text/plain; charset=utf-8',

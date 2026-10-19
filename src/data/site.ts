@@ -222,7 +222,7 @@ export interface Site {
 export const contactInfo: ContactInfo = {
   whatsapp: '628112131496',
   whatsappDisplay: '0811-2131-496',
-  email: 'hello@nanansm.com',
+  email: 'smnanan@gmail.com',
   linkedin: 'https://linkedin.com/in/nanansm',
   instagram: 'https://instagram.com/nanan.sm',
   github: 'https://github.com/nanansm',
@@ -639,7 +639,7 @@ export const site: Site = {
     waPrefill: 'Halo Nanan, saya mau ngobrol soal iklan untuk bisnis saya.',
     links: [
       { label: 'WhatsApp', value: '0811-2131-496' },
-      { label: 'Email', value: 'hello@nanansm.com' },
+      { label: 'Email', value: 'smnanan@gmail.com' },
       { label: 'LinkedIn', value: 'linkedin.com/in/nanansm' },
       { label: 'Instagram', value: '@nanan.sm' },
     ],
@@ -680,7 +680,7 @@ Layanan: Meta Ads & CPAS Shopee, iklan lead dan okupansi, digital marketing outl
 Angka: 45 brand ditangani bersama tim; Hanoon CPAS ROAS 12,7 (April-Juni 2026); KLC Food ROAS 3,58 ke 8,36 (Mei-Agustus 2026).
 Hotel: Rancabango okupansi 32,6% ke 50,2% (April-Juni 2026).
 Rate card webinar online mulai Rp1.000.000 per sesi.
-Kontak: hello@nanansm.com, WhatsApp 0811-2131-496, linkedin.com/in/nanansm`,
+Kontak: smnanan@gmail.com, WhatsApp 0811-2131-496, linkedin.com/in/nanansm`,
 
   ui: {
     hud: {

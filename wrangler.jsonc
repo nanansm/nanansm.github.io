@@ -3,6 +3,8 @@
   "name": "nanansm-portfolio",
   "main": "src/worker.ts",
   "compatibility_date": "2026-08-20",
+  "account_id": "5a4728efc7ef4e9ef576ba275d74fee0",
+  "routes": [{ "pattern": "nanan.motekreatif.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -10,9 +12,14 @@
     "run_worker_first": ["/api/*"]
   },
   "kv_namespaces": [
-    { "binding": "HITS", "id": "local-hits" },
-    { "binding": "CONTACT", "id": "local-contact" }
+    { "binding": "HITS", "id": "d3bff9d7be9e44bd982747021262904b" },
+    { "binding": "CONTACT", "id": "a38760ab2c2c4af0b75460dd51871335" }
   ],
-  "vars": { "TURNSTILE_SITEKEY": "1x00000000000000000000AA" }
-  // send_email binding + real KV ids ditambah saat go-live (fase 10)
+  "send_email": [{ "name": "EMAIL", "destination_address": "smnanan@gmail.com" }],
+  // Sitekey publik. Build produksi pakai `npm run deploy` supaya ContactBlock ikut sitekey ini;
+  // `npm run build` biasa tetap pakai test sitekey (dipakai e2e). TURNSTILE_SECRET = wrangler secret.
+  "vars": {
+    "TURNSTILE_SITEKEY": "0x4AAAAAAFa9L__lEUjQoof1",
+    "CONTACT_TO": "smnanan@gmail.com"
+  }
 }

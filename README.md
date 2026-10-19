@@ -27,4 +27,8 @@ Web portofolio Nanan Somanan. Astro 5 (static) + Cloudflare Workers Static Asset
 
 ## Deploy
 
-Belum otomatis. Setelah KV dibuat dan ID-nya diisi di `wrangler.jsonc`: `npx wrangler deploy`.
+Target: `https://nanan.motekreatif.com` (custom domain Worker, akun Cloudflare utama). KV, widget Turnstile, dan binding `send_email` sudah diisi di `wrangler.jsonc`.
+
+1. Sekali saja: `npx wrangler secret put TURNSTILE_SECRET` (nilai di `~/.config/nanansm/turnstile-secret`).
+2. `smnanan@gmail.com` harus berstatus verified di Email Routing `motekreatif.com`, kalau tidak `send_email` ditolak.
+3. `npm run deploy` (build dengan sitekey produksi lalu `wrangler deploy`). Jangan `npm run build && wrangler deploy`: itu memakai test sitekey.

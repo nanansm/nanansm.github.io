@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && wrangler dev --port 8787",
+    "deploy": "PUBLIC_TURNSTILE_SITEKEY=0x4AAAAAAFa9L__lEUjQoof1 astro build && wrangler deploy",
     "check": "astro check && tsc --noEmit && eslint . && stylelint \"src/**/*.{css,astro}\" && vitest run",
     "test:e2e": "playwright test",
     "og": "node scripts/og.mjs",
