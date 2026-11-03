@@ -642,6 +642,7 @@ export const site: Site = {
       { label: 'Email', value: 'smnanan@gmail.com' },
       { label: 'LinkedIn', value: 'linkedin.com/in/nanansm' },
       { label: 'Instagram', value: '@nanan.sm' },
+      { label: 'Kantor', value: 'MOTÉ Kreatif, Jl. Raya Cipanas No. 13, Tarogong Kaler, Garut, Jawa Barat' },
     ],
     form: {
       fields: [
@@ -670,7 +671,7 @@ export const site: Site = {
 
   footer: {
     copyright:
-      '© 2026 Nanan Somanan. Meta Ads, CPAS, dan digital marketing untuk brand dan outlet.',
+      '© 2026 Nanan Somanan, pendiri MOTÉ Kreatif. Jl. Raya Cipanas No. 13, Tarogong Kaler, Garut, Jawa Barat. smnanan@gmail.com · 0811-2131-496',
     links: ['LinkedIn', 'Instagram', 'GitHub'],
   },
 
